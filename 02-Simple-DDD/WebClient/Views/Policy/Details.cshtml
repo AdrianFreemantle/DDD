@@ -1,0 +1,77 @@
+﻿@model Domain.Policy
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>Policy</legend>
+
+    <div class="display-label">
+        <strong>Policy Number</strong>
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.PolicyNumber)
+    </div>
+
+    <div class="display-label">
+         <strong>Sum Assured</strong>
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.SumAssured)
+    </div>
+
+    <div class="display-label">
+         <strong>Premium</strong>
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Premium)
+    </div>
+
+    <div class="display-label">
+         <strong>Capture Date</strong>
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.CaptureDate)
+    </div>
+
+    <div class="display-label">
+         <strong>Date of Commencement</strong>
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.DateOfCommencement)
+    </div>
+
+    <div class="display-label">
+         <strong>Is Active</strong>
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.IsActive)
+    </div>
+
+    <div class="display-label">
+         <strong>Plan Description</strong>
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.PlanDescription)
+    </div>
+
+    <div class="display-label">
+         <strong>Plan Code</strong>
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.PlanCode)
+    </div>
+
+    <div class="display-label">
+         <strong>Master Contract</strong>
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.MasterContractNumber)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -1,0 +1,59 @@
+﻿@model IEnumerable<Domain.Policy>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<table>
+    <tr>
+        <th>
+            Policy Number
+        </th>
+        <th>
+            Description
+        </th>
+        <th>
+            Cover
+        </th>
+        <th>
+            Premium
+        </th>
+        <th>
+            Date Of Commencement
+        </th>
+        <th>
+            Is Active
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.PolicyNumber)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PlanDescription)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SumAssured)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Premium)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DateOfCommencement)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IsActive)
+        </td>        
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+        </td>
+    </tr>
+}
+
+</table>
