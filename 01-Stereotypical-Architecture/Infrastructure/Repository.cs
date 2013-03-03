@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 
 namespace Infrastructure
 {
@@ -23,9 +24,16 @@ namespace Infrastructure
         void Remove<TPersistable>(TPersistable item) where TPersistable : class, IIntegerIdentity;
     }
 
+    [DataContract]
     public class InMemoryRepository : IRepository
     {
-        readonly Dictionary<Type, object> repository = new Dictionary<Type, object>();        
+        [DataMember]
+        public Dictionary<Type, object> DataStore { get; set; }    
+
+        public InMemoryRepository()
+        {
+            DataStore = new Dictionary<Type, object>();
+        }
 
         public TPersistable Get<TPersistable>(int id) where TPersistable : class, IIntegerIdentity
         {
@@ -77,14 +85,14 @@ namespace Infrastructure
 
         private HashSet<TPersistable> GetCollection<TPersistable>() where TPersistable : class, IIntegerIdentity
         {
-            if (!repository.ContainsKey(typeof(TPersistable)))
+            if (!DataStore.ContainsKey(typeof(TPersistable)))
             {
                 var collection = new HashSet<TPersistable>();
-                repository.Add(typeof(TPersistable), collection);
+                DataStore.Add(typeof(TPersistable), collection);
                 return collection;
             }
 
-            return repository[typeof(TPersistable)] as HashSet<TPersistable>;
+            return DataStore[typeof(TPersistable)] as HashSet<TPersistable>;
         }
     }
 }

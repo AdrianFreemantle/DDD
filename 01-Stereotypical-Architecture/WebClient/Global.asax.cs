@@ -16,7 +16,7 @@ namespace WebClient
 
     public class MvcApplication : System.Web.HttpApplication
     {
-        public static IRepository Repository { get; set; }
+        public static UnitOfWork UnitOfWork { get; set; }
         public static PolicyApplicationService PolicyService { get; set; }
 
         static MvcApplication()
@@ -30,8 +30,8 @@ namespace WebClient
         /// </summary>
         private static void StartupConfig()
         {
-            Repository = new InMemoryRepository();
-            PolicyService = new PolicyApplicationService(Repository);
+            UnitOfWork = new UnitOfWork(new InMemoryRepository());
+            PolicyService = new PolicyApplicationService(UnitOfWork);
 
             PolicyService.CreatePolicy("0011", 20000);
             PolicyService.CreatePolicy("0011", 1000);
@@ -51,7 +51,6 @@ namespace WebClient
                 "{controller}/{action}/{id}", // URL with parameters
                 new { controller = "Home", action = "Index", id = UrlParameter.Optional } // Parameter defaults
             );
-
         }
 
         protected void Application_Start()

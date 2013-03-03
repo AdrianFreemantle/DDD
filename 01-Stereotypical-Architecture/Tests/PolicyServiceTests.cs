@@ -19,15 +19,13 @@ namespace Tests
         const decimal defaultCoverAmount = 10000;
         const string defaultMasterContract = "1234";
 
-        IRepository repository;
         PolicyApplicationService policyService;
         Policy defaultTestPolicy;
 
         [TestInitialize]
         public void TestInit()
         {
-            repository = new InMemoryRepository();
-            policyService = new PolicyApplicationService(repository);
+            policyService = new PolicyApplicationService(new UnitOfWork(new InMemoryRepository()));
 
             //add default policy for testing
             defaultTestPolicy = policyService.CreatePolicy(defaultMasterContract, defaultCoverAmount);

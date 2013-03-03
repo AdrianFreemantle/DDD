@@ -17,7 +17,7 @@ namespace Client
 
         static Program()
         {
-            policyApplicationService = new PolicyApplicationService(new InMemoryRepository());
+            policyApplicationService = new PolicyApplicationService(new UnitOfWork(new InMemoryRepository()));
         }
 
         static void Main(string[] args)

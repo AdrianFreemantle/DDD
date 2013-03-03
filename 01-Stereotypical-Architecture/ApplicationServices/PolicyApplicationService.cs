@@ -17,13 +17,13 @@ namespace ApplicationServices
     /// </summary>
     public class PolicyApplicationService
     {
-        private readonly IRepository repository;
+        private readonly UnitOfWork unitOfWork;
         private const decimal PremiumIncreasePercentage = 10;
         private const decimal PremiumPercentageOfCover = 1;
 
-        public PolicyApplicationService(IRepository repository)
+        public PolicyApplicationService(UnitOfWork unitOfWork)
         {
-            this.repository = repository;
+            this.unitOfWork = unitOfWork;
         }
 
         public Policy CreatePolicy(string masterContractNumber, decimal coverAmount)
@@ -31,22 +31,31 @@ namespace ApplicationServices
             //normally we would get much of the parameters below from a database lookup, factory or service.
             //we simplify it here for the sake of brevity and simply hardcode most values.
 
-            var newPolicy = new Policy
+            try
             {
-                CaptureDate = DateTime.Now.Date,
-                DateOfCommencement = GetFirstDayOfNextMonth(),
-                IsActive = true,
-                MasterContractNumber = masterContractNumber,
-                SumAssured = coverAmount,
-                PlanCode = "PL",
-                PlanDescription = "Premium Life",
-                PolicyNumber = CreatePolicyNumber(),
-                Premium = coverAmount * (PremiumPercentageOfCover / 100)
-            };
+                var newPolicy = new Policy
+                {
+                    CaptureDate = DateTime.Now.Date,
+                    DateOfCommencement = GetFirstDayOfNextMonth(),
+                    IsActive = true,
+                    MasterContractNumber = masterContractNumber,
+                    SumAssured = coverAmount,
+                    PlanCode = "PL",
+                    PlanDescription = "Premium Life",
+                    PolicyNumber = CreatePolicyNumber(),
+                    Premium = coverAmount * (PremiumPercentageOfCover / 100)
+                };
 
-            ValidatePolicy(newPolicy);
-
-            return repository.Add(newPolicy);
+                unitOfWork.Repository.Add(newPolicy);
+                ValidatePolicy(newPolicy);
+                unitOfWork.Commit();
+                return newPolicy;
+            }
+            catch (Exception)
+            {
+                unitOfWork.Rollback();
+                throw;
+            }
         }
 
         private static DateTime GetFirstDayOfNextMonth()
@@ -61,48 +70,69 @@ namespace ApplicationServices
 
         public Policy IncreasePremium(int policyId)
         {
-            var policy = repository.Get<Policy>(policyId);
-            
-            policy.Premium = policy.Premium * (1 + (PremiumIncreasePercentage / 100));
+            try
+            {
+                var policy = unitOfWork.Repository.Get<Policy>(policyId);
+                policy.Premium = policy.Premium * (1 + (PremiumIncreasePercentage / 100));
 
-            ValidatePolicy(policy);
-
-            return repository.Update(policy);
+                ValidatePolicy(policy);
+                unitOfWork.Commit();
+                return policy;
+            }
+            catch (Exception)
+            {
+                unitOfWork.Rollback();
+                throw;
+            }
         }
 
         public Policy Inactivate(int policyId)
         {
-            var policy = repository.Get<Policy>(policyId);
+            try
+            {
+                var policy = unitOfWork.Repository.Get<Policy>(policyId);
+                policy.IsActive = false;
+                policy.Premium = 0;
+                policy.SumAssured = 0;
 
-            policy.IsActive = false;
-            policy.Premium = 0;
-            policy.SumAssured = 0;
-
-            ValidatePolicy(policy);
-
-            return repository.Update(policy);
+                ValidatePolicy(policy);
+                unitOfWork.Commit();
+                return policy;
+            }
+            catch (Exception)
+            {
+                unitOfWork.Rollback();
+                throw;
+            }
         }
 
         public Policy IncreaseCover(int policyId, decimal coverAmount)
         {
-            var policy = repository.Get<Policy>(policyId);
+            try
+            {
+                var policy = unitOfWork.Repository.Get<Policy>(policyId);
+                policy.SumAssured = coverAmount;
 
-            policy.SumAssured = coverAmount;
-
-            //we "forget" to call validate, creating the potential for a serious violation of business rules.
-            //ValidatePolicy(policy);
-
-            return repository.Update(policy);  
+                //we "forget" to call validate, creating the potential for a serious violation of business rules.
+                //ValidatePolicy(policy);
+                unitOfWork.Commit();
+                return policy;
+            }
+            catch (Exception)
+            {
+                unitOfWork.Rollback();
+                throw;
+            }
         }
 
         public IEnumerable<Policy> GetAllPolicies()
         {
-            return repository.GetQuery<Policy>().ToList();
+            return unitOfWork.Repository.GetQuery<Policy>().ToList();
         }
 
         public Policy GetPolicy(int policyId)
         {
-            return repository.Get<Policy>(policyId);
+            return unitOfWork.Repository.Get<Policy>(policyId);
         }
 
         /// <summary>
