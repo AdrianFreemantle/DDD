@@ -1,37 +1,52 @@
 ﻿using System.Linq;
 using System.Web.Mvc;
 
+using ApplicationServices;
+
 using Domain;
 
 namespace WebClient.Controllers
 { 
     public class PolicyController : Controller
     {
+        readonly PolicyApplicationService policyService;
+
+        public PolicyController()
+        {
+            policyService = MvcApplication.PolicyService;
+        }
+
         public ViewResult Index()
         {
-            return View(MvcApplication.Repository.GetQuery<Policy>().ToList());
+            return View(policyService.GetAllPolicies());
         }
 
         public ViewResult Details(int id)
         {
-            Policy policy = MvcApplication.Repository.Get<Policy>(id);
+            Policy policy = policyService.GetPolicy(id);
             return View(policy);
         }
-
-        public ActionResult Edit(int id)
+        
+        //Deliberately disabled post filters to allow us to call these actions by editing the url
+        //[HttpPost]
+        public ActionResult IncreasePremium(int id)
         {
-            Policy policy = MvcApplication.Repository.Get<Policy>(id);
-            return View(policy);
+            var policy = policyService.IncreasePremium(id);
+            return View("Details", policy);
         }
 
-        [HttpPost]
-        public ActionResult Edit(Policy policy)
+        //[HttpPost]
+        public ActionResult Inactivate(int id)
         {
-            if (ModelState.IsValid)
-            {
-                return RedirectToAction("Index");
-            }
-            return View(policy);
+            var policy = policyService.Inactivate(id);
+            return View("Details", policy);
+        }
+
+        //[HttpPost]
+        public ActionResult IncreaseCover(int id, decimal coverAmount)
+        {
+            var policy = policyService.IncreaseCover(id, coverAmount);
+            return View("Details", policy);
         }
     }
 }

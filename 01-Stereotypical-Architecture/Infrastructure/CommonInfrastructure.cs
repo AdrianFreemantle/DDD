@@ -36,17 +36,24 @@ namespace Infrastructure
         public TPersistable Add<TPersistable>(TPersistable item) where TPersistable : class, IIntegerIdentity
         {
             HashSet<TPersistable> collection = GetCollection<TPersistable>();
-            int nextId = 1;
 
-            if(collection.Contains(item))
-                throw new InvalidOperationException("Item is already in the repository.");
+            if(item.Id > 0)
+            {
+                if(collection.Any(persistable => persistable.Id == item.Id ))
+                    throw new InvalidOperationException("Item is already in the repository.");   
+            }
+            else
+            {
+                int nextId = 1;
 
-            if (collection.Any())
-                nextId = collection.Last().Id + 1;
+                if (collection.Any())
+                    nextId = collection.Last().Id + 1;
 
-            item.Id = nextId;
+                item.Id = nextId;
+            }
 
             collection.Add(item);
+
             return item;
         }
 

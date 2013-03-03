@@ -13,13 +13,11 @@ namespace Client
     /// </summary>
     class Program
     {
-        static readonly IRepository repository;
         static readonly PolicyApplicationService policyApplicationService;
 
         static Program()
         {
-            repository = new InMemoryRepository();
-            policyApplicationService = new PolicyApplicationService(repository);
+            policyApplicationService = new PolicyApplicationService(new InMemoryRepository());
         }
 
         static void Main(string[] args)
@@ -27,14 +25,14 @@ namespace Client
             var policy = policyApplicationService.CreatePolicy("0011", 50000);
             PrintPolicyDetails(policy);
 
-            policy = policyApplicationService.IncreasePremium(policy);
+            policy = policyApplicationService.IncreasePremium(policy.Id);
             PrintPolicyDetails(policy);
 
-            policy = policyApplicationService.Inactivate(policy);
+            policy = policyApplicationService.Inactivate(policy.Id);
             PrintPolicyDetails(policy);
 
             //this method call is breaking our business rule which says that you cant increase the cover of a policy which is inactive.
-            policy = policyApplicationService.IncreaseCover(policy, 5000);
+            policy = policyApplicationService.IncreaseCover(policy.Id, 5000);
             PrintPolicyDetails(policy);
 
             Console.ReadKey();

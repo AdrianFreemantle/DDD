@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 using Domain;
@@ -12,9 +14,6 @@ namespace ApplicationServices
     /// in the kind of procedural "business logic" class such as the one implemented here. This style is
     /// very suitable to simpler domains and should always be considered as our first alternative to DDD when our 
     /// domain is not complex enough to warrent a full DDD implementation.   
-    /// 
-    /// Note that we are mixing many different concerns in this class. This will become a problem as the complexity 
-    /// of our domain increases.
     /// </summary>
     public class PolicyApplicationService
     {
@@ -29,58 +28,86 @@ namespace ApplicationServices
 
         public Policy CreatePolicy(string masterContractNumber, decimal coverAmount)
         {
-            //normally we would get much of the detail below from a database lookup, a factory or a service.
+            //normally we would get much of the parameters below from a database lookup, factory or service.
             //we simplify it here for the sake of brevity and simply hardcode most values.
 
             var newPolicy = new Policy
             {
-                Id = 1,
-                CaptureDate = DateTime.Now,
-                DateOfCommencement = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(1),//first day of next month
+                CaptureDate = DateTime.Now.Date,
+                DateOfCommencement = GetFirstDayOfNextMonth(),
                 IsActive = true,
                 MasterContractNumber = masterContractNumber,
                 SumAssured = coverAmount,
                 PlanCode = "PL",
                 PlanDescription = "Premium Life",
-                PolicyNumber = DateTime.Now.Ticks.ToString().Substring(10),
+                PolicyNumber = CreatePolicyNumber(),
                 Premium = coverAmount * (PremiumPercentageOfCover / 100)
             };
 
             ValidatePolicy(newPolicy);
+
             return repository.Add(newPolicy);
         }
 
-        public Policy IncreasePremium(Policy policy)
+        private static DateTime GetFirstDayOfNextMonth()
         {
+            return new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(1);
+        }
+
+        private static string CreatePolicyNumber()
+        {
+            return DateTime.Now.Ticks.ToString(CultureInfo.InvariantCulture).Substring(10);
+        }
+
+        public Policy IncreasePremium(int policyId)
+        {
+            var policy = repository.Get<Policy>(policyId);
+            
             policy.Premium = policy.Premium * (1 + (PremiumIncreasePercentage / 100));
+
             ValidatePolicy(policy);
+
             return repository.Update(policy);
         }
 
-        public Policy Inactivate(Policy policy)
+        public Policy Inactivate(int policyId)
         {
+            var policy = repository.Get<Policy>(policyId);
+
             policy.IsActive = false;
             policy.Premium = 0;
             policy.SumAssured = 0;
+
             ValidatePolicy(policy);
+
             return repository.Update(policy);
         }
 
-        public Policy IncreaseCover(Policy policy, decimal coverAmount)
+        public Policy IncreaseCover(int policyId, decimal coverAmount)
         {
+            var policy = repository.Get<Policy>(policyId);
+
             policy.SumAssured = coverAmount;
-            repository.Update(policy);
-            return policy; //note that we forgot to call validate, creating the potential for a serious violation of business rules.
+
+            //we "forget" to call validate, creating the potential for a serious violation of business rules.
+            //ValidatePolicy(policy);
+
+            return repository.Update(policy);  
         }
 
-        public Policy GetPolicy(int id)
+        public IEnumerable<Policy> GetAllPolicies()
         {
-            return repository.Get<Policy>(id);
+            return repository.GetQuery<Policy>().ToList();
+        }
+
+        public Policy GetPolicy(int policyId)
+        {
+            return repository.Get<Policy>(policyId);
         }
 
         /// <summary>
         /// In transaction script architectures we often tend to see our validation concentrated in a sigle location such as this. 
-        /// An alternate form uses Data Annotation validations our domain model combined with more complex validation being done in a
+        /// An alternate form uses Data Annotation validations on our domain model class combined with more complex validation being done in a
         /// method such as this one. In the end, we are mainly focussed on cecking that the state of the domain object to be persisted
         /// is valid just before doing the actual persistence.
         /// </summary>

@@ -17,7 +17,25 @@ namespace WebClient
     public class MvcApplication : System.Web.HttpApplication
     {
         public static IRepository Repository { get; set; }
-        PolicyApplicationService PolicyService { get; set; }
+        public static PolicyApplicationService PolicyService { get; set; }
+
+        static MvcApplication()
+        {
+            StartupConfig();
+        }
+
+        /// <summary>
+        /// We dont want to have to deal with the complexity of using databases at this stage.
+        /// This basic setup allows us to have an in memory database of sorts without adding 
+        /// </summary>
+        private static void StartupConfig()
+        {
+            Repository = new InMemoryRepository();
+            PolicyService = new PolicyApplicationService(Repository);
+
+            PolicyService.CreatePolicy("0011", 20000);
+            PolicyService.CreatePolicy("0011", 1000);
+        }
 
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
@@ -42,21 +60,6 @@ namespace WebClient
 
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterRoutes(RouteTable.Routes);
-
-            StartupConfig();
-        }
-
-        /// <summary>
-        /// We dont want to have to deal with the complexity of using databases at this stage.
-        /// This basic setup allows us to have an in memory database of sorts without adding 
-        /// </summary>
-        private void StartupConfig()
-        {
-            Repository = new InMemoryRepository();
-            PolicyService = new PolicyApplicationService(Repository);
-
-            PolicyService.CreatePolicy("0011", 20000);
-            PolicyService.CreatePolicy("0011", 1000);
-        }
+        }        
     }
 }
