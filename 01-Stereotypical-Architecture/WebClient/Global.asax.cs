@@ -46,6 +46,10 @@ namespace WebClient
             StartupConfig();
         }
 
+        /// <summary>
+        /// We dont want to have to deal with the complexity of using databases at this stage.
+        /// This basic setup allows us to have an in memory database of sorts without adding 
+        /// </summary>
         private void StartupConfig()
         {
             Repository = new InMemoryRepository();

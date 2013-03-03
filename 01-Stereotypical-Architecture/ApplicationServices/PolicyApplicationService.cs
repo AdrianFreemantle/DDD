@@ -7,6 +7,15 @@ using Infrastructure;
 
 namespace ApplicationServices
 {
+    /// <summary>
+    /// In transaction script architectures, the invariants (rules) and behaviours of our domain are enforced
+    /// in the kind of procedural "business logic" class such as the one implemented here. This style is
+    /// very suitable to simpler domains and should always be considered as our first alternative to DDD when our 
+    /// domain is not complex enough to warrent a full DDD implementation.   
+    /// 
+    /// Note that we are mixing many different concerns in this class. This will become a problem as the complexity 
+    /// of our domain increases.
+    /// </summary>
     public class PolicyApplicationService
     {
         private readonly IRepository repository;
@@ -69,6 +78,12 @@ namespace ApplicationServices
             return repository.Get<Policy>(id);
         }
 
+        /// <summary>
+        /// In transaction script architectures we often tend to see our validation concentrated in a sigle location such as this. 
+        /// An alternate form uses Data Annotation validations our domain model combined with more complex validation being done in a
+        /// method such as this one. In the end, we are mainly focussed on cecking that the state of the domain object to be persisted
+        /// is valid just before doing the actual persistence.
+        /// </summary>
         private void ValidatePolicy(Policy policy)
         {
             if (policy == null)

@@ -4,6 +4,11 @@ using System.Linq;
 
 namespace Infrastructure
 {
+    /* We want to keep our focus of the details of persisting data at this early stage. Therefore we use 
+     * a simple in memory repository to save our data. This has the added advantage in that it introduces
+     * the concept of persistence ignorance in a simple manner.
+     */ 
+    
     public interface IIntegerIdentity
     {
         int Id { get; set; }

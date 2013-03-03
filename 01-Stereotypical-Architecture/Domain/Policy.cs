@@ -4,6 +4,9 @@ using Infrastructure;
 
 namespace Domain
 {
+    /// <summary>
+    /// A typical aneamic domain model. This really is just a DTO with no atual behaviour.
+    /// </summary>
     public class Policy : IIntegerIdentity
     {
         public int Id { get; set; }

@@ -8,6 +8,9 @@ using Infrastructure;
 
 namespace Client
 {
+    /// <summary>
+    /// A very simple console application for the testing of our current application service.
+    /// </summary>
     class Program
     {
         static readonly IRepository repository;
@@ -30,6 +33,7 @@ namespace Client
             policy = policyApplicationService.Inactivate(policy);
             PrintPolicyDetails(policy);
 
+            //this method call is breaking our business rule which says that you cant increase the cover of a policy which is inactive.
             policy = policyApplicationService.IncreaseCover(policy, 5000);
             PrintPolicyDetails(policy);
 
