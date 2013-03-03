@@ -1,0 +1,78 @@
+﻿@model Domain.Policy
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>Policy</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.PolicyNumber)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.PolicyNumber)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.SumAssured)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.SumAssured)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Premium)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Premium)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.CaptureDate)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.CaptureDate)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.DateOfCommencement)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.DateOfCommencement)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.IsActive)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.IsActive)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.PlanDescription)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.PlanDescription)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.PlanCode)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.PlanCode)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.MasterContractNumber)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.MasterContractNumber)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

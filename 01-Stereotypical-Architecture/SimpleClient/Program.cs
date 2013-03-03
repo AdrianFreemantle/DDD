@@ -1,0 +1,51 @@
+﻿using System;
+
+using ApplicationServices;
+
+using Domain;
+
+using Infrastructure;
+
+namespace Client
+{
+    class Program
+    {
+        static readonly IRepository repository;
+        static readonly PolicyApplicationService policyApplicationService;
+
+        static Program()
+        {
+            repository = new InMemoryRepository();
+            policyApplicationService = new PolicyApplicationService(repository);
+        }
+
+        static void Main(string[] args)
+        {
+            var policy = policyApplicationService.CreatePolicy("0011", 50000);
+            PrintPolicyDetails(policy);
+
+            policy = policyApplicationService.IncreasePremium(policy);
+            PrintPolicyDetails(policy);
+
+            policy = policyApplicationService.Inactivate(policy);
+            PrintPolicyDetails(policy);
+
+            policy = policyApplicationService.IncreaseCover(policy, 5000);
+            PrintPolicyDetails(policy);
+
+            Console.ReadKey();
+        }
+
+        static void PrintPolicyDetails(Policy policy)
+        {
+            Console.WriteLine("{0} policy {1} is currently {2} and provides {3} cover with a montly premium of {4}", 
+                policy.PlanDescription, 
+                policy.PolicyNumber, 
+                policy.IsActive ? "active" : "inactive",
+                policy.SumAssured,
+                policy.Premium);
+
+            Console.WriteLine();
+        }
+    }
+}
