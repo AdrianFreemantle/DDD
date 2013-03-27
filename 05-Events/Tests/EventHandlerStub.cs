@@ -4,11 +4,11 @@ using Domain.Core.Events;
 
 namespace Tests
 {
-    class EventHandlerHelper
+    class EventHandlerStub 
     {
         public List<IDomainEvent> RaisedEvents { get; private set; }
 
-        public EventHandlerHelper()
+        public EventHandlerStub()
         {
             RaisedEvents = new List<IDomainEvent>();
         }

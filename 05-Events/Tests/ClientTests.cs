@@ -19,7 +19,7 @@ namespace Tests
         [TestCleanup]
         public void Cleanup()
         {
-            DomainEvent.Current.ClearCallbacks();
+            DomainEvent.Current.ClearSubscribers();
         }
 
         private static Client CreateGenericClient()
@@ -72,10 +72,12 @@ namespace Tests
         }
 
         [TestMethod]
-        public void A_new_client_can_be_registered()
+        public void A_new_client_can_be_registered_Observer()
         {
-            var eventHelper = new EventHandlerHelper();
-            DomainEvent.Current.Register<ClientRegistered>(eventHelper.Handle);
+            // here we use the observer pattern to register an action (the subscriber) to 
+            // handle an event of type ClientRegistered which will be raised by the entity (the publisher)
+            var eventHelper = new EventHandlerStub();
+            DomainEvent.Current.Subscribe<ClientRegistered>(eventHelper.Handle);
 
             var idNumber = new IdentityNumber("5008035176089");
             var telephoneNumber = new TelephoneNumber("0125552222");
@@ -88,7 +90,28 @@ namespace Tests
             ((ClientRegistered)eventHelper.RaisedEvents.First()).FirstName.ShouldBe(clientName.FirstName);
             ((ClientRegistered)eventHelper.RaisedEvents.First()).Surname.ShouldBe(clientName.Surname);
             ((ClientRegistered)eventHelper.RaisedEvents.First()).TelephoneNumber.ShouldBe(telephoneNumber.Number);
-        }        
+        }
+
+        [TestMethod]
+        public void A_new_client_can_be_registered_EventBus()
+        {
+            // here we register an event bus (publisher) which knows how to locate event 
+            // handlers (subscribers) and publish the event to them.
+            var eventBusStub = new EventBusStub();
+            DomainEvent.Current.RegisterEventBus(eventBusStub);
+
+            var idNumber = new IdentityNumber("5008035176089");
+            var telephoneNumber = new TelephoneNumber("0125552222");
+            var clientName = new PersonName("Adrian", "Freemantle");
+            new Client(idNumber, clientName, telephoneNumber);
+
+            eventBusStub.RaisedEvents.Count().ShouldBe(1);
+            eventBusStub.RaisedEvents.First().ShouldBeTypeOf<ClientRegistered>();
+            ((ClientRegistered)eventBusStub.RaisedEvents.First()).ClientId.ShouldBe(idNumber.Number);
+            ((ClientRegistered)eventBusStub.RaisedEvents.First()).FirstName.ShouldBe(clientName.FirstName);
+            ((ClientRegistered)eventBusStub.RaisedEvents.First()).Surname.ShouldBe(clientName.Surname);
+            ((ClientRegistered)eventBusStub.RaisedEvents.First()).TelephoneNumber.ShouldBe(telephoneNumber.Number);
+        }
 
         [TestMethod]
         public void Correcting_a_date_of_birth_raises_a_ClientDateOfBirthCorrected_event()

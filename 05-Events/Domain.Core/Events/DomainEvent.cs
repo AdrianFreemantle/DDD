@@ -2,30 +2,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-using Domain.Core.Ioc;
-
 namespace Domain.Core.Events
 {
     public sealed class DomainEvent
     {
         [ThreadStatic] //so that each thread has its own callbacks
         private static volatile DomainEvent instance;
-        private static List<Delegate> actions;
         private static readonly object SyncRoot = new Object();
 
-        private readonly IEventBus eventBus;
+        private List<Delegate> actions;
+        private IEventBus eventBus;
 
-        private DomainEvent()
-        {
-            try
-            {
-                eventBus = ServiceLocator.Current.GetService<IEventBus>();
-            }
-            catch
-            {
-                eventBus = null;
-            }
-        }
+        private DomainEvent() { }
 
         public static DomainEvent Current
         {
@@ -61,7 +49,7 @@ namespace Domain.Core.Events
             }
         }
 
-        public void Register<T>(Action<T> callback) where T : IDomainEvent
+        public void Subscribe<T>(Action<T> callback) where T : IDomainEvent
         {
             if (actions == null)
             {
@@ -71,9 +59,14 @@ namespace Domain.Core.Events
             actions.Add(callback);
         }
 
-        public void ClearCallbacks()
+        public void ClearSubscribers()
         {
             actions = null;
+        }
+
+        public void RegisterEventBus(IEventBus bus)
+        {
+            eventBus = bus;
         }
     }   
 }

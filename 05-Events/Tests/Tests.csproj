@@ -57,7 +57,8 @@
     <Compile Include="Clients\ClientSnapshot.cs" />
     <Compile Include="Clients\ClientId.cs" />
     <Compile Include="CompareObjects.cs" />
-    <Compile Include="EventHandlerHelper.cs" />
+    <Compile Include="EventBusStub.cs" />
+    <Compile Include="EventHandlerStub.cs" />
     <Compile Include="ValueObjects\DateOfBirth.cs" />
     <Compile Include="ValueObjects\IdentityNumber.cs" />
     <Compile Include="ValueObjects\InsuranceProduct.cs" />
