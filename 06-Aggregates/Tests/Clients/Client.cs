@@ -15,27 +15,35 @@ namespace Tests.Clients
         private DateOfBirth dateOfBirth;
         private HashSet<InsuranceProduct> insuranceProducts;
 
-        protected Client(IHaveIdentity identity)
+        protected Client()
         {
-            Identity = (ClientId)identity;
+            insuranceProducts = new HashSet<InsuranceProduct>();
         }
 
-        public Client(IdentityNumber idNumber, PersonName clientName, TelephoneNumber telephoneNumber)
+        public static Client RegisterClient(IdentityNumber idNumber, PersonName clientName, TelephoneNumber telephoneNumber)
         {
-            Identity = new ClientId(idNumber);
-            this.clientName = clientName;
-            primaryContactNumber = telephoneNumber;
+            var client = new Client();
+            client.RaiseEvent(new ClientRegistered(idNumber.Number, clientName.FirstName, clientName.Surname, telephoneNumber.Number));
+            return client;
+        }
 
-            insuranceProducts = new HashSet<InsuranceProduct>();
-            dateOfBirth = idNumber.GetDateOfBirth();
-
-            DomainEvent.Current.Raise(new ClientRegistered(Identity.Id, clientName.FirstName, clientName.Surname, telephoneNumber.Number));
+        public void When(ClientRegistered @event)
+        {
+            var identityNumber = new IdentityNumber(@event.ClientId);
+            Identity = new ClientId(identityNumber);
+            clientName = new PersonName(@event.FirstName, @event.Surname);
+            primaryContactNumber = new TelephoneNumber(@event.TelephoneNumber);
+            dateOfBirth = identityNumber.GetDateOfBirth();
         }
 
         public void CorrectDateOfBirth(DateOfBirth dateOfBirth)
         {
-            this.dateOfBirth = dateOfBirth;
             RaiseEvent(new ClientDateOfBirthCorrected(Identity.Id, dateOfBirth.Date));
+        }
+
+        public void When(ClientDateOfBirthCorrected @event)
+        {
+            dateOfBirth = new DateOfBirth(@event.DateOfBirth);
         }
 
         public bool QualifiesForPensionersDiscount()

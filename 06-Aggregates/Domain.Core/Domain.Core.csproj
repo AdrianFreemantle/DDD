@@ -44,7 +44,7 @@
     <Compile Include="IAggregate.cs" />
     <Compile Include="IEntity.cs" />
     <Compile Include="IPublishEvents.cs" />
-    <Compile Include="EntityFactory.cs" />
+    <Compile Include="AggregateFactory.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="Events\DomainEvent.cs" />
     <Compile Include="Events\IDomainEvent.cs" />

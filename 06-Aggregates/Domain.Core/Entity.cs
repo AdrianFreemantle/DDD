@@ -5,7 +5,7 @@ namespace Domain.Core
     public abstract class Entity<TIdentity> : IEquatable<Entity<TIdentity>>, IEntity where TIdentity : IHaveIdentity
     {
         public TIdentity Identity { get; protected set; }
-               
+
         public override int GetHashCode()
         {
             return Identity.GetHashCode();
