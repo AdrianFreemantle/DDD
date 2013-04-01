@@ -1,4 +1,4 @@
-namespace Tests.ValueObjects
+namespace Domain.Client.ValueObjects
 {
     public class InsuranceProduct
     {

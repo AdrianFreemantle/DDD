@@ -1,8 +1,7 @@
+using Domain.Client.ValueObjects;
 using Domain.Core;
 
-using Tests.ValueObjects;
-
-namespace Tests.Clients
+namespace Domain.Client.Clients
 {
     public sealed class ClientId : IdentityBase<string>
     {

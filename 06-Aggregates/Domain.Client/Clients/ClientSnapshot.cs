@@ -1,8 +1,7 @@
+using Domain.Client.ValueObjects;
 using Domain.Core;
 
-using Tests.ValueObjects;
-
-namespace Tests.Clients
+namespace Domain.Client.Clients
 {
     public class ClientSnapshot : IMemento
     {
@@ -10,6 +9,5 @@ namespace Tests.Clients
         public PersonName ClientName { get; set; }
         public TelephoneNumber PrimaryContactNumber { get; set; }
         public DateOfBirth DateOfBirth { get; set; }
-        public InsuranceProduct[] InsuranceProducts { get; set; }
     }
 }

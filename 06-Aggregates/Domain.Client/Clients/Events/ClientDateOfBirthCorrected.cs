@@ -1,9 +1,9 @@
-using System;
 using System.Runtime.Serialization;
 
+using Domain.Client.ValueObjects;
 using Domain.Core.Events;
 
-namespace Tests.Clients
+namespace Domain.Client.Clients.Events
 {
     [DataContract]
     public class ClientDateOfBirthCorrected : IDomainEvent
@@ -12,12 +12,17 @@ namespace Tests.Clients
         public string ClientId { get; set; }
 
         [DataMember(Order = 2)]
-        public DateTime DateOfBirth { get; set; }
+        public DateOfBirth DateOfBirth { get; set; }
 
-        public ClientDateOfBirthCorrected(string clientId, DateTime dateOfBirth)
+        public ClientDateOfBirthCorrected(string clientId, DateOfBirth dateOfBirth)
         {
             ClientId = clientId;
             DateOfBirth = dateOfBirth;
+        }
+
+        public override string ToString()
+        {
+            return "Client date of birth corrected.";
         }
     }
 }

@@ -1,35 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Text.RegularExpressions;
+
 using Domain.Core;
 using Domain.Core.Events;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Tests.Clients;
-using Tests.ValueObjects;
 
 namespace Tests
 {
-    [TestClass]
-    public class when_client_is_registered : client_specifications
-    {
-        [TestMethod]
-        public void DoSomeThingsHere()
-        {
-            var idNumber = new IdentityNumber("5008035176089");
-            var telephoneNumber = new TelephoneNumber("0125552222");
-            var clientName = new PersonName("Adrian", "Freemantle");
-
-            Given();
-            When(Client.RegisterClient(idNumber, clientName, telephoneNumber));
-            Then(new ClientRegistered(idNumber.Number, "susan", clientName.Surname, telephoneNumber.Number));
-        }
-    }
-
-    public class client_specifications : AggregateTestSpecification<Client>
-    {
-        
-    }
-
     public abstract class AggregateTestSpecification<TAggregate> where TAggregate : class, IAggregate 
     {
         protected TAggregate Aggregate { get; private set; }
@@ -52,32 +32,61 @@ namespace Tests
 
         protected void Given(IDomainEvent @event)
         {
-            ((dynamic)Aggregate).When((dynamic)@event);
+            Console.WriteLine("Given: {0}", @event);
+            Aggregate.ApplyEvent(@event);
         }
 
         protected void Given(IEnumerable<IDomainEvent> events)
         {
             foreach (var @event in events)
             {
-                ((dynamic)Aggregate).When((dynamic)@event);
+                Given(@event);
             }
         }
 
-        protected void When(TAggregate aggregate)
-        {
-            Aggregate = aggregate;
-        }
-
-        protected void When(Action<TAggregate> action)
+        protected void When(Expression<Func<TAggregate>> function)
         {
             try
             {
-                action.Invoke(Aggregate);
+                Console.WriteLine("When : {0}", GetFormattedFunctionName(function));
+                Aggregate = function.Compile()();
             }
             catch (Exception ex)
             {
                 thrownException = ex;
             }
+        }
+
+        private string GetFormattedFunctionName(Expression<Func<TAggregate>> function)
+        {
+            string name = function.ToString().Replace("() => ", "");
+            int firstBracket = name.IndexOf('(');
+
+            name = name.Remove(firstBracket);
+            return Regex.Replace(name, "([a-z])([A-Z])", "$1 $2");
+        }
+
+        protected void When(Expression<Action<TAggregate>> action)
+        {
+            try
+            {
+                Console.WriteLine("When : {0}", GetFormattedActionName(action));
+                action.Compile()(Aggregate);
+            }
+            catch (Exception ex)
+            {
+                thrownException = ex;
+            }
+        }
+
+        private string GetFormattedActionName(Expression<Action<TAggregate>> action)
+        {
+            string name = action.ToString();
+            int firstDot = name.IndexOf('.');
+            int firstBracket = name.IndexOf('(');
+
+            name = name.Remove(firstBracket).Substring(firstDot + 1);
+            return Regex.Replace(name, "([a-z])([A-Z])", "$1 $2");
         }
 
         protected virtual void Then<TException>() where TException : Exception
@@ -87,6 +96,8 @@ namespace Tests
 
             if (typeof(TException) != thrownException.GetType())
                 Assert.Fail("The expected exception type does not match the thrown type. \n\tExpected Exception : {0} \n\tActual Thrown      : {1}", typeof(TException).FullName, thrownException.GetType().FullName);
+
+            Console.WriteLine("Then : {0} : {1}", typeof(TException).Name, thrownException.Message);
         }
 
         protected virtual void Then<TException>(string expectedMessage) where TException : Exception
@@ -95,6 +106,8 @@ namespace Tests
 
             if (!thrownException.Message.Equals(expectedMessage, StringComparison.Ordinal))
                 Assert.Fail("The expected exception message does not match the thrown message. \n\tExpected Message : {0} \n\tActual Message   : {1}", expectedMessage, thrownException.Message);
+
+            Console.WriteLine("Then : {0} : {1}", typeof(TException).Name, expectedMessage);
         }
 
         protected virtual void Then(params IDomainEvent[] domainEvents)
@@ -107,6 +120,11 @@ namespace Tests
                     Aggregate.GetType().Name, Aggregate.GetRaisedEvents().Count(), domainEvents.Count());
 
             AssertEquality(Aggregate.GetRaisedEvents().ToArray(), domainEvents);
+
+            foreach (var domainEvent in domainEvents)
+            {
+                Console.WriteLine("Then : {0}", domainEvent);
+            }
         }
 
         private void AssertEquality(IDomainEvent[] expected, IDomainEvent[] actual)

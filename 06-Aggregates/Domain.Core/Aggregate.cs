@@ -7,10 +7,23 @@ namespace Domain.Core
     {
         private readonly HashSet<IDomainEvent> uncommitedEvents = new HashSet<IDomainEvent>();
 
+        public int Version { get; protected set; }
+
         protected virtual void RaiseEvent(IDomainEvent domainEvent)
         {
             ApplyEvent(domainEvent);
             uncommitedEvents.Add(domainEvent);
+        }
+
+        void IAggregate.ApplyEvent(object @event)
+        {
+            Version++;
+            ApplyEvent(@event);
+        }
+
+        protected virtual void ApplyEvent(object @event)
+        {
+            ((dynamic)this).When((dynamic)@event);
         }
 
         public void ClearRaisedEvents()
@@ -21,16 +34,6 @@ namespace Domain.Core
         public IEnumerable<IDomainEvent> GetRaisedEvents()
         {
             return uncommitedEvents;
-        }
-
-        void IAggregate.ApplyEvent(object @event)
-        {
-            ApplyEvent(@event);
-        }
-
-        protected virtual void ApplyEvent(object @event)
-        {
-            ((dynamic)this).When((dynamic)@event);
-        }
+        }                
     }    
 }

@@ -1,6 +1,6 @@
 using System;
 
-namespace Tests.ValueObjects
+namespace Domain.Client.ValueObjects
 {
     public class TelephoneNumber : IEquatable<TelephoneNumber>
     {
