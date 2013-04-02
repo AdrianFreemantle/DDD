@@ -12,16 +12,16 @@ namespace Domain.Client.ValueObjects
 
     public class AccountStatus
     {
-        public AccountStatusType Value { get; private set; }
+        public AccountStatusType Status { get; private set; }
 
         public AccountStatus(AccountStatusType value)
         {
-            Value = value;
+            Status = value;
         }
 
         public override int GetHashCode()
         {
-            return Value.GetHashCode();
+            return Status.GetHashCode();
         }
 
         public override bool Equals(object obj)
@@ -33,7 +33,7 @@ namespace Domain.Client.ValueObjects
         {
             if (null != other && other.GetType() == GetType())
             {
-                return other.Value == Value;
+                return other.Status == Status;
             }
 
             return false;

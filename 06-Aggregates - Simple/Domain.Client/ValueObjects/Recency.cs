@@ -4,9 +4,34 @@ namespace Domain.Client.ValueObjects
     {
         public int Value { get; private set; }
 
-        public Recency(int value)
+        protected Recency(int value)
         {
             Value = value;
+        }
+
+        public static Recency UpToDate()
+        {
+            return new Recency(0);
+        }
+
+        public Recency IncreaseRecency()
+        {
+            return new Recency(Value + 1);
+        }
+
+        public bool IsUpToDate()
+        {
+            return Value == 0;
+        }
+
+        public bool ShouldAccountBeLapsed()
+        {
+            return Value == 6;
+        }
+
+        public bool ShouldAccountBeSuspended()
+        {
+            return Value == 3;
         }
 
         public override int GetHashCode()

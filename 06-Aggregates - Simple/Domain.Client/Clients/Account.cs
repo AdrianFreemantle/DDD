@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using Domain.Client.Clients.Snapshots;
 using Domain.Client.ValueObjects;
 using Domain.Core;
@@ -6,43 +8,78 @@ namespace Domain.Client.Clients
 {
     public class Account : Entity<AccountNumber>
     {
-        private Recency recency;
-        private BillingDate billingDate;
+        private AccountStatus accountStatus;
+        private HashSet<BillingResult> billingResults;
 
         protected Account()
         {
+            billingResults = new HashSet<BillingResult>(); 
+            SetAccountStatus(AccountStatusType.Active);
         }
 
-        protected Account(AccountNumber accountNumber, BillingDate billingDate)
+        internal static Account Open(AccountNumber accountNumber)
         {
-            Identity = accountNumber;
-            this.billingDate = billingDate;
-        }
+            Mandate.ParameterNotNull(accountNumber, "accountNumber");
 
-        internal static Account Open(AccountNumber accountNumber, BillingDate billingDate)
-        {
             return new Account
             {
-                Identity = accountNumber,
-                billingDate = billingDate
+                Identity = accountNumber
             };
         }
 
-        internal static Account Null()
+        private void SetAccountStatus(AccountStatusType status)
         {
-            return new Account
+            accountStatus = new AccountStatus(status);
+        }
+
+        internal void RegisterPayment(BillingResult billingResult)
+        {
+            billingResults.Add(billingResult);
+            UpdateStatusBasedOnRecency();
+        }
+
+        internal void ReversePayment(BillingResult billingResult)
+        {
+            billingResults.Remove(billingResult);
+            UpdateStatusBasedOnRecency();
+        }
+
+        private void UpdateStatusBasedOnRecency()
+        {
+            int notPaidCounter = 0;
+
+            foreach (var billingResult in billingResults)
             {
-                Identity = new AccountNumber("00000000"),
-                billingDate = new BillingDate(SalaryPaymentType.Unknown)
-            };
+                if (billingResult.Paid)
+                {
+                    notPaidCounter = 0;
+                }
+                else
+                {
+                    notPaidCounter++;
+                }
+            }
+
+            if (notPaidCounter < 3)
+            {
+                SetAccountStatus(AccountStatusType.Active);
+            }
+            else if (notPaidCounter == 3)
+            {
+                SetAccountStatus(AccountStatusType.Suspended);
+            }
+            else if (notPaidCounter == 6)
+            {
+                SetAccountStatus(AccountStatusType.Lapsed);
+            }
         }
 
         protected override IMemento GetSnapshot()
         {
             return new AccountSnapshot
             {
-                Recency = recency,
-                BillingDate = billingDate
+                AccountStatus = accountStatus,
+                BillingResults = billingResults.ToArray()
             };
         }
 
@@ -50,8 +87,8 @@ namespace Domain.Client.Clients
         {
             var snapshot = (AccountSnapshot)memento;
 
-            recency = snapshot.Recency;
-            billingDate = snapshot.BillingDate;
+            accountStatus = snapshot.AccountStatus;
+            billingResults = new HashSet<BillingResult>(snapshot.BillingResults);
         }
     }
 }

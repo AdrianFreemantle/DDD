@@ -37,11 +37,10 @@ namespace Tests.ClientSpecifications
         public void Blah()
         {
             var accountNumber = new AccountNumber("12345");
-            var billingDate = new BillingDate(SalaryPaymentType.Monthly);
 
             Given(ClientRegistered());
-            When(client => client.OpenAccount(accountNumber, billingDate));
-            Then(new AccountOpened(accountNumber, billingDate));
+            When(client => client.OpenAccount(accountNumber));
+            Then(new AccountOpened(accountNumber));
         }
     }
 }

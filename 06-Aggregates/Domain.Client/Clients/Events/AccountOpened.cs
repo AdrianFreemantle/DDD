@@ -10,13 +10,9 @@ namespace Domain.Client.Clients.Events
         [DataMember(Order = 1)]
         public AccountNumber AccountNumber { get; protected set; }
 
-        [DataMember(Order = 2)]
-        public BillingDate BillingDate { get; protected set; }
-
-        public AccountOpened(AccountNumber accountNumber, BillingDate billingDate)
+        public AccountOpened(AccountNumber accountNumber)
         {
             AccountNumber = accountNumber;
-            BillingDate = billingDate;
         }
     }
 }

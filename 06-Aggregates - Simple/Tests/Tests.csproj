@@ -52,13 +52,14 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClientTests\When_a_client_is_billed.cs" />
     <Compile Include="TestHelpers\ActivatorHelper.cs" />
-    <Compile Include="ClientSpecifications\ClientTests.cs" />
+    <Compile Include="ClientTests\ClientTest.cs" />
     <Compile Include="TestHelpers\CompareObjects.cs" />
     <Compile Include="TestHelpers\EventBusStub.cs" />
     <Compile Include="TestHelpers\EventHandlerStub.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ClientSpecifications\when_client_date_of_birth_is_corrected.cs" />
+    <Compile Include="ClientTests\When_client_date_of_birth_is_corrected.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -8,37 +8,33 @@ namespace Domain.Client.Clients
     public class Account : Entity<AccountNumber>
     {
         private Recency recency;
-        private BillingDate billingDate;
 
         protected Account()
         {
         }
 
-        protected Account(AccountNumber accountNumber, BillingDate billingDate)
+        protected Account(AccountNumber accountNumber)
         {
             Identity = accountNumber;
-            this.billingDate = billingDate;
         }
 
-        internal static Account Open(AccountNumber accountNumber, BillingDate billingDate)
+        internal static Account Open(AccountNumber accountNumber)
         {
             var account = new Account();
-            account.RaiseEvent(new AccountOpened(accountNumber, billingDate));
+            account.RaiseEvent(new AccountOpened(accountNumber));
             return account;
         }
 
         public void When(AccountOpened @event)
         {
             Identity = @event.AccountNumber;
-            billingDate = @event.BillingDate;
         }
 
         internal static Account Null()
         {
             return new Account
             {
-                Identity = new AccountNumber("00000000"),
-                billingDate = new BillingDate(SalaryPaymentType.Unknown)
+                Identity = new AccountNumber("00000000")
             };
         }
 
@@ -47,7 +43,6 @@ namespace Domain.Client.Clients
             var snapshot = (IAccountSnapshot)memento;
 
             recency = snapshot.Recency;
-            billingDate = snapshot.BillingDate;
         }
     }
 }

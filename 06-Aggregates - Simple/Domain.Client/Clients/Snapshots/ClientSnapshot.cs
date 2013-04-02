@@ -9,6 +9,7 @@ namespace Domain.Client.Clients.Snapshots
         public PersonName ClientName { get; set; }
         public TelephoneNumber PrimaryContactNumber { get; set; }
         public DateOfBirth DateOfBirth { get; set; }
+        public IdentityNumber IdentityNumber { get; set; }
         public AccountSnapshot AccountSnapshot { get; set; }
     }
 }

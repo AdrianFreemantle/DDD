@@ -17,14 +17,14 @@ namespace Domain.Client.Clients
             return client;
         }
 
-        public void OpenAccount(AccountNumber accountNumber, BillingDate billingDate)
+        public void OpenAccount(AccountNumber accountNumber)
         {
             if (account != null)
             {
                 throw DomainError.Named("Account-Exists", "The account alreay exists");
             }
             
-            account = Account.Open(accountNumber, billingDate);
+            account = Account.Open(accountNumber);
             RaiseEvent((account as IEntity).GetRaisedEvents());
         }
 

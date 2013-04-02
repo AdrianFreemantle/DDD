@@ -43,16 +43,15 @@
   <ItemGroup>
     <Compile Include="Clients\Account.cs" />
     <Compile Include="Clients\AccountNumber.cs" />
+    <Compile Include="ValueObjects\BillingResult.cs" />
     <Compile Include="Clients\Snapshots\AccountSnapshot.cs" />
     <Compile Include="Clients\Client.cs" />
     <Compile Include="Clients\ClientId.cs" />
     <Compile Include="Clients\Snapshots\ClientSnapshot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ValueObjects\AccountStatus.cs" />
-    <Compile Include="ValueObjects\BillingDate.cs" />
     <Compile Include="ValueObjects\DateOfBirth.cs" />
     <Compile Include="ValueObjects\IdentityNumber.cs" />
-    <Compile Include="ValueObjects\InsuranceProduct.cs" />
     <Compile Include="ValueObjects\PersonAge.cs" />
     <Compile Include="ValueObjects\PersonName.cs" />
     <Compile Include="ValueObjects\Recency.cs" />
