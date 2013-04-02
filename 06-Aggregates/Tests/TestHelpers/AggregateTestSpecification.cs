@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text.RegularExpressions;
-
 using Domain.Core;
 using Domain.Core.Events;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Tests
+namespace Tests.TestHelpers
 {
     public abstract class AggregateTestSpecification<TAggregate> where TAggregate : class, IAggregate 
     {
@@ -44,12 +43,12 @@ namespace Tests
             }
         }
 
-        protected void When(Expression<Func<TAggregate>> function)
+        protected void When(Expression<Func<TAggregate>> expression)
         {
             try
             {
-                Console.WriteLine("When : {0}", GetFormattedFunctionName(function));
-                Aggregate = function.Compile()();
+                Console.WriteLine("When : {0}", GetFormattedFunctionName(expression));
+                Aggregate = expression.Compile()();
             }
             catch (Exception ex)
             {
@@ -66,12 +65,14 @@ namespace Tests
             return Regex.Replace(name, "([a-z])([A-Z])", "$1 $2");
         }
 
-        protected void When(Expression<Action<TAggregate>> action)
+        protected void When(Expression<Action<TAggregate>> expression)
         {
             try
             {
-                Console.WriteLine("When : {0}", GetFormattedActionName(action));
-                action.Compile()(Aggregate);
+                Console.WriteLine("When : {0}", GetFormattedActionName(expression));
+                Action<TAggregate> action = expression.Compile();
+                action(Aggregate);
+
             }
             catch (Exception ex)
             {

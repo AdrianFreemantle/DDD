@@ -4,9 +4,9 @@ namespace Domain.Core
 {
     public static class AggregateFactory
     {
-        public static TEntity Build<TEntity>(IMemento memento) where TEntity : IAggregate
+        public static TAggreggate Build<TAggreggate>(IMemento memento) where TAggreggate : IAggregate
         {
-            ConstructorInfo constructor = typeof(TEntity).GetConstructor(
+            ConstructorInfo constructor = typeof(TAggreggate).GetConstructor(
                 BindingFlags.NonPublic | BindingFlags.Instance, null, new[] { typeof(IHaveIdentity) }, null);
 
             var aggregate = constructor.Invoke(new object[] { memento.Identity }) as IAggregate;
@@ -16,7 +16,7 @@ namespace Domain.Core
                 aggregate.RestoreSnapshot(memento);
             }
 
-            return (TEntity)aggregate;
+            return (TAggreggate)aggregate;
         }
     }
 }

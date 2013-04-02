@@ -1,7 +1,7 @@
 using Domain.Client.ValueObjects;
 using Domain.Core;
 
-namespace Domain.Client.Clients
+namespace Domain.Client.Clients.Snapshots
 {
     public class ClientSnapshot : IMemento
     {
@@ -9,5 +9,6 @@ namespace Domain.Client.Clients
         public PersonName ClientName { get; set; }
         public TelephoneNumber PrimaryContactNumber { get; set; }
         public DateOfBirth DateOfBirth { get; set; }
+        public AccountSnapshot AccountSnapshot { get; set; }
     }
 }

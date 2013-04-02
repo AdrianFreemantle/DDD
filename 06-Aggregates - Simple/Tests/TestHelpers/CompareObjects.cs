@@ -22,7 +22,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 
-namespace Tests
+namespace Tests.TestHelpers
 {
     /// <summary>
     /// Class that allows comparison of two objects of the same type to each other.  Supports classes, lists, arrays, dictionaries, child comparison and more.

@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Reflection;
 
-namespace Tests
+namespace Tests.TestHelpers
 {
     public static class ActivatorHelper
     {

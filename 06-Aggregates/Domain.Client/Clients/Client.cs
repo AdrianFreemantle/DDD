@@ -3,35 +3,9 @@ using Domain.Client.ValueObjects;
 using Domain.Core;
 
 namespace Domain.Client.Clients
-{
-    public class Account : Entity<AccountNumber>
+{   
+    public partial class Client : Aggregate<ClientId>
     {
-        private Recency recency;
-        private BillingDate billingDate;
-
-        protected Account()
-        {
-        }
-
-        internal static Account Open(AccountNumber accountNumber, BillingDate billingDate)
-        {
-            return new Account
-            {
-                billingDate = billingDate,
-                Identity = accountNumber
-            };
-        }
-    }
-
-    public class Client : Aggregate<ClientId>, IClientEvents
-    {
-        private IdentityNumber identityNumber;
-        private PersonName clientName;
-        private TelephoneNumber primaryContactNumber;
-        private DateOfBirth dateOfBirth;
-
-        private Account account;
-
         protected Client()
         {
         }
@@ -43,13 +17,15 @@ namespace Domain.Client.Clients
             return client;
         }
 
-        void IClientEvents.When(ClientRegistered @event)
+        public void OpenAccount(AccountNumber accountNumber, BillingDate billingDate)
         {
-            Identity = @event.ClientId;
-            identityNumber = @event.IdentityNumber;
-            clientName = @event.ClientName;
-            primaryContactNumber = @event.TelephoneNumber;
-            dateOfBirth = identityNumber.GetDateOfBirth();
+            if (account != null)
+            {
+                throw DomainError.Named("Account-Exists", "The account alreay exists");
+            }
+            
+            account = Account.Open(accountNumber, billingDate);
+            RaiseEvent((account as IEntity).GetRaisedEvents());
         }
 
         public void CorrectDateOfBirth(DateOfBirth dateOfBirth)
@@ -60,35 +36,6 @@ namespace Domain.Client.Clients
             }
 
             RaiseEvent(new ClientDateOfBirthCorrected(Identity.Id, dateOfBirth));
-        }
-
-        void IClientEvents.When(ClientDateOfBirthCorrected @event)
-        {
-            dateOfBirth = @event.DateOfBirth;
-        }
-
-        protected override IMemento GetSnapshot()
-        {
-            return new ClientSnapshot
-            {
-                DateOfBirth = dateOfBirth,
-                ClientName = clientName,
-                PrimaryContactNumber = primaryContactNumber
-            };
-        }
-
-        protected override void RestoreSnapshot(IMemento memento)
-        {
-            var snapshot = (ClientSnapshot)memento;
-
-            dateOfBirth = snapshot.DateOfBirth;
-            clientName = snapshot.ClientName;
-            primaryContactNumber = snapshot.PrimaryContactNumber;
-        }
-
-        protected override void ApplyEvent(object @event)
-        {
-            ((IClientEvents)this).When((dynamic)@event);
         }
     }
 }

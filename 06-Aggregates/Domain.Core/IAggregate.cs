@@ -1,8 +1,7 @@
 ﻿namespace Domain.Core
 {
-    public interface IAggregate : IEntity, IPublishEvents
+    public interface IAggregate : IEntity
     {
-        int Version { get; }
         void ApplyEvent(object @event);
     }
 }

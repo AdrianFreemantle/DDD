@@ -1,8 +1,7 @@
 using System.Collections.Generic;
-
 using Domain.Core.Events;
 
-namespace Tests
+namespace Tests.TestHelpers
 {
     class EventHandlerStub 
     {

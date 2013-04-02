@@ -1,29 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using Domain.Core.Events;
 
 namespace Domain.Core
 {
     public abstract class Entity<TIdentity> : IEquatable<Entity<TIdentity>>, IEntity where TIdentity : IHaveIdentity
     {
-        private readonly HashSet<IDomainEvent> events = new HashSet<IDomainEvent>();
-
         public TIdentity Identity { get; protected set; }
-
-        protected virtual void RaiseEvent(IDomainEvent @event)
-        {
-            events.Add(@event);
-        }
-
-        void IEntity.ClearEvents()
-        {
-            events.Clear();
-        }
-
-        IEnumerable<IDomainEvent> IEntity.GetRaisedEvents()
-        {
-            return events;
-        }
 
         public override int GetHashCode()
         {

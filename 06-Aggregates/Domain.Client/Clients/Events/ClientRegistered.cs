@@ -28,10 +28,5 @@ namespace Domain.Client.Clients.Events
             ClientName = personName;
             TelephoneNumber = telephoneNumber;
         }
-
-        public override string ToString()
-        {
-            return String.Format("Client is registered.");
-        }
     }
 }
