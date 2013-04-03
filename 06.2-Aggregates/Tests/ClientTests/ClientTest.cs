@@ -11,6 +11,7 @@ namespace Tests.ClientTests
         public readonly IdentityNumber DefaultIdentityNumber = new IdentityNumber("7808035176089");
         public readonly PersonName DefaultPersonName = new PersonName("Adrian", "Freemantle");
         public readonly TelephoneNumber DefaultTelephoneNumber = new TelephoneNumber("0125552222");
+        public readonly ClientId DefaultClientId = new ClientId(new IdentityNumber("7808035176089"));
         public readonly AccountNumber DefaultAccountNumber = new AccountNumber("1234565");
 
         [TestCleanup]
@@ -22,6 +23,11 @@ namespace Tests.ClientTests
         protected Client DefaultClient()
         {
             return Client.RegisterClient(DefaultIdentityNumber, DefaultPersonName, DefaultTelephoneNumber);
+        }
+
+        protected Account DefaultAccount()
+        {
+            return Account.Open(DefaultClientId, DefaultAccountNumber);
         }
     }
 }

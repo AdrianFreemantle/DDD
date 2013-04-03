@@ -45,14 +45,7 @@ namespace Domain.Client.Accounts
         {
             Mandate.ParameterNotNull(billingResult, "billingResult");
 
-            if (billingResult.Paid)
-            {
-                recency.IsUpToDate();
-            }
-            else
-            {
-                recency.IncreaseRecency();
-            }
+            recency = billingResult.Paid ? Recency.UpToDate() : recency.IncreaseRecency();
 
             UpdateStatusBasedOnRecency();
         }

@@ -1,5 +1,3 @@
-// ReSharper disable InconsistentNaming
-
 using System;
 using Domain.Client.Clients;
 using Domain.Client.ValueObjects;
@@ -10,6 +8,7 @@ using Shouldly;
 namespace Tests.ClientTests
 {
     [TestClass]
+    // ReSharper disable InconsistentNaming
     public class When_client_date_of_birth_is_corrected : ClientTest
     {
         [TestMethod]
@@ -41,4 +40,3 @@ namespace Tests.ClientTests
         }
     }
 }
-// ReSharper restore InconsistentNaming

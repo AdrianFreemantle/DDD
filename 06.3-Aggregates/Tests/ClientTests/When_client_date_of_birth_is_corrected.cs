@@ -1,27 +1,27 @@
-// ReSharper disable InconsistentNaming
-
 using System;
-using Domain.Client.Clients;
+using Domain.Client.Events;
 using Domain.Client.ValueObjects;
 using Domain.Core;
+using Domain.Core.Events;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
 
 namespace Tests.ClientTests
 {
     [TestClass]
+    // ReSharper disable InconsistentNaming
     public class When_client_date_of_birth_is_corrected : ClientTest
     {
         [TestMethod]
         public void With_a_valid_bith_date()
         {
+            DomainEvent.Current.Subscribe<ClientDateOfBirthCorrected>(Events.Handle);
             var dateOfBirth = new DateOfBirth(DateTime.Today.Date.AddYears(-18));
 
             var client = DefaultClient();
             client.CorrectDateOfBirth(dateOfBirth);
 
-            var snapshot = ((IEntity)client).GetSnapshot();
-            ((ClientSnapshot)snapshot).DateOfBirth.ShouldBe(dateOfBirth);
+            Then(new ClientDateOfBirthCorrected(client.Identity, dateOfBirth));
         }
 
         [TestMethod, ExpectedException(typeof(DomainError))]
@@ -41,4 +41,3 @@ namespace Tests.ClientTests
         }
     }
 }
-// ReSharper restore InconsistentNaming

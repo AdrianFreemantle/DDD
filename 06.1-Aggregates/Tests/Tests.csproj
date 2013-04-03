@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClientTests\When_a_client_is_billed.cs" />
+    <Compile Include="ClientTests\When_a_client_is_deceased.cs" />
     <Compile Include="TestHelpers\ActivatorHelper.cs" />
     <Compile Include="ClientTests\ClientTest.cs" />
     <Compile Include="TestHelpers\CompareObjects.cs" />

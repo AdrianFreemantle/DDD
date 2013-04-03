@@ -1,4 +1,3 @@
-using System;
 using Domain.Client.Clients.Snapshots;
 using Domain.Client.ValueObjects;
 using Domain.Core;
@@ -9,32 +8,33 @@ namespace Tests.ClientTests
 {
     [TestClass]
     // ReSharper disable InconsistentNaming
-    public class When_client_date_of_birth_is_corrected : ClientTest
+    public class When_a_client_is_deceased : ClientTest
     {
         [TestMethod]
-        public void With_a_valid_bith_date()
+        public void Then_their_account_is_cancelled()
         {
-            var dateOfBirth = new DateOfBirth(DateTime.Today.Date.AddYears(-18));
-
-            var client = DefaultClient();
-            client.CorrectDateOfBirth(dateOfBirth);
+            var client = DefaultClient(); 
+            client.OpenAccount(DefaultAccountNumber);
+            client.ClientIsDeceased();
 
             var snapshot = ((IEntity)client).GetSnapshot();
-            ((ClientSnapshot)snapshot).DateOfBirth.ShouldBe(dateOfBirth);
+            AccountStatus accountStatus = ((ClientSnapshot)snapshot).AccountSnapshot.AccountStatus;
+
+            accountStatus.Status.ShouldBe(AccountStatusType.Cancelled);
         }
 
         [TestMethod, ExpectedException(typeof(DomainError))]
-        public void With_an_invalid_birth_date()
+        public void An_account_cannot_be_opened()
         {
             try
             {
-                var dateOfBirth = new DateOfBirth(DateTime.Today.Date);
                 var client = DefaultClient();
-                client.CorrectDateOfBirth(dateOfBirth);
+                client.ClientIsDeceased();
+                client.OpenAccount(DefaultAccountNumber);
             }
             catch (DomainError e)
             {
-                e.Name.ShouldBe("underage");
+                e.Name.ShouldBe("client-deceased");
                 throw;
             }
         }

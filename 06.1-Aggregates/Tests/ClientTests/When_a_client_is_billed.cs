@@ -1,5 +1,3 @@
-// ReSharper disable InconsistentNaming
-
 using System;
 using Domain.Client.Clients.Snapshots;
 using Domain.Client.ValueObjects;
@@ -10,10 +8,11 @@ using Shouldly;
 namespace Tests.ClientTests
 {
     [TestClass]
+    // ReSharper disable InconsistentNaming
     public class When_a_client_is_billed : ClientTest
     {
         [TestMethod]
-        public void And_payment_has_been_made()
+        public void Account_is_active_after_valid_payment()
         {
             var client = DefaultClient();
             client.OpenAccount(DefaultAccountNumber);
@@ -26,7 +25,7 @@ namespace Tests.ClientTests
         }
 
         [TestMethod]
-        public void And_three_payments_have_been_missed()
+        public void Account_is_suspended_after_three_payments_have_been_missed()
         {
             var client = DefaultClient();
             client.OpenAccount(DefaultAccountNumber);
@@ -41,7 +40,7 @@ namespace Tests.ClientTests
         }
 
         [TestMethod]
-        public void And_six_payments_have_been_missed()
+        public void Account_is_lapsed_after_six_payments_have_been_missed()
         {
             var client = DefaultClient();
             client.OpenAccount(DefaultAccountNumber);
@@ -59,4 +58,3 @@ namespace Tests.ClientTests
         }
     }
 }
-// ReSharper restore InconsistentNaming

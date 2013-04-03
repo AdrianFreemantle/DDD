@@ -16,7 +16,7 @@ namespace Domain.Client.Accounts
         protected Account()
         {
             recency = Recency.UpToDate();
-            SetAccountStatus(AccountStatusType.Active);
+            accountStatus = new AccountStatus(AccountStatusType.Active);
         }
 
         internal static Account Open(ClientId clientId, AccountNumber accountNumber)
@@ -49,17 +49,10 @@ namespace Domain.Client.Accounts
         {
             Mandate.ParameterNotNull(billingResult, "billingResult");
 
-            if (billingResult.Paid)
-            {
-                recency.IsUpToDate();
-            }
-            else
-            {
-                recency.IncreaseRecency();
-            }
+            recency = billingResult.Paid ? Recency.UpToDate() : recency.IncreaseRecency();
 
-            UpdateStatusBasedOnRecency();
             DomainEvent.Current.Raise(new AccountBilled(Identity, recency));
+            UpdateStatusBasedOnRecency();
         }
 
         private void UpdateStatusBasedOnRecency()
