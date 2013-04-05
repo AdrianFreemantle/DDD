@@ -10,7 +10,7 @@ namespace Domain.Core
             ApplyEvent(@event);
         }
 
-        protected override void RaiseEvent(IDomainEvent @event)
+        protected override void RaiseEvent<TEvent>(TEvent @event) 
         {
             base.RaiseEvent(@event);
             ApplyEvent(@event);

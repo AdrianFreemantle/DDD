@@ -7,6 +7,11 @@ namespace Domain.Client.Clients
     {
         public override string Id { get; protected set; }
 
+        public ClientId(string clientId)
+        {
+            Id = clientId;
+        }
+
         public ClientId(IdentityNumber identityNumber)
         {
             Id = identityNumber.Number;

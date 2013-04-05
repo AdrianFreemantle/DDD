@@ -13,10 +13,11 @@ namespace Tests.TestHelpers
         IGiven And(IDomainEvent @event);
     }
 
-    public abstract class AggregateTestSpecification<TAggregate> : IGiven where TAggregate : class, IAggregate 
+    public abstract class AggregateTestSpecification<TAggregate> : IGiven where TAggregate : class, IAggregate
     {
         protected TAggregate Aggregate { get; private set; }
-        Exception thrownException;
+        private Exception thrownException;
+        private EventBusStub eventBusStub;
 
         protected virtual TAggregate ConstructAggregate()
         {
@@ -26,6 +27,9 @@ namespace Tests.TestHelpers
         [TestInitialize]
         public virtual void TestSetup()
         {
+            eventBusStub = new EventBusStub();
+            DomainEvent.Current.ClearSubscribers();
+            DomainEvent.Current.RegisterEventBus(eventBusStub);
             Aggregate = ConstructAggregate();
         }
 
@@ -82,7 +86,6 @@ namespace Tests.TestHelpers
                 Console.WriteLine("When : {0}", GetFormattedActionName(expression));
                 Action<TAggregate> action = expression.Compile();
                 action(Aggregate);
-
             }
             catch (Exception ex)
             {
@@ -121,18 +124,16 @@ namespace Tests.TestHelpers
             Console.WriteLine("Then : {0} : {1} : {2}", typeof(TException).Name, expectedName, thrownException.Message);
         }
 
-
-
         protected virtual void Then(params IDomainEvent[] domainEvents)
         {
             if (thrownException != null)
                 throw thrownException;
 
-            if (Aggregate.GetRaisedEvents().Count() != domainEvents.Count())
-                Assert.Fail("The aggregate {0} contained {1} events : Expected number of events is {2}", 
-                    Aggregate.GetType().Name, Aggregate.GetRaisedEvents().Count(), domainEvents.Count());
+            if (eventBusStub.RaisedEvents.Count() != domainEvents.Count())
+                Assert.Fail("The aggregate {0} contained {1} events : Expected number of events is {2}",
+                    Aggregate.GetType().Name, eventBusStub.RaisedEvents.Count(), domainEvents.Count());
 
-            AssertEquality(Aggregate.GetRaisedEvents().ToArray(), domainEvents);
+            AssertEquality(eventBusStub.RaisedEvents.ToArray(), domainEvents);
 
             bool insertComma = false;
 

@@ -1,14 +1,11 @@
 ﻿using System.Linq;
+using Domain.Client.Clients;
 using Domain.Client.Events;
-using Domain.Core.Events;
 using Domain.Core.Infrastructure;
 
 namespace PersistenceModel
-{   
-    public class ClientProjections : 
-        IEventHandler<ClientRegistered>,
-        IEventHandler<ClientDateOfBirthCorrected>,
-        IEventHandler<ClientPassedAway>
+{
+    public class ClientProjections : IHandleClientStateTransitions
     {
         private readonly IRepository repository;
 
@@ -34,20 +31,19 @@ namespace PersistenceModel
 
         public void When(ClientDateOfBirthCorrected @event)
         {
-            var clientModel = FetchClientModel(@event.ClientId.Id);
+            var clientModel = FetchModel(@event.ClientId);
             clientModel.DateOfBirth = @event.DateOfBirth;
         }
 
         public void When(ClientPassedAway @event)
         {
-            var clientModel = FetchClientModel(@event.ClientId.Id);
+            var clientModel = FetchModel(@event.ClientId);
             clientModel.IsDeceased = true;
         }
 
-        private ClientModel FetchClientModel(string clientId)
+        private ClientModel FetchModel(ClientId clientId)
         {
-            var clientModel = repository.GetQueryable<ClientModel>().First(client => client.IdentityNumber == clientId);
-            return clientModel;
+            return repository.GetQueryable<ClientModel>().First(client => client.IdentityNumber == clientId.Id);
         }
     }
 }

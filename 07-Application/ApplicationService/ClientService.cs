@@ -23,12 +23,11 @@ namespace ApplicationService
                 Client.RegisterClient(new IdentityNumber(idNumber), new PersonName(firstName, surname), new TelephoneNumber(primaryContactNumber));
                 unitOfWork.Commit();
             }
-            catch 
+            catch (Exception ex)
             {
-                unitOfWork.Rollback();
-                throw;
+                HandleException(ex);
             }
-        }
+        }        
 
         public void CorrectDateOfBirth(string clientId, DateTime dateOfBirth)
         {
@@ -36,11 +35,11 @@ namespace ApplicationService
             {
                 Client client = clientRepository.Get(clientId);
                 client.CorrectDateOfBirth(new DateOfBirth(dateOfBirth));
+                unitOfWork.Commit();
             }
-            catch
+            catch (Exception ex)
             {
-                unitOfWork.Rollback();
-                throw;
+                HandleException(ex);
             }
         }
 
@@ -50,12 +49,18 @@ namespace ApplicationService
             {
                 Client client = clientRepository.Get(clientId);
                 client.ClientIsDeceased();
+                unitOfWork.Commit();
             }
-            catch 
+            catch (Exception ex)
             {
-                unitOfWork.Rollback();
-                throw;
+                HandleException(ex);
             }
+        }
+
+        private void HandleException(Exception ex)
+        {
+            unitOfWork.Rollback();
+            throw ex;
         }
     }
 }

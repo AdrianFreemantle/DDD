@@ -3,14 +3,14 @@ using Domain.Client.ValueObjects;
 
 namespace Domain.Client.Clients
 {
-    public interface IClientState
+    public interface IHandleClientStateTransitions
     {
         void When(ClientRegistered @event);
         void When(ClientDateOfBirthCorrected @event);
         void When(ClientPassedAway @event);
     }
 
-    public partial class Client : IClientState
+    public partial class Client : IHandleClientStateTransitions
     {
         private IdentityNumber identityNumber;
         private PersonName clientName;
@@ -18,7 +18,7 @@ namespace Domain.Client.Clients
         private DateOfBirth dateOfBirth;
         private bool isDeceased;
 
-        void IClientState.When(ClientRegistered @event)
+        void IHandleClientStateTransitions.When(ClientRegistered @event)
         {
             Identity = @event.ClientId;
             identityNumber = @event.IdentityNumber;
@@ -27,19 +27,19 @@ namespace Domain.Client.Clients
             dateOfBirth = @event.IdentityNumber.GetDateOfBirth();
         }
 
-        void IClientState.When(ClientDateOfBirthCorrected @event)
+        void IHandleClientStateTransitions.When(ClientDateOfBirthCorrected @event)
         {
             dateOfBirth = @event.DateOfBirth;
         }
 
-        void IClientState.When(ClientPassedAway @event)
+        void IHandleClientStateTransitions.When(ClientPassedAway @event)
         {
             isDeceased = true;
         }
 
         protected override void ApplyEvent(object @event)
         {
-            ((IClientState)this).When((dynamic)@event);
+            ((IHandleClientStateTransitions)this).When((dynamic)@event);
         }
     }
 }

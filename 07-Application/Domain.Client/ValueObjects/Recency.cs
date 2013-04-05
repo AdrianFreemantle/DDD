@@ -4,7 +4,7 @@ namespace Domain.Client.ValueObjects
     {
         public int Value { get; private set; }
 
-        internal Recency(int value)
+        public Recency(int value)
         {
             Value = value;
         }

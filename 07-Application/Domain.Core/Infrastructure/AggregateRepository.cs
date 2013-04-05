@@ -4,7 +4,14 @@
     {
         public virtual TAggregate Get(object id)
         {
-            return AggregateFactory.Build<TAggregate>(LoadSnapshot(id));
+            var aggregate = ActivatorHelper.CreateInstance<TAggregate>();
+
+            if (aggregate != null)
+            {
+                aggregate.RestoreSnapshot(LoadSnapshot(id));
+            }
+
+            return aggregate;
         }
 
         protected abstract IMemento LoadSnapshot(object id);

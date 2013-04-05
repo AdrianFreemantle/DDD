@@ -51,7 +51,6 @@
     <Compile Include="Infrastructure\ISerialize.cs" />
     <Compile Include="Infrastructure\IUnitOfWork.cs" />
     <Compile Include="IPublishEvents.cs" />
-    <Compile Include="Infrastructure\AggregateFactory.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="Events\DomainEvent.cs" />
     <Compile Include="Events\IDomainEvent.cs" />

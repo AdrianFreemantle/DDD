@@ -54,7 +54,7 @@
     <Compile Include="Events\ClientRegistered.cs" />
     <Compile Include="Services\IAccountService.cs" />
     <Compile Include="ValueObjects\BillingResult.cs" />
-    <Compile Include="Accounts\AccountSnapshot.cs" />
+    <Compile Include="Accounts\IAccountSnapshot.cs" />
     <Compile Include="Clients\Client.cs" />
     <Compile Include="Clients\ClientId.cs" />
     <Compile Include="Clients\ClientSnapshot.cs" />

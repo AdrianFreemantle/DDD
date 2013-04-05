@@ -10,9 +10,9 @@ namespace Domain.Core
 
         public TIdentity Identity { get; protected set; }
 
-        protected virtual void RaiseEvent(IDomainEvent @event)
+        protected virtual void RaiseEvent<TEvent>(TEvent @event) where TEvent : IDomainEvent
         {
-            events.Add(@event);
+            DomainEvent.Current.Raise(@event);
         }
 
         void IEntity.ClearEvents()
