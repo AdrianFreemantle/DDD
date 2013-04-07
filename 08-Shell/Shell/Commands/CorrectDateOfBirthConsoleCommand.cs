@@ -1,0 +1,35 @@
+﻿using ApplicationService.Commands;
+using Domain.Client.Clients;
+using Domain.Client.ValueObjects;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Shell.Commands
+{
+    class CorrectDateOfBirthConsoleCommand : CorrectDateOfBirth, IConsoleCommand
+    {
+        public string[] Keys
+        {
+            get { return new[] { "CorrectDateOfBirth" }; }
+        }
+
+        public string Usage
+        {
+            get { return "CorrectDateOfBirth <ClientId> <Date> { Date is YYYY-MM-DD }"; }
+        }
+
+        public void Build(string[] args)
+        {
+            if (args.Length != 2)
+            {
+                throw new Exception(String.Format("Error. Usage is: {0}", Usage));
+            }
+
+            ClientId = new ClientId(args[0]);
+            DateOfBirth = new DateOfBirth(DateTime.Parse(args[1]));
+        }
+    }
+}
