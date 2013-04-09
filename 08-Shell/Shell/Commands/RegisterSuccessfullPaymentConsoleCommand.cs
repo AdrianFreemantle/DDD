@@ -1,5 +1,5 @@
-﻿using ApplicationService.Commands;
-using Domain.Client.Accounts;
+﻿using Domain.Client.Accounts;
+using Domain.Client.Accounts.Commands;
 using Domain.Client.ValueObjects;
 using System;
 using System.Collections.Generic;

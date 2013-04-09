@@ -1,6 +1,6 @@
 using Domain.Client.Accounts;
+using Domain.Client.Accounts.Events;
 using Domain.Client.Clients;
-using Domain.Client.Events;
 using Domain.Client.ValueObjects;
 using Domain.Core.Events;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

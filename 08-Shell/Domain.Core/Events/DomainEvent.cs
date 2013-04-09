@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace Domain.Core.Events
-{   
-    public sealed class DomainEvent
+{
+    public sealed class DomainEvent : IEventPublisher
     {
         [ThreadStatic] //so that each thread has its own callbacks
         private static volatile DomainEvent instance;
         private static readonly object SyncRoot = new Object();
 
         private HashSet<Delegate> actions;
-        private IEventBus eventBus;
+        private IEventPublisher eventPublisher;
 
         private DomainEvent() { }
 
@@ -32,19 +32,19 @@ namespace Domain.Core.Events
             }
         }
 
-        public void Raise<T>(T @event) where T : IDomainEvent
-        {
-            if (eventBus != null)
-            {
-                eventBus.Submit(@event);
-            }
-
+        public void Publish<T>(T @event) where T : IDomainEvent
+        {           
             if (actions != null)
             {
                 foreach (Action<T> action in actions.OfType<Action<T>>())
                 {
                     action(@event);
                 }
+            }
+
+            if (eventPublisher != null)
+            {
+                eventPublisher.Publish(@event);
             }
         }
 
@@ -63,9 +63,9 @@ namespace Domain.Core.Events
             actions = null;
         }
 
-        public void RegisterEventBus(IEventBus bus)
+        public void RegisterEventBus(IEventPublisher publisher)
         {
-            eventBus = bus;
+            eventPublisher = publisher;
         }
     }   
 }

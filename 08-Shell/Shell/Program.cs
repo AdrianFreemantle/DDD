@@ -1,26 +1,19 @@
 ﻿using System;
-using ApplicationService;
-using Domain.Client.Accounts;
-using Domain.Client.Clients;
-using Domain.Client.Events;
-using Domain.Core.Events;
-using Domain.Core.Infrastructure;
-using Infrastructure;
-using Infrastructure.Repositories;
-using PersistenceModel;
-using Infrastructure.Services;
-using ApplicationService.EventHandlers;
 using System.Threading;
 using System.Linq;
-using Domain.Core.Commands;
+using Domain.Core.Logging;
 
 namespace Shell
 {
     class Program
     {
+        static ILog logger;
+
         static void Main()
         {
             ConsoleEnvironment.Build();
+            logger = LogFactory.BuildLogger(typeof(Program));
+
             PrintHelp();
 
             while (true)
@@ -43,7 +36,7 @@ namespace Shell
                 }
                 catch (Exception ex)
                 {
-                    ConsoleEnvironment.Logger.Fatal(ex.Message);
+                    logger.Fatal(ex.Message);
                 }
 
                 Console.WriteLine();
@@ -57,11 +50,11 @@ namespace Shell
                 IConsoleCommand command = ConsoleEnvironment.Commands[split.First()];
                 command.Build(split.Skip(1).ToArray());
 
-                ConsoleEnvironment.CommandBus.Submit(command);
+                ConsoleEnvironment.LocalCommandPublisher.Publish(command);
             }
             else
             {
-                ConsoleEnvironment.Logger.Fatal("Unable to find a matching command");
+                logger.Fatal("Unable to find a matching command");
             }
         }
 

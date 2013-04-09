@@ -15,7 +15,7 @@ namespace Infrastructure
             
         }
 
-        public InMemoryUnitOfWork(InMemoryRepository repository)
+        public InMemoryUnitOfWork(IRepository repository)
         {
             Repository = repository;
             Commit();

@@ -1,29 +1,25 @@
 ﻿using System;
 using Domain.Client.Clients;
-using Domain.Client.ValueObjects;
+using Domain.Client.Clients.Commands;
+using Domain.Client.Clients.Events;
+using Domain.Core.Events;
 using Domain.Core.Infrastructure;
-using Domain.Client.Services;
-using Domain.Client.Accounts;
-using Domain.Core.Commands;
-using ApplicationService.Commands;
 
 namespace ApplicationService
 {   
-    public class ClientService : 
-        ICommandHandler<RegisterClient>,
-        ICommandHandler<OpenAccount>,
-        ICommandHandler<CorrectDateOfBirth>,
-        ICommandHandler<SetClientAsDeceased>
+    public class ClientApplicationService : IClientApplicationService
     {
-        private readonly AggregateRepository<Client> clientRepository;
-        private readonly IAccountNumberService accountNumberService;
+        private readonly IAggregateRepository<Client> clientRepository;
+        private readonly IClientProjections clientProjections;
         private readonly IUnitOfWork unitOfWork;
 
-        public ClientService(AggregateRepository<Client> clientRepository, IAccountNumberService accountNumberService, IUnitOfWork unitOfWork)
+        public ClientApplicationService(IAggregateRepository<Client> clientRepository, IClientProjections clientProjections, IUnitOfWork unitOfWork)
         {
             this.clientRepository = clientRepository;
-            this.accountNumberService = accountNumberService;
+            this.clientProjections = clientProjections;
             this.unitOfWork = unitOfWork;
+
+            SubsribeToEvents();
         }
 
         public void Execute(RegisterClient command)
@@ -37,27 +33,13 @@ namespace ApplicationService
             {
                 HandleException(ex);
             }
-        }
-
-        public void Execute(OpenAccount command)
-        {
-            try
-            {
-                Client client = clientRepository.Get(command.ClientId.Id);
-                client.OpenAccount(accountNumberService);
-                unitOfWork.Commit();
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex);
-            }
-        }
+        }        
 
         public void Execute(CorrectDateOfBirth command)
         {
             try
             {
-                Client client = clientRepository.Get(command.ClientId.Id);
+                Client client = clientRepository.Get(command.ClientId);
                 client.CorrectDateOfBirth(command.DateOfBirth);
                 unitOfWork.Commit();
             }
@@ -71,7 +53,7 @@ namespace ApplicationService
         {
             try
             {
-                Client client = clientRepository.Get(command.ClientId.Id);
+                Client client = clientRepository.Get(command.ClientId);
                 client.ClientIsDeceased();
                 unitOfWork.Commit();
             }
@@ -79,12 +61,19 @@ namespace ApplicationService
             {
                 HandleException(ex);
             }
-        }
+        }        
 
         private void HandleException(Exception ex)
         {
             unitOfWork.Rollback();
             throw ex;
+        }
+
+        private void SubsribeToEvents()
+        {
+            DomainEvent.Current.Subscribe<ClientRegistered>(clientProjections.When);
+            DomainEvent.Current.Subscribe<ClientDateOfBirthCorrected>(clientProjections.When);
+            DomainEvent.Current.Subscribe<ClientPassedAway>(clientProjections.When);
         }
     }
 }

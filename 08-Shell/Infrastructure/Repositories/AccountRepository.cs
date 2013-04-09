@@ -19,8 +19,7 @@ namespace Infrastructure.Repositories
 
         protected override IMemento LoadSnapshot(object id)
         {
-            var accountModel = repository.GetQueryable<AccountModel>()
-                                        .First(client => client.AccountNumber == id.ToString());
+            var accountModel = repository.Get<AccountModel>(id);
 
             return new AccountSnapshot
             {

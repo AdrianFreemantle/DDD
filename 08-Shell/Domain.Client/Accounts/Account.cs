@@ -1,5 +1,5 @@
+using Domain.Client.Accounts.Events;
 using Domain.Client.Clients;
-using Domain.Client.Events;
 using Domain.Client.ValueObjects;
 using Domain.Core;
 
@@ -13,7 +13,7 @@ namespace Domain.Client.Accounts
             accountStatus = new AccountStatus(AccountStatusType.Active);
         }
 
-        internal static Account Open(ClientId clientId, AccountNumber accountNumber)
+        public static Account Open(ClientId clientId, AccountNumber accountNumber)
         {
             Mandate.ParameterNotNull(accountNumber, "accountNumber");
             Mandate.ParameterNotNull(clientId, "clientId");

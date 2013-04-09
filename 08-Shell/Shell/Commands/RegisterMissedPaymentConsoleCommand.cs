@@ -1,10 +1,10 @@
-﻿using ApplicationService.Commands;
-using Domain.Client.Accounts;
+﻿using Domain.Client.Accounts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Domain.Client.Accounts.Commands;
 
 namespace Shell.Commands
 {

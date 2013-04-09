@@ -1,20 +1,19 @@
-﻿using System.Linq;
+﻿using Domain.Client.Accounts.Events;
 using Domain.Client.Clients;
-using Domain.Client.Events;
+using Domain.Client.Clients.Events;
 using Domain.Core.Infrastructure;
-using Domain.Core;
+using Domain.Core.Logging;
 
 namespace PersistenceModel
-{
-    public class ClientProjections : IHandleClientStateTransitions
+{   
+    public class ClientProjections : IClientProjections
     {
+        private static readonly ILog Logger = LogFactory.BuildLogger(typeof(ClientProjections));
         private readonly IRepository repository;
-        private readonly ILog logger;
 
-        public ClientProjections(IRepository repository, ILog logger)
+        public ClientProjections(IRepository repository)
         {
             this.repository = repository;
-            this.logger = logger;
         }
 
         public void When(ClientRegistered @event)
@@ -30,35 +29,33 @@ namespace PersistenceModel
             };
 
             repository.Add(clientModel);
-
-            logger.Verbose("Registered new client {0} {1}.", @event.ClientName.FirstName, @event.ClientName.Surname);
+            Logger.Verbose(@event.ToString());
         }
 
         public void When(AccountOpened @event)
         {
             var clientModel = FetchModel(@event.ClientId);
             clientModel.AccountNumber = @event.AccountNumber.Id;
+            Logger.Verbose(@event.ToString());
         }
 
         public void When(ClientDateOfBirthCorrected @event)
         {
             var clientModel = FetchModel(@event.ClientId);
             clientModel.DateOfBirth = @event.DateOfBirth;
-
-            logger.Verbose("Update date of birth for client {0} to {1}.", @event.ClientId.Id, @event.DateOfBirth.Date.ToShortDateString());
+            Logger.Verbose(@event.ToString());
         }
 
         public void When(ClientPassedAway @event)
         {
             var clientModel = FetchModel(@event.ClientId);
             clientModel.IsDeceased = true;
-
-            logger.Verbose("Client {0} has passed away. They will be missed.", @event.ClientId.Id);
+            Logger.Verbose(@event.ToString());
         }
 
         private ClientModel FetchModel(ClientId clientId)
         {
-            return repository.GetQueryable<ClientModel>().First(client => client.IdentityNumber == clientId.Id);
+            return repository.Get<ClientModel>(clientId.Id);
         }
     }
 }

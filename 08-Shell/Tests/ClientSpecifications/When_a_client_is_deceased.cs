@@ -1,4 +1,4 @@
-using Domain.Client.Events;
+using Domain.Client.Clients.Events;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Tests.ClientSpecifications
@@ -12,7 +12,7 @@ namespace Tests.ClientSpecifications
         {
             Given(ClientRegistered());
             When(client => client.ClientIsDeceased());
-            Then(new ClientPassedAway(DefaultClientId, null));
+            Then(new ClientPassedAway(DefaultClientId));
         }
     }
 }

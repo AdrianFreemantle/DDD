@@ -1,9 +1,11 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace PersistenceModel
 {
     public class ClientModel
     {
+        [Key]
         public string IdentityNumber { get; set; }
         public string FirstName { get; set; }
         public string Surname { get; set; }
@@ -11,13 +13,5 @@ namespace PersistenceModel
         public DateTime DateOfBirth { get; set; }
         public bool IsDeceased { get; set; }
         public string AccountNumber { get; set; }
-    }
-
-    public class AccountModel
-    {
-        public string AccountNumber { get; set; }
-        public string ClientId { get; set; }
-        public int AccountStatusId { get; set; }
-        public int Recency { get; set; }
     }
 }   

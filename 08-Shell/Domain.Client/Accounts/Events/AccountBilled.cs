@@ -1,9 +1,9 @@
+using System;
 using System.Runtime.Serialization;
-using Domain.Client.Accounts;
 using Domain.Client.ValueObjects;
 using Domain.Core.Events;
 
-namespace Domain.Client.Events
+namespace Domain.Client.Accounts.Events
 {
     [DataContract]
     public class AccountBilled : IDomainEvent
@@ -18,6 +18,11 @@ namespace Domain.Client.Events
         {
             Recency = recency;
             AccountNumber = accountNumber;
+        }
+
+        public override string ToString()
+        {
+            return String.Format("Account {0} recency was updated to {1}.", AccountNumber.Id, Recency.Value);
         }
     }
 }

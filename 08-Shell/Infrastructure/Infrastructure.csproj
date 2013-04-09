@@ -36,6 +36,7 @@
       <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -44,7 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CommandBus.cs" />
+    <Compile Include="LocalCommandPublisher.cs" />
     <Compile Include="ConsoleWindowLogger.cs" />
     <Compile Include="InMemoryRepository.cs" />
     <Compile Include="JsonSerializer.cs" />
@@ -55,6 +56,8 @@
     <Compile Include="Repositories\ClientRepository.cs" />
     <Compile Include="SerializeExtensions.cs" />
     <Compile Include="InMemoryUnitOfWork.cs" />
+    <Compile Include="Services\AccountCancellationService.cs" />
+    <Compile Include="Services\AccountFactory.cs" />
     <Compile Include="Services\AccountNumberService.cs" />
   </ItemGroup>
   <ItemGroup>

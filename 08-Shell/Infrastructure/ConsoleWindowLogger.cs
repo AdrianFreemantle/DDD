@@ -1,19 +1,19 @@
-﻿using Domain.Core;
+﻿using System.Globalization;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Domain.Core.Logging;
 
 namespace Infrastructure
 {
     public class ConsoleWindowLogger : ILog
     {
+        private const string MessageFormat = "{0} - {1}";
         private static readonly object Sync = new object();
         private readonly ConsoleColor originalColor = Console.ForegroundColor;
+        private readonly Type typeToLog;
 
-        public ConsoleWindowLogger()
+        public ConsoleWindowLogger(Type typeToLog)
         {
+            this.typeToLog = typeToLog;
         }
 
         public virtual void Verbose(string message, params object[] values)
@@ -51,18 +51,18 @@ namespace Infrastructure
             lock (Sync)
             {
                 Console.ForegroundColor = color;
-
-                if (values.Length > 0)
-                {
-                    Console.WriteLine(message, values);
-                }
-                else
-                {
-                    Console.WriteLine(message);
-                }
-
-                Console.ForegroundColor = this.originalColor;
+                Console.WriteLine(FormatMessage(message, typeToLog, values));
+                Console.ForegroundColor = originalColor;
             }
+        }
+
+        public static string FormatMessage(string message, Type typeToLog, params object[] values)
+        {
+            return string.Format(
+                CultureInfo.InvariantCulture,
+                MessageFormat,
+                typeToLog.FullName,
+                string.Format(CultureInfo.InvariantCulture, message, values));
         }
     }
 }

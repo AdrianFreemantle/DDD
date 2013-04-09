@@ -45,14 +45,27 @@
     <Compile Include="Accounts\Account.cs" />
     <Compile Include="Accounts\AccountNumber.cs" />
     <Compile Include="Accounts\AccountState.cs" />
+    <Compile Include="Accounts\IAccountApplicationService.cs" />
+    <Compile Include="Accounts\IAccountProjections.cs" />
+    <Compile Include="Clients\IClientApplicationService.cs" />
+    <Compile Include="Clients\IClientProjections.cs" />
     <Compile Include="Clients\ClientState.cs" />
-    <Compile Include="Events\AccountBilled.cs" />
-    <Compile Include="Events\AccountOpened.cs" />
-    <Compile Include="Events\AccountStatusChanged.cs" />
-    <Compile Include="Events\ClientDateOfBirthCorrected.cs" />
-    <Compile Include="Events\ClientPassedAway.cs" />
-    <Compile Include="Events\ClientRegistered.cs" />
-    <Compile Include="Services\IAccountNumberService.cs" />
+    <Compile Include="Clients\Commands\CorrectDateOfBirth.cs" />
+    <Compile Include="Accounts\Commands\OpenAccount.cs" />
+    <Compile Include="Clients\Commands\RegisterClient.cs" />
+    <Compile Include="Accounts\Commands\RegisterSuccessfullPayment.cs" />
+    <Compile Include="Accounts\Commands\CancelAccount.cs" />
+    <Compile Include="Clients\Commands\SetClientAsDeceased.cs" />
+    <Compile Include="Accounts\Commands\RegisterMissedPayment.cs" />
+    <Compile Include="Accounts\Events\AccountBilled.cs" />
+    <Compile Include="Accounts\Events\AccountOpened.cs" />
+    <Compile Include="Accounts\Events\AccountStatusChanged.cs" />
+    <Compile Include="Clients\Events\ClientDateOfBirthCorrected.cs" />
+    <Compile Include="Clients\Events\ClientPassedAway.cs" />
+    <Compile Include="Clients\Events\ClientRegistered.cs" />
+    <Compile Include="Clients\Services\IAccountFactory.cs" />
+    <Compile Include="Clients\Services\IAccountCancellationService.cs" />
+    <Compile Include="Clients\Services\IAccountNumberService.cs" />
     <Compile Include="ValueObjects\BillingResult.cs" />
     <Compile Include="Accounts\IAccountSnapshot.cs" />
     <Compile Include="Clients\Client.cs" />
@@ -73,9 +86,7 @@
       <Name>Domain.Core</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Factories\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -10,7 +10,7 @@ namespace Domain.Core
 
         protected virtual void RaiseEvent<TEvent>(TEvent @event) where TEvent : IDomainEvent
         {
-            DomainEvent.Current.Raise(@event);
+            DomainEvent.Current.Publish(@event);
         }
 
         public override int GetHashCode()

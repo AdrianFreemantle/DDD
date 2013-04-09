@@ -10,11 +10,11 @@ namespace Domain.Client.ValueObjects
         Cancelled
     }
 
-    public class AccountStatus
+    public struct AccountStatus
     {
         public AccountStatusType Status { get; private set; }
 
-        public AccountStatus(AccountStatusType value)
+        public AccountStatus(AccountStatusType value) : this()
         {
             Status = value;
         }
@@ -31,12 +31,12 @@ namespace Domain.Client.ValueObjects
 
         public override bool Equals(object obj)
         {
-            return Equals(obj as AccountStatus);
+            return Equals((AccountStatus)obj);
         }
 
-        public virtual bool Equals(AccountStatus other)
+        public bool Equals(AccountStatus other)
         {
-            if (null != other && other.GetType() == GetType())
+            if (other.GetType() == GetType())
             {
                 return other.Status == Status;
             }

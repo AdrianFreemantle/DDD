@@ -10,7 +10,6 @@ namespace Domain.Client.Clients
         TelephoneNumber PrimaryContactNumber { get; set; }
         DateOfBirth DateOfBirth { get; set; }
         IdentityNumber IdentityNumber { get; set; }
-        AccountNumber AccountNumber { get; set; }
         bool IsDeceased { get; set; }
     }
 }

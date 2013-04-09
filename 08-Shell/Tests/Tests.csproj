@@ -58,7 +58,7 @@
     <Compile Include="ClientSpecifications\ClientSpecification.cs" />
     <Compile Include="TestHelpers\AggregateTestSpecification.cs" />
     <Compile Include="TestHelpers\CompareObjects.cs" />
-    <Compile Include="TestHelpers\EventBusStub.cs" />
+    <Compile Include="TestHelpers\EventPublisherStub.cs" />
     <Compile Include="TestHelpers\EventHandlerStub.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ClientSpecifications\When_client_date_of_birth_is_corrected.cs" />

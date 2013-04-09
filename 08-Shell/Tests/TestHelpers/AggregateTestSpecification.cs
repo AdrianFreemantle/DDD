@@ -18,7 +18,7 @@ namespace Tests.TestHelpers
     {
         protected TAggregate Aggregate { get; private set; }
         private Exception thrownException;
-        private EventBusStub eventBusStub;
+        private EventPublisherStub eventPublisherStub;
 
         protected virtual TAggregate ConstructAggregate()
         {
@@ -28,9 +28,9 @@ namespace Tests.TestHelpers
         [TestInitialize]
         public virtual void TestSetup()
         {
-            eventBusStub = new EventBusStub();
+            eventPublisherStub = new EventPublisherStub();
             DomainEvent.Current.ClearSubscribers();
-            DomainEvent.Current.RegisterEventBus(eventBusStub);
+            DomainEvent.Current.RegisterEventBus(eventPublisherStub);
             Aggregate = ConstructAggregate();
         }
 
@@ -130,11 +130,11 @@ namespace Tests.TestHelpers
             if (thrownException != null)
                 throw thrownException;
 
-            if (eventBusStub.RaisedEvents.Count() != domainEvents.Count())
+            if (eventPublisherStub.RaisedEvents.Count() != domainEvents.Count())
                 Assert.Fail("The aggregate {0} contained {1} events : Expected number of events is {2}",
-                    Aggregate.GetType().Name, eventBusStub.RaisedEvents.Count(), domainEvents.Count());
+                    Aggregate.GetType().Name, eventPublisherStub.RaisedEvents.Count(), domainEvents.Count());
 
-            AssertEquality(eventBusStub.RaisedEvents.ToArray(), domainEvents);
+            AssertEquality(eventPublisherStub.RaisedEvents.ToArray(), domainEvents);
 
             bool insertComma = false;
 

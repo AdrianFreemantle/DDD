@@ -3,13 +3,13 @@ using Domain.Core.Events;
 
 namespace Tests.TestHelpers
 {
-    class EventBusStub : IEventBus
+    class EventPublisherStub : IEventPublisher
     {
         readonly EventHandlerStub eventHandler = new EventHandlerStub();
 
         public IEnumerable<IDomainEvent> RaisedEvents { get { return eventHandler.RaisedEvents; } } 
 
-        public void Submit<TEvent>(TEvent @event) where TEvent : IDomainEvent
+        public void Publish<TEvent>(TEvent @event) where TEvent : IDomainEvent
         {
             eventHandler.Handle(@event);
         }

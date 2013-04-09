@@ -1,9 +1,8 @@
 using System.Runtime.Serialization;
-using Domain.Client.Accounts;
 using Domain.Client.Clients;
 using Domain.Core.Events;
 
-namespace Domain.Client.Events
+namespace Domain.Client.Accounts.Events
 {
     [DataContract]
     public class AccountOpened : IDomainEvent
@@ -18,6 +17,11 @@ namespace Domain.Client.Events
         {
             ClientId = clientId;
             AccountNumber = accountNumber;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("Opened account {0} for client {1}", AccountNumber.Id, ClientId.Id);
         }
     }
 }

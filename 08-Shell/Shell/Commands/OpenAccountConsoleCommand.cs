@@ -1,4 +1,4 @@
-﻿using ApplicationService.Commands;
+﻿using Domain.Client.Accounts.Commands;
 using Domain.Client.Clients;
 using System;
 using System.Collections.Generic;

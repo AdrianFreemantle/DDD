@@ -1,9 +1,9 @@
+using System;
 using System.Runtime.Serialization;
-using Domain.Client.Clients;
 using Domain.Client.ValueObjects;
 using Domain.Core.Events;
 
-namespace Domain.Client.Events
+namespace Domain.Client.Clients.Events
 {
     [DataContract]
     public class ClientDateOfBirthCorrected : IDomainEvent
@@ -18,6 +18,11 @@ namespace Domain.Client.Events
         {
             ClientId = clientId;
             DateOfBirth = dateOfBirth;
+        }
+
+        public override string ToString()
+        {
+            return String.Format("Update date of birth for client {0} to {1}.", ClientId.Id, DateOfBirth.Date.ToShortDateString());
         }
     }
 }

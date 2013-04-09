@@ -1,6 +1,6 @@
 ﻿namespace Domain.Core.Events
 {
-    public interface IEventHandler<in TEvent> where TEvent : IDomainEvent
+    public interface IHandleEvent<in TEvent> where TEvent : IDomainEvent
     {
         void When(TEvent @event);
     }

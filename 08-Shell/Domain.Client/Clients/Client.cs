@@ -1,6 +1,4 @@
-using Domain.Client.Accounts;
-using Domain.Client.Events;
-using Domain.Client.Services;
+using Domain.Client.Clients.Events;
 using Domain.Client.ValueObjects;
 using Domain.Core;
 
@@ -33,27 +31,15 @@ namespace Domain.Client.Clients
             RaiseEvent(new ClientDateOfBirthCorrected(Identity, birthDate));
         }
 
-        public Account OpenAccount(IAccountNumberService accountnumberService)
+        public bool ClientMayOpenAccount()
         {
-            Mandate.ParameterNotNull(accountnumberService, "accountnumberService");
-
-            if (this.accountNumber != null)
-            {
-                throw DomainError.Named("account-exists", "The client already has an account.");
-            }
-
-            if (isDeceased)
-            {
-                throw DomainError.Named("client-deceased", "The client is deceased.");
-            }
-
-            this.accountNumber = accountnumberService.GetNextAccountNumber();
-            return Account.Open(Identity, accountNumber);
+            var clientAge = dateOfBirth.GetCurrentAge();
+            return (!isDeceased) && (clientAge >= 18);
         }
 
         public void ClientIsDeceased()
         {
-            RaiseEvent(new ClientPassedAway(Identity, accountNumber));
+            RaiseEvent(new ClientPassedAway(Identity));
         }
 
         protected override void RestoreSnapshot(IMemento memento)
@@ -65,7 +51,6 @@ namespace Domain.Client.Clients
             primaryContactNumber = snapshot.PrimaryContactNumber;
             identityNumber = snapshot.IdentityNumber;
             isDeceased = snapshot.IsDeceased;
-            accountNumber = snapshot.AccountNumber;
         }
     }
 }

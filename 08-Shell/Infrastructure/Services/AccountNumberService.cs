@@ -1,14 +1,10 @@
 ﻿using Domain.Client.Accounts;
-using Domain.Client.Services;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Domain.Client.Clients.Services;
 
 namespace Infrastructure.Services
 {
-    public class AccountNumberService : IAccountNumberService
+    public sealed class AccountNumberService : IAccountNumberService
     {
         public AccountNumber GetNextAccountNumber()
         {

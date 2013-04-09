@@ -1,9 +1,9 @@
+using System;
 using System.Runtime.Serialization;
-using Domain.Client.Clients;
 using Domain.Client.ValueObjects;
 using Domain.Core.Events;
 
-namespace Domain.Client.Events
+namespace Domain.Client.Clients.Events
 {
     [DataContract]
     public class ClientRegistered : IDomainEvent
@@ -26,6 +26,11 @@ namespace Domain.Client.Events
             IdentityNumber = identityNumber;
             ClientName = clientName;
             PrimaryContactNumber = primaryContactNumber;
+        }
+
+        public override string ToString()
+        {
+            return String.Format("Registered new client {0} {1}.", ClientName.FirstName, ClientName.Surname);
         }
     }
 }

@@ -1,5 +1,5 @@
 using Domain.Client.Accounts;
-using Domain.Client.Events;
+using Domain.Client.Clients.Events;
 using Domain.Client.ValueObjects;
 
 namespace Domain.Client.Clients
@@ -18,8 +18,6 @@ namespace Domain.Client.Clients
         private TelephoneNumber primaryContactNumber;
         private DateOfBirth dateOfBirth;
         private bool isDeceased;
-
-        private AccountNumber accountNumber;
 
         void IHandleClientStateTransitions.When(ClientRegistered @event)
         {

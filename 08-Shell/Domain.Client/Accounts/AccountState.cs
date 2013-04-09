@@ -1,5 +1,5 @@
-﻿using Domain.Client.Clients;
-using Domain.Client.Events;
+﻿using Domain.Client.Accounts.Events;
+using Domain.Client.Clients;
 using Domain.Client.ValueObjects;
 
 namespace Domain.Client.Accounts

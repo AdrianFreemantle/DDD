@@ -1,5 +1,5 @@
 using System;
-using Domain.Client.Events;
+using Domain.Client.Accounts.Events;
 using Domain.Client.ValueObjects;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

@@ -39,11 +39,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AccountService.cs" />
-    <Compile Include="Commands\AccountCommands.cs" />
-    <Compile Include="Commands\ClientCommands.cs" />
-    <Compile Include="EventHandlers\ClientPassedAwayHandler.cs" />
-    <Compile Include="ClientService.cs" />
+    <Compile Include="AccountApplicationService.cs" />
+    <Compile Include="ClientApplicationService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -41,25 +41,28 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Aggregate.cs" />
-    <Compile Include="Commands\ICommandHandler.cs" />
     <Compile Include="Commands\ICommand.cs" />
-    <Compile Include="Events\IEventBus.cs" />
-    <Compile Include="Events\IEventHandler.cs" />
+    <Compile Include="Commands\ICommandPublisher.cs" />
+    <Compile Include="Commands\IHandleCommand.cs" />
+    <Compile Include="Events\DomainEvent.cs" />
+    <Compile Include="Events\IDomainEvent.cs" />
+    <Compile Include="Events\IEventPublisher.cs" />
+    <Compile Include="Events\IHandleEvent.cs" />
     <Compile Include="IAggregate.cs" />
     <Compile Include="IEntity.cs" />
-    <Compile Include="ILog.cs" />
+    <Compile Include="Logging\ILog.cs" />
     <Compile Include="Infrastructure\ActivatorHelper.cs" />
     <Compile Include="Infrastructure\AggregateRepository.cs" />
     <Compile Include="Infrastructure\IAggregateRepository.cs" />
+    <Compile Include="Infrastructure\IDataQuery.cs" />
     <Compile Include="Infrastructure\IRepository.cs" />
     <Compile Include="Infrastructure\ISerialize.cs" />
     <Compile Include="Infrastructure\IUnitOfWork.cs" />
     <Compile Include="Entity.cs" />
-    <Compile Include="Events\DomainEvent.cs" />
-    <Compile Include="Events\IDomainEvent.cs" />
     <Compile Include="IHaveIdentity.cs" />
     <Compile Include="IdentityBase.cs" />
     <Compile Include="IMemento.cs" />
+    <Compile Include="Logging\LogFactory.cs" />
     <Compile Include="Mandate.cs" />
     <Compile Include="DomainError.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
