@@ -47,10 +47,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ApplicationService\ApplicationService.csproj">
-      <Project>{28F7DD7D-8AFF-4AC6-88C5-7FBC27348BF7}</Project>
-      <Name>ApplicationService</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Domain.Client\Domain.Client.csproj">
       <Project>{8AA049BB-331F-4F00-80D2-4597B6DE0236}</Project>
       <Name>Domain.Client</Name>

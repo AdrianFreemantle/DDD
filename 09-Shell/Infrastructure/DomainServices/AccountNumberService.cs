@@ -2,7 +2,7 @@
 using System;
 using Domain.Client.Clients.Services;
 
-namespace Infrastructure.Services
+namespace Infrastructure.DomainServices
 {
     public sealed class AccountNumberService : IAccountNumberService
     {

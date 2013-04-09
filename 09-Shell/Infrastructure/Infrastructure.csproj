@@ -56,9 +56,9 @@
     <Compile Include="Repositories\ClientRepository.cs" />
     <Compile Include="SerializeExtensions.cs" />
     <Compile Include="InMemoryUnitOfWork.cs" />
-    <Compile Include="Services\AccountCancellationService.cs" />
-    <Compile Include="Services\AccountFactory.cs" />
-    <Compile Include="Services\AccountNumberService.cs" />
+    <Compile Include="DomainServices\AccountCancellationService.cs" />
+    <Compile Include="DomainServices\AccountFactory.cs" />
+    <Compile Include="DomainServices\AccountNumberService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -5,7 +5,7 @@ using Domain.Client.Clients.Services;
 using Domain.Core.Infrastructure;
 using PersistenceModel;
 
-namespace Infrastructure.Services
+namespace Infrastructure.DomainServices
 {
     public sealed class AccountCancellationService : IAccountCancellationService
     {

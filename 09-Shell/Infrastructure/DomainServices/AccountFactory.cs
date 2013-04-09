@@ -6,7 +6,7 @@ using Domain.Core;
 using Domain.Core.Infrastructure;
 using PersistenceModel;
 
-namespace Infrastructure.Services
+namespace Infrastructure.DomainServices
 {
     public sealed class AccountFactory : IAccountFactory
     {

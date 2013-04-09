@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Aggregate.cs" />
+    <Compile Include="ISpecification.cs" />
     <Compile Include="Commands\ICommand.cs" />
     <Compile Include="Commands\ICommandPublisher.cs" />
     <Compile Include="Commands\IHandleCommand.cs" />

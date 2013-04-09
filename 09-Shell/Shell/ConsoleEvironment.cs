@@ -6,9 +6,9 @@ using Domain.Core.Commands;
 using Domain.Core.Infrastructure;
 using Domain.Core.Logging;
 using Infrastructure;
+using Infrastructure.DomainServices;
 using Infrastructure.Repositories;
 using PersistenceModel;
-using Infrastructure.Services;
 using System.Collections.Generic;
 using Shell.Commands;
 
