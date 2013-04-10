@@ -18,12 +18,12 @@ namespace Shell.Commands
 
         public string Usage
         {
-            get { return "RegisterPayment <AccountNumber>"; }
+            get { return "RegisterPayment <AccountNumber> <amount>"; }
         }
 
         public void Build(string[] args)
         {
-            if (args.Length != 1)
+            if (args.Length != 2)
             {
                 throw new Exception(String.Format("Error. Usage is: {0}", Usage));
             }

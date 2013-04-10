@@ -29,7 +29,7 @@ namespace Shell
         public static IAggregateRepository<Account> AccountRepository { get; private set; }
         public static IAccountApplicationService AccountApplicationService { get; private set; }
         public static Dictionary<string, IConsoleCommand> Commands { get; private set; }
-        public static ICommandPublisher LocalCommandPublisher { get; private set; }
+        public static IPublishCommands LocalCommandPublisher { get; private set; }
 
         public static void Build()
         {

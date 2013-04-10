@@ -13,7 +13,7 @@ namespace Domain.Client.ValueObjects
         public TelephoneNumber(string number) : this()
         {
             Mandate.ParameterNotNullOrEmpty(number, "number");
-            Mandate.ParameterCondition(number.Length >= 13, "number", "A telephone number must be 10 digits long.");
+            Mandate.ParameterCondition(number.Length >= 10, "number", "A telephone number must be 10 digits long.");
 
             Number = number;
         }

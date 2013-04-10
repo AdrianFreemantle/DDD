@@ -12,7 +12,7 @@ namespace Infrastructure
     /// messaging technology such as WCF, Rabbit MQ, Zer0 MQ, MSMQ, Serivce Bus, nServiceBus etc. This meas we can easily combine 
     /// or separate our web and worker roles into a single or distributed process.
     /// </summary>
-    public sealed class LocalCommandPublisher : ICommandPublisher
+    public sealed class LocalCommandPublisher : IPublishCommands
     {
         private readonly HashSet<object> handlers;
         private readonly HashSet<object> commandSpecifications;
@@ -28,7 +28,7 @@ namespace Infrastructure
             handlers.Add(handler);
         }
 
-        public void RegisterSpecification<TCommand>(ICommandValidation<TCommand> specification) where TCommand : ICommand
+        public void RegisterSpecification<TCommand>(IValidateCommand<TCommand> specification) where TCommand : ICommand
         {
             commandSpecifications.Add(specification);
         }
@@ -46,22 +46,19 @@ namespace Infrastructure
 
         private void Validate<TCommand>(TCommand command) where TCommand : ICommand
         {
-            Type handlerGenericType = typeof(ICommandValidation<>);
-            Type specificationType = handlerGenericType.MakeGenericType(new[] { command.GetType() });
-            IEnumerable<object> specifications = commandSpecifications.Where(specificationType.IsInstanceOfType);
-            List<ValidationResult> validationResults = ValidateCommand(command, specifications);
+            Type validatorGenericType = typeof(IValidateCommand<>);
+            Type specificationType = validatorGenericType.MakeGenericType(new[] { command.GetType() });
+            object validator = commandSpecifications.SingleOrDefault(specificationType.IsInstanceOfType);
 
-            if (validationResults.Any())
+            if (validator != null)
             {
-                throw new CommandValidationException(validationResults);
-            }
-        }
+                ValidationResult[] validationResults = ((dynamic)validator).Validate((dynamic)command);
 
-        private static List<ValidationResult> ValidateCommand<TCommand>(TCommand command, IEnumerable<object> specifications) where TCommand : ICommand
-        {
-            return (from dynamic spec in specifications
-                    where !spec.IsValid((dynamic)command)
-                    select new ValidationResult(spec.ErrorMessage)).ToList();
+                if (validationResults.Any())
+                {
+                    throw new CommandValidationException(validationResults);
+                }
+            }
         }
     }
 }

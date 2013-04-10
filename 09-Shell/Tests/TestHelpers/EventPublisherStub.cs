@@ -3,7 +3,7 @@ using Domain.Core.Events;
 
 namespace Tests.TestHelpers
 {
-    class EventPublisherStub : IEventPublisher
+    class EventPublisherStub : IPublishEvents
     {
         readonly EventHandlerStub eventHandler = new EventHandlerStub();
 

@@ -4,14 +4,14 @@ using System.Linq;
 
 namespace Domain.Core.Events
 {
-    public sealed class DomainEvent : IEventPublisher
+    public sealed class DomainEvent : IPublishEvents
     {
         [ThreadStatic] //so that each thread has its own callbacks
         private static volatile DomainEvent instance;
         private static readonly object SyncRoot = new Object();
 
         private HashSet<Delegate> actions;
-        private IEventPublisher eventPublisher;
+        private IPublishEvents eventPublisher;
 
         private DomainEvent() { }
 
@@ -63,7 +63,7 @@ namespace Domain.Core.Events
             actions = null;
         }
 
-        public void RegisterEventBus(IEventPublisher publisher)
+        public void RegisterEventBus(IPublishEvents publisher)
         {
             eventPublisher = publisher;
         }

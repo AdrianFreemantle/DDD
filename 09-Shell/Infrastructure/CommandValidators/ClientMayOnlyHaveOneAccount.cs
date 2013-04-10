@@ -1,15 +1,16 @@
 ﻿using System.Linq;
+using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
 using Domain.Client.Accounts.Commands;
 using Domain.Core.Infrastructure;
 using PersistenceModel;
 using Domain.Core.Commands;
+using Domain.Client.Clients;
 
 namespace Infrastructure.CommandValidators
 {
-    public sealed class ClientMayOnlyHaveOneAccount : ICommandValidation<OpenAccount>
+    public sealed class ClientMayOnlyHaveOneAccount : IValidateCommand<OpenAccount>
     {
-        public string ErrorMessage { get { return "A client may not have more than one account."; } }
-
         private readonly IDataQuery dataQuery;
 
         public ClientMayOnlyHaveOneAccount(IDataQuery dataQuery)
@@ -17,11 +18,21 @@ namespace Infrastructure.CommandValidators
             this.dataQuery = dataQuery;
         }
 
-        public bool IsValid(OpenAccount command)
+        public IEnumerable<ValidationResult> Validate(OpenAccount command)
+        {
+            if (ClientHasAccount(command.ClientId))
+            {
+                return new[] { new ValidationResult("A client may not have more than one account.") };
+            }
+
+            return new ValidationResult[0];
+        }
+
+        public bool ClientHasAccount(ClientId clientId)
         {
             return dataQuery
                 .GetQueryable<AccountModel>()
-                .All(account => account.ClientId != command.ClientId.Id);
+                .Any(account => account.ClientId == clientId.Id);
         }
     }
 }

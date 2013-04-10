@@ -43,14 +43,14 @@
   <ItemGroup>
     <Compile Include="Aggregate.cs" />
     <Compile Include="Commands\CommandValidationException.cs" />
-    <Compile Include="Commands\ICommandValidation.cs" />
+    <Compile Include="Commands\IValidateCommand.cs" />
     <Compile Include="ISpecification.cs" />
     <Compile Include="Commands\ICommand.cs" />
-    <Compile Include="Commands\ICommandPublisher.cs" />
+    <Compile Include="Commands\IPublishCommands.cs" />
     <Compile Include="Commands\IHandleCommand.cs" />
     <Compile Include="Events\DomainEvent.cs" />
     <Compile Include="Events\IDomainEvent.cs" />
-    <Compile Include="Events\IEventPublisher.cs" />
+    <Compile Include="Events\IPublishEvents.cs" />
     <Compile Include="Events\IHandleEvent.cs" />
     <Compile Include="IAggregate.cs" />
     <Compile Include="IEntity.cs" />
