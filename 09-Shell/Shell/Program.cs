@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Linq;
+using Domain.Core.Commands;
 using Domain.Core.Logging;
 
 namespace Shell
@@ -28,18 +29,32 @@ namespace Shell
                     continue;
                 }
 
-                var split = line.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                var split = line.Split(new[] {' '}, StringSplitOptions.RemoveEmptyEntries);
 
-                try
-                {
-                    HandleRequest(split);
-                }
-                catch (Exception ex)
-                {
-                    logger.Fatal(ex.Message);
-                }
+                TryHandleRequest(split);
 
                 Console.WriteLine();
+            }
+        }
+
+        private static void TryHandleRequest(string[] split)
+        {
+            try
+            {
+                HandleRequest(split);
+            }
+            catch (CommandValidationException ex)
+            {
+                Console.WriteLine(ex.Message);
+
+                foreach (var validationResult in ex.ValidationResults)
+                {
+                    logger.Fatal(validationResult.ErrorMessage);
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.Fatal(ex.Message);
             }
         }
 

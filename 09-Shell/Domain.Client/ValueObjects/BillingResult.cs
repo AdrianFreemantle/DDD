@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.Serialization;
+using Domain.Core;
 
 namespace Domain.Client.ValueObjects
 {
@@ -21,6 +22,9 @@ namespace Domain.Client.ValueObjects
 
         public static BillingResult PaymentMade(decimal amount, DateTime paymentDate)
         {
+            Mandate.ParameterCondition(amount > 0, "amount", "Must be a positive amount.");
+            Mandate.ParameterCondition(paymentDate < DateTime.Today.AddDays(1), "paymentDate", "The payment date cannot be in the future.");
+
             return new BillingResult
             {
                 Amount = amount,

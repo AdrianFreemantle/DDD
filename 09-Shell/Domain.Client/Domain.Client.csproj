@@ -64,6 +64,8 @@
     <Compile Include="Clients\Events\ClientPassedAway.cs" />
     <Compile Include="Clients\Events\ClientRegistered.cs" />
     <Compile Include="Accounts\Services\IAccountNumberService.cs" />
+    <Compile Include="DomainSpecifications\ClientMayOnlyBeRegisteredOnceRule.cs" />
+    <Compile Include="DomainSpecifications\ClientMayOnlyHaveOneAccount.cs" />
     <Compile Include="ValueObjects\BillingResult.cs" />
     <Compile Include="Accounts\IAccountSnapshot.cs" />
     <Compile Include="Clients\Client.cs" />
