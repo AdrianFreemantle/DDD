@@ -45,19 +45,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DomainSpecifications\ClientMayOnlyBeRegisteredOnce.cs" />
+    <Compile Include="DomainSpecifications\ClientMayOnlyHaveOneAccount.cs" />
     <Compile Include="LocalCommandPublisher.cs" />
     <Compile Include="ConsoleWindowLogger.cs" />
     <Compile Include="InMemoryRepository.cs" />
     <Compile Include="JsonSerializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\AccountRepository.cs" />
-    <Compile Include="Repositories\AccountSnapshot.cs" />
-    <Compile Include="Repositories\ClientSnapshot.cs" />
     <Compile Include="Repositories\ClientRepository.cs" />
     <Compile Include="SerializeExtensions.cs" />
     <Compile Include="InMemoryUnitOfWork.cs" />
-    <Compile Include="DomainServices\AccountCancellationService.cs" />
-    <Compile Include="DomainServices\AccountFactory.cs" />
     <Compile Include="DomainServices\AccountNumberService.cs" />
   </ItemGroup>
   <ItemGroup>

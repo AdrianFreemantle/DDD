@@ -2,7 +2,10 @@
 
 namespace Infrastructure
 {
-    public class InMemoryUnitOfWork : IUnitOfWork
+    /// <summary>
+    /// Normally a real unit of work would track changes to our persistence store and handle actual transactions. 
+    /// </summary>
+    public sealed class InMemoryUnitOfWork : IUnitOfWork
     {
         private readonly JsonSerializer serializer = new JsonSerializer();
         private byte[] committedData;

@@ -35,7 +35,8 @@ namespace Commands
 
         private void Validate<TCommand>(TCommand command) where TCommand : ICommand
         {
-            Type specificationType = GetSpecificationType(command);
+            Type handlerGenericType = typeof(ICommandSpecification<>);
+            Type specificationType = handlerGenericType.MakeGenericType(new[] { command.GetType() });
             IEnumerable<object> specifications = commandSpecifications.Where(specificationType.IsInstanceOfType);
             List<ValidationResult> validationResults = ValidateCommand(command, specifications);
 
@@ -43,13 +44,6 @@ namespace Commands
             {
                 throw new CommandValidationException(validationResults);
             }
-        }
-
-        private static Type GetSpecificationType<TCommand>(TCommand command) where TCommand : ICommand
-        {
-            Type eventType = command.GetType();
-            Type handlerGenericType = typeof(ICommandSpecification<>);
-            return handlerGenericType.MakeGenericType(new[] { eventType });
         }
 
         private static List<ValidationResult> ValidateCommand<TCommand>(TCommand command, IEnumerable<object> specifications) where TCommand : ICommand

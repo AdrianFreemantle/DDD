@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Domain.Client.Accounts;
+﻿using Domain.Client.Accounts;
 using Domain.Client.Clients;
 using Domain.Client.ValueObjects;
 using Domain.Core;
@@ -8,7 +7,7 @@ using PersistenceModel;
 
 namespace Infrastructure.Repositories
 {
-    public class AccountRepository : AggregateRepository<Account>
+    public sealed class AccountRepository : AggregateRepository<Account>
     {
         private readonly IRepository repository;
 
@@ -28,6 +27,14 @@ namespace Infrastructure.Repositories
                 Recency = new Recency(accountModel.Recency),
                 ClientId = new ClientId(accountModel.ClientId)                
             };
+        }
+
+        class AccountSnapshot : IAccountSnapshot
+        {
+            public IHaveIdentity Identity { get; set; }
+            public AccountStatus AccountStatus { get; set; }
+            public Recency Recency { get; set; }
+            public ClientId ClientId { get; set; }
         }
     }
 }

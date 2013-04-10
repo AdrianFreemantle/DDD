@@ -4,6 +4,9 @@ using Domain.Core.Logging;
 
 namespace Infrastructure
 {
+    /// <summary>
+    /// An logger implementation which prints our loggs to the console window.
+    /// </summary>
     public class ConsoleWindowLogger : ILog
     {
         private const string MessageFormat = "{0} - {1}";

@@ -1,12 +1,13 @@
 ﻿using ApplicationService;
 using Domain.Client.Accounts;
+using Domain.Client.Accounts.Services;
 using Domain.Client.Clients;
-using Domain.Client.Clients.Services;
 using Domain.Core.Commands;
 using Domain.Core.Infrastructure;
 using Domain.Core.Logging;
 using Infrastructure;
 using Infrastructure.DomainServices;
+using Infrastructure.DomainSpecifications;
 using Infrastructure.Repositories;
 using PersistenceModel;
 using System.Collections.Generic;
@@ -22,9 +23,7 @@ namespace Shell
         public static IClientProjections ClientProjections { get; private set; }
         public static IAggregateRepository<Client> ClientRepository { get; private set; }
         public static IClientApplicationService ClientApplicationService { get; private set; }
-        public static IAccountFactory AccountFactory { get; private set; }
         public static IAccountNumberService AccountNumberService { get; private set; }
-        public static IAccountCancellationService AccountCancellationService { get; private set; }
         public static IAccountProjections AccountProjections { get; private set; }
         public static IAggregateRepository<Account> AccountRepository { get; private set; }
         public static IAccountApplicationService AccountApplicationService { get; private set; }
@@ -43,21 +42,12 @@ namespace Shell
             ClientApplicationService = new ClientApplicationService(ClientRepository, ClientProjections, UnitOfWork);
             AccountProjections = new AccountProjections(Repository);
             AccountRepository = new AccountRepository(Repository);
-            AccountNumberService = new AccountNumberService();
-            AccountCancellationService = new AccountCancellationService(DataQuery, AccountRepository);
-            AccountFactory = new AccountFactory(AccountNumberService, DataQuery, ClientRepository);
-            AccountApplicationService = new AccountApplicationService(AccountRepository, AccountProjections, AccountFactory, AccountCancellationService, UnitOfWork);
+            AccountNumberService = new AccountNumberService(DataQuery);
+            AccountApplicationService = new AccountApplicationService(AccountRepository, AccountProjections, AccountNumberService, UnitOfWork);
             
             RegisterCommands();
             SubscribeToCommands();
-        }
-
-        private static void SubscribeToCommands()
-        {
-            LocalCommandPublisher = new LocalCommandPublisher();
-
-            ((LocalCommandPublisher)LocalCommandPublisher).Subscribe(ClientApplicationService);
-            ((LocalCommandPublisher)LocalCommandPublisher).Subscribe(AccountApplicationService);
+            RegisterSpecifications();
         }
 
         static void RegisterCommands()
@@ -79,6 +69,20 @@ namespace Shell
             {
                 Commands.Add(key, command);
             }
+        }
+
+        private static void SubscribeToCommands()
+        {
+            LocalCommandPublisher = new LocalCommandPublisher();
+
+            ((LocalCommandPublisher)LocalCommandPublisher).Subscribe(ClientApplicationService);
+            ((LocalCommandPublisher)LocalCommandPublisher).Subscribe(AccountApplicationService);
+        }
+
+        static void RegisterSpecifications()
+        {
+            ((LocalCommandPublisher)LocalCommandPublisher).RegisterSpecification(new ClientMayOnlyBeRegisteredOnce(DataQuery));
+            ((LocalCommandPublisher)LocalCommandPublisher).RegisterSpecification(new ClientMayOnlyHaveOneAccount(DataQuery));
         }
     }
 }

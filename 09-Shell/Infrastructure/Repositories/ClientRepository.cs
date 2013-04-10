@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Domain.Client.Clients;
+﻿using Domain.Client.Clients;
 using Domain.Client.ValueObjects;
 using Domain.Core;
 using Domain.Core.Infrastructure;
@@ -7,7 +6,7 @@ using PersistenceModel;
 
 namespace Infrastructure.Repositories
 {
-    public class ClientRepository : AggregateRepository<Client>
+    public sealed class ClientRepository : AggregateRepository<Client>
     {       
         private readonly IRepository repository;
 
@@ -30,12 +29,17 @@ namespace Infrastructure.Repositories
                 PrimaryContactNumber = new TelephoneNumber(clientModel.PrimaryContactNumber),
             };
 
-            if(!string.IsNullOrWhiteSpace(clientModel.AccountNumber))
-            {
-                snapshot.AccountNumber = new Domain.Client.Accounts.AccountNumber(clientModel.AccountNumber);
-            }
-
             return snapshot;
+        }
+
+        class ClientSnapshot : IClientSnapshot
+        {
+            public IHaveIdentity Identity { get; set; }
+            public PersonName ClientName { get; set; }
+            public TelephoneNumber PrimaryContactNumber { get; set; }
+            public DateOfBirth DateOfBirth { get; set; }
+            public IdentityNumber IdentityNumber { get; set; }
+            public bool IsDeceased { get; set; }
         }
     }
 }

@@ -8,7 +8,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Infrastructure
 {
-    public class InMemoryRepository : IRepository, IDataQuery
+    /// <summary>
+    /// An in memory representation of a data store. This could as easily be an sql, file or key value store.
+    /// The point of the repository pattern is to hide the technical details of the specific storage technology 
+    /// from the from the application service.
+    /// </summary>
+    public sealed class InMemoryRepository : IRepository, IDataQuery
     {
         readonly Dictionary<Type, object> repository = new Dictionary<Type, object>();
 

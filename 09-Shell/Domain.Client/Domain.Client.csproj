@@ -63,14 +63,12 @@
     <Compile Include="Clients\Events\ClientDateOfBirthCorrected.cs" />
     <Compile Include="Clients\Events\ClientPassedAway.cs" />
     <Compile Include="Clients\Events\ClientRegistered.cs" />
-    <Compile Include="Clients\Services\IAccountFactory.cs" />
-    <Compile Include="Clients\Services\IAccountCancellationService.cs" />
-    <Compile Include="Clients\Services\IAccountNumberService.cs" />
+    <Compile Include="Accounts\Services\IAccountNumberService.cs" />
     <Compile Include="ValueObjects\BillingResult.cs" />
     <Compile Include="Accounts\IAccountSnapshot.cs" />
     <Compile Include="Clients\Client.cs" />
     <Compile Include="Clients\ClientId.cs" />
-    <Compile Include="Clients\ClientSnapshot.cs" />
+    <Compile Include="Clients\IClientSnapshot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ValueObjects\AccountStatus.cs" />
     <Compile Include="ValueObjects\DateOfBirth.cs" />
@@ -86,7 +84,9 @@
       <Name>Domain.Core</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Clients\Services\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
