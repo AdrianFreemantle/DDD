@@ -1,3 +1,4 @@
+using System.Runtime.Serialization;
 namespace Domain.Client.ValueObjects
 {
     public enum AccountStatusType
@@ -10,8 +11,10 @@ namespace Domain.Client.ValueObjects
         Cancelled
     }
 
+    [DataContract]
     public struct AccountStatus
     {
+        [DataMember(Order = 1, Name = "Status", IsRequired = true)]
         public AccountStatusType Status { get; private set; }
 
         public AccountStatus(AccountStatusType value) : this()
@@ -31,17 +34,17 @@ namespace Domain.Client.ValueObjects
 
         public override bool Equals(object obj)
         {
-            return Equals((AccountStatus)obj);
+            if (obj is AccountStatus)
+            {
+                return Equals((AccountStatus)obj);
+            }
+
+            return false;
         }
 
         public bool Equals(AccountStatus other)
         {
-            if (other.GetType() == GetType())
-            {
-                return other.Status == Status;
-            }
-
-            return false;
+            return other.Status == Status;
         }
 
         public static bool operator ==(AccountStatus left, AccountStatus right)

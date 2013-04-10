@@ -1,14 +1,23 @@
+using Domain.Core;
 using System;
+using System.Runtime.Serialization;
 
 namespace Domain.Client.ValueObjects
 {
-    public class PersonName : IEquatable<PersonName>
+    [DataContract]
+    public struct PersonName : IEquatable<PersonName>
     {
+        [DataMember(Order = 1, Name = "FirstName", IsRequired = true)]
         public string FirstName { get; private set; }
+
+        [DataMember(Order = 2, Name = "Surname", IsRequired = true)]
         public string Surname { get; private set; }
 
-        public PersonName(string firstName, string surname)
+        public PersonName(string firstName, string surname) : this()
         {
+            Mandate.ParameterNotNullOrEmpty(firstName, "firstName");
+            Mandate.ParameterNotNullOrEmpty(surname, "surname");
+
             FirstName = firstName;
             Surname = surname;
         }
@@ -20,18 +29,18 @@ namespace Domain.Client.ValueObjects
 
         public override bool Equals(object obj)
         {
-            return Equals(obj as PersonName);
-        }
-
-        public virtual bool Equals(PersonName other)
-        {
-            if (null != other && other.GetType() == GetType())
+            if (obj is PersonName)
             {
-                return other.FirstName == FirstName
-                    && other.Surname == Surname;
+                return Equals((PersonName)obj);
             }
 
             return false;
+        }
+
+        public bool Equals(PersonName other)
+        {
+            return other.FirstName == FirstName
+                && other.Surname == Surname;
         }
 
         public static bool operator ==(PersonName left, PersonName right)

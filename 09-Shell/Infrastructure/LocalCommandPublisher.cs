@@ -28,7 +28,7 @@ namespace Infrastructure
             handlers.Add(handler);
         }
 
-        public void RegisterSpecification<TCommand>(ICommandSpecification<TCommand> specification) where TCommand : ICommand
+        public void RegisterSpecification<TCommand>(ICommandValidation<TCommand> specification) where TCommand : ICommand
         {
             commandSpecifications.Add(specification);
         }
@@ -46,7 +46,7 @@ namespace Infrastructure
 
         private void Validate<TCommand>(TCommand command) where TCommand : ICommand
         {
-            Type handlerGenericType = typeof(ICommandSpecification<>);
+            Type handlerGenericType = typeof(ICommandValidation<>);
             Type specificationType = handlerGenericType.MakeGenericType(new[] { command.GetType() });
             IEnumerable<object> specifications = commandSpecifications.Where(specificationType.IsInstanceOfType);
             List<ValidationResult> validationResults = ValidateCommand(command, specifications);

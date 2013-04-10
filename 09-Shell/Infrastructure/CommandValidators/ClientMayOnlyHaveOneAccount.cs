@@ -1,13 +1,15 @@
 ﻿using System.Linq;
 using Domain.Client.Accounts.Commands;
-using Domain.Client.DomainSpecifications;
 using Domain.Core.Infrastructure;
 using PersistenceModel;
+using Domain.Core.Commands;
 
-namespace Infrastructure.DomainSpecifications
+namespace Infrastructure.CommandValidators
 {
-    public sealed class ClientMayOnlyHaveOneAccount : ClientMayOnlyHaveOneAccountRule
+    public sealed class ClientMayOnlyHaveOneAccount : ICommandValidation<OpenAccount>
     {
+        public string ErrorMessage { get { return "A client may not have more than one account."; } }
+
         private readonly IDataQuery dataQuery;
 
         public ClientMayOnlyHaveOneAccount(IDataQuery dataQuery)
@@ -15,7 +17,7 @@ namespace Infrastructure.DomainSpecifications
             this.dataQuery = dataQuery;
         }
 
-        public override bool IsValid(OpenAccount command)
+        public bool IsValid(OpenAccount command)
         {
             return dataQuery
                 .GetQueryable<AccountModel>()

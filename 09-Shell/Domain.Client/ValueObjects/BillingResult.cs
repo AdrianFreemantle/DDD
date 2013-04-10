@@ -5,20 +5,16 @@ using Domain.Core;
 namespace Domain.Client.ValueObjects
 {
     [DataContract]
-    public class BillingResult 
+    public struct BillingResult 
     {
-        [DataMember(Order = 0, Name = "Paid", IsRequired = true)]
+        [DataMember(Order = 1, Name = "Paid", IsRequired = true)]
         public bool Paid { get; private set; }
 
-        [DataMember(Order = 1, Name = "Amount", IsRequired = true)]
+        [DataMember(Order = 2, Name = "Amount", IsRequired = true)]
         public decimal Amount { get; private set; }
 
-        [DataMember(Order = 2, Name = "PaymentDate", IsRequired = true)]
+        [DataMember(Order = 3, Name = "PaymentDate", IsRequired = true)]
         public DateTime PaymentDate { get; private set; }
-
-        private BillingResult()
-        {
-        }
 
         public static BillingResult PaymentMade(decimal amount, DateTime paymentDate)
         {
@@ -50,19 +46,19 @@ namespace Domain.Client.ValueObjects
 
         public override bool Equals(object obj)
         {
-            return Equals(obj as BillingResult);
-        }
-
-        public virtual bool Equals(BillingResult other)
-        {
-            if (null != other && other.GetType() == GetType())
+            if (obj is BillingResult)
             {
-                return other.Paid == Paid
-                       && other.Amount == Amount
-                       && other.PaymentDate == PaymentDate;
+                return Equals((BillingResult)obj);
             }
 
             return false;
+        }
+
+        public bool Equals(BillingResult other)
+        {
+                return other.Paid == Paid
+                    && other.Amount == Amount
+                    && other.PaymentDate == PaymentDate;        
         }
 
         public static bool operator ==(BillingResult left, BillingResult right)

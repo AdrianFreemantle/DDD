@@ -1,6 +1,6 @@
 ﻿namespace Domain.Core.Commands
 {
-    public interface ICommandSpecification<in TCommand> where TCommand : ICommand
+    public interface ICommandValidation<in TCommand> where TCommand : ICommand
     {
         string ErrorMessage { get; }
         bool IsValid(TCommand command);

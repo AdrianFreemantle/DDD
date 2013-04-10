@@ -1,13 +1,15 @@
 ﻿using System.Linq;
 using Domain.Client.Clients.Commands;
-using Domain.Client.DomainSpecifications;
 using Domain.Core.Infrastructure;
 using PersistenceModel;
+using Domain.Core.Commands;
 
 namespace Infrastructure.DomainSpecifications
 {
-    public sealed class ClientMayOnlyBeRegisteredOnce : ClientMayOnlyBeRegisteredOnceRule
+    public sealed class ClientMayOnlyBeRegisteredOnce : ICommandValidation<RegisterClient>
     {
+        public string ErrorMessage { get { return "The client is already registered."; } }
+
         private readonly IDataQuery dataQuery;
 
         public ClientMayOnlyBeRegisteredOnce(IDataQuery dataQuery)
@@ -15,7 +17,7 @@ namespace Infrastructure.DomainSpecifications
             this.dataQuery = dataQuery;
         }
 
-        public override bool IsValid(RegisterClient command)
+        public bool IsValid(RegisterClient command)
         {
             return dataQuery
                 .GetQueryable<ClientModel>()

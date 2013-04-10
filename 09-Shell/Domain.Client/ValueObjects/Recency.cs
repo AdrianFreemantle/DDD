@@ -1,10 +1,13 @@
+using System.Runtime.Serialization;
 namespace Domain.Client.ValueObjects
-{   
-    public class Recency
+{
+    [DataContract]
+    public struct Recency
     {
+        [DataMember(Order = 1, Name = "Value", IsRequired = true)]
         public int Value { get; private set; }
 
-        public Recency(int value)
+        public Recency(int value) : this()
         {
             Value = value;
         }
@@ -46,17 +49,17 @@ namespace Domain.Client.ValueObjects
 
         public override bool Equals(object obj)
         {
-            return Equals(obj as Recency);
+            if (obj is Recency)
+            {
+                return Equals((Recency)obj);
+            }
+            
+            return false;
         }
 
-        public virtual bool Equals(Recency other)
+        public bool Equals(Recency other)
         {
-            if (null != other && other.GetType() == GetType())
-            {
-                return other.Value == Value;
-            }
-
-            return false;
+            return other.Value == Value;
         }
 
         public static bool operator ==(Recency left, Recency right)

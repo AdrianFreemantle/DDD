@@ -1,13 +1,20 @@
+using Domain.Core;
 using System;
+using System.Runtime.Serialization;
 
 namespace Domain.Client.ValueObjects
 {
-    public class TelephoneNumber : IEquatable<TelephoneNumber>
+    [DataContract]
+    public struct TelephoneNumber
     {
+        [DataMember(Order = 1, Name = "Number", IsRequired = true)]
         public string Number { get; private set; }
 
-        public TelephoneNumber(string number)
+        public TelephoneNumber(string number) : this()
         {
+            Mandate.ParameterNotNullOrEmpty(number, "number");
+            Mandate.ParameterCondition(number.Length >= 13, "number", "A telephone number must be 10 digits long.");
+
             Number = number;
         }
 
@@ -18,17 +25,17 @@ namespace Domain.Client.ValueObjects
 
         public override bool Equals(object obj)
         {
-            return Equals(obj as TelephoneNumber);
-        }
-
-        public virtual bool Equals(TelephoneNumber other)
-        {
-            if (null != other && other.GetType() == GetType())
+            if (obj is TelephoneNumber)
             {
-                return other.Number.Equals(Number);
+                return Equals((TelephoneNumber)obj);
             }
 
             return false;
+        }
+
+        public bool Equals(TelephoneNumber other)
+        {
+            return other.Number.Equals(Number);
         }
 
         public static bool operator ==(TelephoneNumber left, TelephoneNumber right)

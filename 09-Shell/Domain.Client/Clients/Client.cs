@@ -12,10 +12,6 @@ namespace Domain.Client.Clients
 
         public static Client RegisterClient(IdentityNumber idNumber, PersonName clientName, TelephoneNumber primaryContactNumber)
         {
-            Mandate.ParameterNotNull(idNumber, "idNumber");
-            Mandate.ParameterNotNull(clientName, "clientName");
-            Mandate.ParameterNotNull(primaryContactNumber, "primaryContactNumber");
-
             var client = new Client();
             client.RaiseEvent(new ClientRegistered(new ClientId(idNumber), idNumber, clientName, primaryContactNumber));
             return client;

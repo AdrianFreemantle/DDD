@@ -12,6 +12,7 @@ using Infrastructure.Repositories;
 using PersistenceModel;
 using System.Collections.Generic;
 using Shell.Commands;
+using Infrastructure.CommandValidators;
 
 namespace Shell
 {

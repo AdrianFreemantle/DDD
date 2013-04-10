@@ -43,7 +43,7 @@
   <ItemGroup>
     <Compile Include="Aggregate.cs" />
     <Compile Include="Commands\CommandValidationException.cs" />
-    <Compile Include="Commands\ICommandSpecification.cs" />
+    <Compile Include="Commands\ICommandValidation.cs" />
     <Compile Include="ISpecification.cs" />
     <Compile Include="Commands\ICommand.cs" />
     <Compile Include="Commands\ICommandPublisher.cs" />

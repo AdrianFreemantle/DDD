@@ -1,13 +1,19 @@
+using Domain.Core;
 using System;
+using System.Runtime.Serialization;
 
 namespace Domain.Client.ValueObjects
 {
-    public class DateOfBirth
+    [DataContract]
+    public struct DateOfBirth
     {
+        [DataMember(Order = 1, Name = "Date", IsRequired = true)]
         public DateTime Date { get; private set; }
 
-        public DateOfBirth(DateTime dateOfBith)
+        public DateOfBirth(DateTime dateOfBith) : this()
         {
+            Mandate.ParameterCondition(dateOfBith < DateTime.Today.AddDays(1), "dateOfBith", "The date of birth cannot be in the future.");
+
             Date = dateOfBith.Date;
         }
 
@@ -41,17 +47,17 @@ namespace Domain.Client.ValueObjects
 
         public override bool Equals(object obj)
         {
-            return Equals(obj as DateOfBirth);
-        }
-
-        public virtual bool Equals(DateOfBirth other)
-        {
-            if (null != other && other.GetType() == GetType())
+            if (obj is DateOfBirth)
             {
-                return other.Date == Date;
+                return Equals((DateOfBirth)obj);
             }
 
             return false;
+        }
+
+        public bool Equals(DateOfBirth other)
+        {
+            return other.Date == Date;
         }
 
         public static bool operator ==(DateOfBirth left, DateOfBirth right)

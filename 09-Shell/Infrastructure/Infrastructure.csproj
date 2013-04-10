@@ -45,8 +45,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DomainSpecifications\ClientMayOnlyBeRegisteredOnce.cs" />
-    <Compile Include="DomainSpecifications\ClientMayOnlyHaveOneAccount.cs" />
+    <Compile Include="CommandValidators\ClientMayOnlyBeRegisteredOnce.cs" />
+    <Compile Include="CommandValidators\ClientMayOnlyHaveOneAccount.cs" />
     <Compile Include="LocalCommandPublisher.cs" />
     <Compile Include="ConsoleWindowLogger.cs" />
     <Compile Include="InMemoryRepository.cs" />

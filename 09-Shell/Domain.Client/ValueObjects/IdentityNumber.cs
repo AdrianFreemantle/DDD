@@ -1,13 +1,20 @@
+using Domain.Core;
 using System;
+using System.Runtime.Serialization;
 
 namespace Domain.Client.ValueObjects
 {
-    public class IdentityNumber
+    [DataContract]
+    public struct IdentityNumber
     {
+        [DataMember(Order = 1, Name = "Number", IsRequired = true)]
         public string Number { get; private set; }
 
-        public IdentityNumber(string number)
+        public IdentityNumber(string number) : this()
         {
+            Mandate.ParameterNotNullOrEmpty(number, "number");
+            Mandate.ParameterCondition(number.Length >= 13, "number", "An identity number must be 13 digits long.");
+
             Number = number;
         }
 
@@ -27,17 +34,17 @@ namespace Domain.Client.ValueObjects
 
         public override bool Equals(object obj)
         {
-            return Equals(obj as IdentityNumber);
-        }
-
-        public virtual bool Equals(IdentityNumber other)
-        {
-            if (null != other && other.GetType() == GetType())
+            if (obj is IdentityNumber)
             {
-                return other.Number.Equals(Number);
+                return Equals((IdentityNumber)obj);
             }
 
             return false;
+        }
+
+        public bool Equals(IdentityNumber other)
+        {
+            return other.Number.Equals(Number);
         }
 
         public static bool operator ==(IdentityNumber left, IdentityNumber right)

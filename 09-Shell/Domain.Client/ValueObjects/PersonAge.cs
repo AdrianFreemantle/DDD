@@ -1,11 +1,17 @@
+using Domain.Core;
+using System.Runtime.Serialization;
 namespace Domain.Client.ValueObjects
 {
-    public class PersonAge
+    [DataContract]
+    public struct PersonAge
     {
+        [DataMember(Order = 1, Name = "Age", IsRequired = true)]
         public int Age { get; set; }
 
-        public PersonAge(int age)
+        public PersonAge(int age) : this()
         {
+            Mandate.ParameterCondition(age >= 0, "age", "A persons age must be a non negative number");
+
             Age = age;
         }
 
@@ -21,17 +27,17 @@ namespace Domain.Client.ValueObjects
 
         public override bool Equals(object obj)
         {
-            return Equals(obj as PersonAge);
-        }
-
-        public virtual bool Equals(PersonAge other)
-        {
-            if (null != other && other.GetType() == GetType())
+            if (obj is PersonAge)
             {
-                return other.Age == Age;
+                return Equals((PersonAge)obj);
             }
 
             return false;
+        }
+
+        public bool Equals(PersonAge other)
+        {
+            return other.Age == Age;
         }
 
         public static bool operator ==(PersonAge left, PersonAge right)
