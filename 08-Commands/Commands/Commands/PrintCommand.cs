@@ -1,6 +1,7 @@
 using System;
+using System.Linq;
 
-namespace Commands.Messages
+namespace Commands.Commands
 {
     public class PrintCommand : ICommand
     {
@@ -29,6 +30,18 @@ namespace Commands.Messages
 
             Text = args[0];
             Count = int.Parse(args[1]);
+        }
+    }
+
+    public sealed class NoSwearWords : ICommandSpecification<PrintCommand>
+    {
+        public string ErrorMessage { get { return "That is disgusting... such language is not allowed!"; } }
+
+        private readonly string[] badWords = new[] {"waterfall", "overtime"};
+
+        public bool IsValid(PrintCommand command)
+        {
+            return !badWords.Any(s => s.Equals(command.Text, StringComparison.InvariantCultureIgnoreCase));
         }
     }
 }

@@ -1,7 +1,5 @@
 using System.Collections.Generic;
-
-using Commands.Handlers;
-using Commands.Messages;
+using Commands.Commands;
 
 namespace Commands
 {
@@ -16,6 +14,7 @@ namespace Commands
             CommandHandler = new CommandHandler();
 
             RegisterCommands();
+            RegisterSpecifications();
         }
 
         static void RegisterCommands()
@@ -30,6 +29,13 @@ namespace Commands
             {
                 Commands.Add(key, command);
             }
+        }
+
+        static void RegisterSpecifications()
+        {
+            CommandHandler.AddCommandSpecification(new NoSwearWords());
+            CommandHandler.AddCommandSpecification(new SumNotGreaterThanOneThousand());
+            CommandHandler.AddCommandSpecification(new SumNotDivisibleByOneHundred());
         }
     }
 }

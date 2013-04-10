@@ -29,6 +29,15 @@ namespace Commands
                 {
                     HandleRequest(split);
                 }
+                catch (CommandValidationException ex)
+                {
+                    Console.WriteLine(ex.Message);
+
+                    foreach (var validationResult in ex.ValidationResults)
+                    {
+                        Console.WriteLine("-{0}", validationResult.ErrorMessage);                        
+                    }
+                }
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);

@@ -1,6 +1,6 @@
 using System;
 
-namespace Commands.Messages
+namespace Commands.Commands
 {
     public class AddNumbersCommand : ICommand
     {
@@ -29,6 +29,26 @@ namespace Commands.Messages
 
             X = int.Parse(args[0]);
             Y = int.Parse(args[1]);
+        }
+    }
+
+    public sealed class SumNotGreaterThanOneThousand : ICommandSpecification<AddNumbersCommand>
+    {
+        public string ErrorMessage { get { return "The sum of X and Y may not exceed 1000."; } }
+
+        public bool IsValid(AddNumbersCommand command)
+        {
+            return (command.X + command.Y) <= 1000;
+        }
+    }
+
+    public sealed class SumNotDivisibleByOneHundred : ICommandSpecification<AddNumbersCommand>
+    {
+        public string ErrorMessage { get { return "The sum of X and Y may not be divisible by 100."; } }
+
+        public bool IsValid(AddNumbersCommand command)
+        {
+            return ((command.X + command.Y) % 100) != 0;
         }
     }
 }
