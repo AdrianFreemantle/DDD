@@ -5,7 +5,7 @@ using Domain.Core;
 namespace Domain.Client.ValueObjects
 {
     [DataContract]
-    public struct BillingResult 
+    public struct BillingResult : IEquatable<BillingResult>
     {
         [DataMember(Order = 1, Name = "Paid", IsRequired = true)]
         public bool Paid { get; private set; }
@@ -46,12 +46,12 @@ namespace Domain.Client.ValueObjects
 
         public override bool Equals(object obj)
         {
-            if (obj is BillingResult)
+            if (ReferenceEquals(null, obj))
             {
-                return Equals((BillingResult)obj);
+                return false;
             }
 
-            return false;
+            return obj is BillingResult && Equals((BillingResult)obj);
         }
 
         public bool Equals(BillingResult other)

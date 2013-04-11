@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 namespace Domain.Client.ValueObjects
 {
     [DataContract]
-    public struct IdentityNumber
+    public struct IdentityNumber : IEquatable<IdentityNumber>
     {
         [DataMember(Order = 1, Name = "Number", IsRequired = true)]
         public string Number { get; private set; }
@@ -34,17 +34,17 @@ namespace Domain.Client.ValueObjects
 
         public override bool Equals(object obj)
         {
-            if (obj is IdentityNumber)
+            if (ReferenceEquals(null, obj))
             {
-                return Equals((IdentityNumber)obj);
+                return false;
             }
 
-            return false;
+            return obj is IdentityNumber && Equals((IdentityNumber)obj);
         }
 
         public bool Equals(IdentityNumber other)
         {
-            return other.Number.Equals(Number);
+            return other.Number == Number;
         }
 
         public static bool operator ==(IdentityNumber left, IdentityNumber right)

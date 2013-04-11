@@ -9,6 +9,8 @@ namespace Domain.Client.Accounts
 
         public AccountNumber(string accountNumber)
         {
+            Mandate.ParameterNotNullOrEmpty(accountNumber, "accountNumber");
+
             Id = accountNumber;
         }
 

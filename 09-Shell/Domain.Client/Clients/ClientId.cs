@@ -9,11 +9,15 @@ namespace Domain.Client.Clients
 
         public ClientId(string clientId)
         {
+            Mandate.ParameterNotNullOrEmpty(clientId, "clientId");
+
             Id = clientId;
         }
 
         public ClientId(IdentityNumber identityNumber)
         {
+            Mandate.ParameterNotDefaut(identityNumber, "identityNumber");
+
             Id = identityNumber.Number;
         }
 

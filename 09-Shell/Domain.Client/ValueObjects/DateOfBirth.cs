@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 namespace Domain.Client.ValueObjects
 {
     [DataContract]
-    public struct DateOfBirth
+    public struct DateOfBirth : IEquatable<DateOfBirth>
     {
         [DataMember(Order = 1, Name = "Date", IsRequired = true)]
         public DateTime Date { get; private set; }
@@ -47,12 +47,12 @@ namespace Domain.Client.ValueObjects
 
         public override bool Equals(object obj)
         {
-            if (obj is DateOfBirth)
+            if (ReferenceEquals(null, obj))
             {
-                return Equals((DateOfBirth)obj);
+                return false;
             }
 
-            return false;
+            return obj is DateOfBirth && Equals((DateOfBirth)obj);
         }
 
         public bool Equals(DateOfBirth other)

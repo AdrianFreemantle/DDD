@@ -36,6 +36,20 @@ namespace Domain.Core
         }
 
         /// <summary>
+        /// Mandates that the specified value parameter may not be the default value
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <param name="paramName">Name of the param.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="value"/> is the default value.</exception>
+        public static void ParameterNotDefaut<T>(T value, string paramName) where T : struct, IEquatable<T>
+        {
+            if (value.Equals(default(T)))
+            {
+                throw new ArgumentException("A non-default value is required.", paramName);
+            }
+        }
+
+        /// <summary>
         /// Mandates that the specified sequence is not null and has at least one element.
         /// </summary>
         /// <typeparam name="T"></typeparam>

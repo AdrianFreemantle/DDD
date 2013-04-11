@@ -29,12 +29,12 @@ namespace Domain.Client.ValueObjects
 
         public override bool Equals(object obj)
         {
-            if (obj is PersonName)
+            if (ReferenceEquals(null, obj))
             {
-                return Equals((PersonName)obj);
+                return false;
             }
 
-            return false;
+            return obj is PersonName && Equals((PersonName)obj);
         }
 
         public bool Equals(PersonName other)

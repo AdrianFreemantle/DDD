@@ -1,3 +1,4 @@
+using System;
 using System.Runtime.Serialization;
 namespace Domain.Client.ValueObjects
 {
@@ -12,12 +13,13 @@ namespace Domain.Client.ValueObjects
     }
 
     [DataContract]
-    public struct AccountStatus
+    public struct AccountStatus : IEquatable<AccountStatus>
     {
         [DataMember(Order = 1, Name = "Status", IsRequired = true)]
         public AccountStatusType Status { get; private set; }
 
-        public AccountStatus(AccountStatusType value) : this()
+        public AccountStatus(AccountStatusType value)
+            : this()
         {
             Status = value;
         }
@@ -34,12 +36,12 @@ namespace Domain.Client.ValueObjects
 
         public override bool Equals(object obj)
         {
-            if (obj is AccountStatus)
+            if (ReferenceEquals(null, obj))
             {
-                return Equals((AccountStatus)obj);
+                return false;
             }
 
-            return false;
+            return obj is AccountStatus && Equals((AccountStatus)obj);
         }
 
         public bool Equals(AccountStatus other)

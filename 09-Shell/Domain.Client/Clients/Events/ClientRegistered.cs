@@ -1,6 +1,7 @@
 using System;
 using System.Runtime.Serialization;
 using Domain.Client.ValueObjects;
+using Domain.Core;
 using Domain.Core.Events;
 
 namespace Domain.Client.Clients.Events
@@ -22,6 +23,11 @@ namespace Domain.Client.Clients.Events
 
         public ClientRegistered(ClientId clientId, IdentityNumber identityNumber, PersonName clientName, TelephoneNumber primaryContactNumber)
         {
+            Mandate.ParameterNotNull(clientId, "clientId");
+            Mandate.ParameterNotDefaut(identityNumber, "identityNumber");
+            Mandate.ParameterNotDefaut(clientName, "clientName");
+            Mandate.ParameterNotDefaut(primaryContactNumber, "primaryContactNumber");
+
             ClientId = clientId;
             IdentityNumber = identityNumber;
             ClientName = clientName;

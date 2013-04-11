@@ -1,6 +1,7 @@
 using System;
 using System.Runtime.Serialization;
 using Domain.Client.ValueObjects;
+using Domain.Core;
 using Domain.Core.Events;
 
 namespace Domain.Client.Clients.Events
@@ -16,6 +17,9 @@ namespace Domain.Client.Clients.Events
 
         public ClientDateOfBirthCorrected(ClientId clientId, DateOfBirth dateOfBirth)
         {
+            Mandate.ParameterNotNull(clientId, "clientId");
+            Mandate.ParameterNotDefaut(dateOfBirth, "dateOfBirth");
+
             ClientId = clientId;
             DateOfBirth = dateOfBirth;
         }

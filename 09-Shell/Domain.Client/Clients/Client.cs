@@ -12,6 +12,10 @@ namespace Domain.Client.Clients
 
         public static Client RegisterClient(IdentityNumber idNumber, PersonName clientName, TelephoneNumber primaryContactNumber)
         {
+            Mandate.ParameterNotDefaut(idNumber, "idNumber");
+            Mandate.ParameterNotDefaut(clientName, "clientName");
+            Mandate.ParameterNotDefaut(primaryContactNumber, "primaryContactNumber");
+
             var client = new Client();
             client.RaiseEvent(new ClientRegistered(new ClientId(idNumber), idNumber, clientName, primaryContactNumber));
             return client;
@@ -19,6 +23,8 @@ namespace Domain.Client.Clients
 
         public void CorrectDateOfBirth(DateOfBirth birthDate)
         {
+            Mandate.ParameterNotDefaut(birthDate, "birthDate");
+
             if (birthDate.GetCurrentAge() < 18)
             {
                 throw DomainError.Named("underage", "A client must be older than 18 years.");

@@ -40,6 +40,8 @@ namespace Domain.Client.Accounts
 
         public void RegisterPayment(BillingResult billingResult)
         {
+            Mandate.ParameterNotDefaut(billingResult, "billingResult");
+
             RaiseEvent(new AccountBilled(Identity, recency.FromBillingResult(billingResult)));
             UpdateStatusBasedOnRecency();
         }

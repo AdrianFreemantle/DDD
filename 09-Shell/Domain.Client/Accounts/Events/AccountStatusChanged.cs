@@ -1,6 +1,7 @@
 using System;
 using System.Runtime.Serialization;
 using Domain.Client.ValueObjects;
+using Domain.Core;
 using Domain.Core.Events;
 
 namespace Domain.Client.Accounts.Events
@@ -16,6 +17,9 @@ namespace Domain.Client.Accounts.Events
 
         public AccountStatusChanged(AccountNumber accountNumber, AccountStatus status)
         {
+            Mandate.ParameterNotNull(accountNumber, "accountNumber");
+            Mandate.ParameterNotDefaut(status, "status");
+
             Status = status;
             AccountNumber = accountNumber;
         }

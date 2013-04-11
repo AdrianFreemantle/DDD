@@ -1,9 +1,10 @@
+using System;
 using Domain.Core;
 using System.Runtime.Serialization;
 namespace Domain.Client.ValueObjects
 {
     [DataContract]
-    public struct PersonAge
+    public struct PersonAge : IEquatable<PersonAge>
     {
         [DataMember(Order = 1, Name = "Age", IsRequired = true)]
         public int Age { get; set; }
@@ -27,12 +28,12 @@ namespace Domain.Client.ValueObjects
 
         public override bool Equals(object obj)
         {
-            if (obj is PersonAge)
+            if (ReferenceEquals(null, obj))
             {
-                return Equals((PersonAge)obj);
+                return false;
             }
 
-            return false;
+            return obj is PersonAge && Equals((PersonAge)obj);
         }
 
         public bool Equals(PersonAge other)

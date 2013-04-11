@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.Serialization;
+using Domain.Core;
 using Domain.Core.Events;
 
 namespace Domain.Client.Clients.Events
@@ -12,6 +13,8 @@ namespace Domain.Client.Clients.Events
 
         public ClientPassedAway(ClientId clientId)
         {
+            Mandate.ParameterNotNull(clientId, "clientId");
+
             ClientId = clientId;
         }
 

@@ -1,4 +1,6 @@
 using Domain.Client.Clients.Events;
+using Domain.Client.ValueObjects;
+using Domain.Core;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Tests.ClientSpecifications

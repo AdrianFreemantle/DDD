@@ -1,5 +1,6 @@
 using System.Runtime.Serialization;
 using Domain.Client.Clients;
+using Domain.Core;
 using Domain.Core.Events;
 
 namespace Domain.Client.Accounts.Events
@@ -15,6 +16,9 @@ namespace Domain.Client.Accounts.Events
 
         public AccountOpened(ClientId clientId, AccountNumber accountNumber)
         {
+            Mandate.ParameterNotNull(clientId, "clientId");
+            Mandate.ParameterNotNull(accountNumber, "accountNumber");
+
             ClientId = clientId;
             AccountNumber = accountNumber;
         }
