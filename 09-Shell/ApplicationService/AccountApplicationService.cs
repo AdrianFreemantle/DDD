@@ -2,7 +2,6 @@
 using Domain.Client.Accounts;
 using Domain.Client.Accounts.Commands;
 using Domain.Client.Accounts.Events;
-using Domain.Client.Accounts.Services;
 using Domain.Client.Clients.Events;
 using Domain.Client.ValueObjects;
 using Domain.Core.Events;

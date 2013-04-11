@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using Domain.Client.Accounts;
 using System;
-using Domain.Client.Accounts.Services;
 using Domain.Client.Clients;
 using Domain.Core.Infrastructure;
 using PersistenceModel;

@@ -1,6 +1,6 @@
 ﻿using Domain.Client.Clients;
 
-namespace Domain.Client.Accounts.Services
+namespace Domain.Client.Accounts
 {
     public interface IAccountNumberService
     {
