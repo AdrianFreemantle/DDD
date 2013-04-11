@@ -9,11 +9,11 @@ using Domain.Client.Clients;
 
 namespace Infrastructure.CommandValidators
 {
-    public sealed class ClientMayOnlyHaveOneAccount : IValidateCommand<OpenAccount>
+    public sealed class OpenAccountValidator : IValidateCommand<OpenAccount>
     {
         private readonly IDataQuery dataQuery;
 
-        public ClientMayOnlyHaveOneAccount(IDataQuery dataQuery)
+        public OpenAccountValidator(IDataQuery dataQuery)
         {
             this.dataQuery = dataQuery;
         }

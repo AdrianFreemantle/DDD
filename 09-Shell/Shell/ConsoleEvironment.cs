@@ -7,7 +7,6 @@ using Domain.Core.Infrastructure;
 using Domain.Core.Logging;
 using Infrastructure;
 using Infrastructure.DomainServices;
-using Infrastructure.DomainSpecifications;
 using Infrastructure.Repositories;
 using PersistenceModel;
 using System.Collections.Generic;
@@ -82,8 +81,8 @@ namespace Shell
 
         static void RegisterSpecifications()
         {
-            ((LocalCommandPublisher)LocalCommandPublisher).RegisterSpecification(new ClientMayOnlyBeRegisteredOnce(DataQuery));
-            ((LocalCommandPublisher)LocalCommandPublisher).RegisterSpecification(new ClientMayOnlyHaveOneAccount(DataQuery));
+            ((LocalCommandPublisher)LocalCommandPublisher).RegisterSpecification(new RegisterClientValidator(DataQuery));
+            ((LocalCommandPublisher)LocalCommandPublisher).RegisterSpecification(new OpenAccountValidator(DataQuery));
         }
     }
 }

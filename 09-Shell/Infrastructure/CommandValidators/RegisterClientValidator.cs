@@ -7,13 +7,13 @@ using PersistenceModel;
 using Domain.Core.Commands;
 using Domain.Client.ValueObjects;
 
-namespace Infrastructure.DomainSpecifications
+namespace Infrastructure.CommandValidators
 {
-    public sealed class ClientMayOnlyBeRegisteredOnce : IValidateCommand<RegisterClient>
+    public sealed class RegisterClientValidator : IValidateCommand<RegisterClient>
     {
         private readonly IDataQuery dataQuery;
 
-        public ClientMayOnlyBeRegisteredOnce(IDataQuery dataQuery)
+        public RegisterClientValidator(IDataQuery dataQuery)
         {
             this.dataQuery = dataQuery;
         }       
