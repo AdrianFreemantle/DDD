@@ -25,5 +25,7 @@ namespace Domain.Core
         /// versions of .NET Framework
         /// </summary>
         int GetStableHashCode();
+
+        bool IsEmpty();
     }
 }

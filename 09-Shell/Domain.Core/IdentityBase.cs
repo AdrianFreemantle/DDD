@@ -10,13 +10,17 @@ namespace Domain.Core
     public abstract class IdentityBase<TKey> : IHaveIdentity
     {
         public abstract TKey Id { get; protected set; }
+        public abstract string GetTag();
 
         public string GetId()
         {
             return Id.ToString();
         }
-
-        public abstract string GetTag();
+        
+        public bool IsEmpty()
+        {
+            return default(TKey).Equals(Id);
+        }
 
         public override bool Equals(object obj)
         {

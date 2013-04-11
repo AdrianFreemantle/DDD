@@ -36,7 +36,7 @@ namespace Domain.Client.Clients.Events
 
         public override string ToString()
         {
-            return String.Format("Registered new client {0} {1}.", ClientName.FirstName, ClientName.Surname);
+            return String.Format("Registered new client {0} {1} with Id {2}.", ClientName.FirstName, ClientName.Surname, IdentityNumber.Number);
         }
     }
 }

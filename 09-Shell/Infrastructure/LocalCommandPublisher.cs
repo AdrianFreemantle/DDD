@@ -3,6 +3,7 @@ using Domain.Core.Commands;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Domain.Core.Logging;
 
 namespace Infrastructure
 {
@@ -14,6 +15,8 @@ namespace Infrastructure
     /// </summary>
     public sealed class LocalCommandPublisher : IPublishCommands
     {
+        private static readonly ILog Logger = LogFactory.BuildLogger(typeof(LocalCommandPublisher));
+
         private readonly HashSet<object> handlers;
         private readonly HashSet<object> commandSpecifications;
 
@@ -40,6 +43,7 @@ namespace Infrastructure
             object handler = handlers.Single(handlerType.IsInstanceOfType);
 
             Validate(command);
+            Logger.Verbose(command.ToString());
 
             ((dynamic)handler).Execute((dynamic)command);
         }

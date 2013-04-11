@@ -9,15 +9,19 @@ namespace Domain.Client.Accounts.Events
     [DataContract]
     public class AccountBilled : IDomainEvent
     {
-        [DataMember(Order = 0, IsRequired = true, Name = "AccountNumber")]
+        [DataMember(Order = 1, IsRequired = true, Name = "AccountNumber")]
         public AccountNumber AccountNumber { get; protected set; }
 
-        [DataMember(Order = 1, IsRequired = true, Name = "Recency")]
+        [DataMember(Order = 2, IsRequired = true, Name = "Recency")]
         public Recency Recency { get; protected set; }
+        
+        protected AccountBilled()
+        {
+        }
 
         public AccountBilled(AccountNumber accountNumber, Recency recency)
         {
-            Mandate.ParameterNotNull(accountNumber, "accountNumber");
+            Mandate.ParameterNotNullOrEmpty(accountNumber, "accountNumber");
             Mandate.ParameterNotDefaut(recency, "recency");
 
             Recency = recency;

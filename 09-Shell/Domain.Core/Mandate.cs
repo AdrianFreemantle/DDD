@@ -50,6 +50,22 @@ namespace Domain.Core
         }
 
         /// <summary>
+        /// Mandates that the specified parameter is not null or empty.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <param name="paramName">Name of the param.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="value"/> is empty.</exception>
+        public static void ParameterNotNullOrEmpty<T>(T value, string paramName) where T : class, IHaveIdentity
+        {
+            ParameterNotNull(value, paramName);
+
+            if (value.IsEmpty())
+            {
+                throw new ArgumentException("A non-empty value is required.", paramName);
+            }
+        }
+
+        /// <summary>
         /// Mandates that the specified sequence is not null and has at least one element.
         /// </summary>
         /// <typeparam name="T"></typeparam>

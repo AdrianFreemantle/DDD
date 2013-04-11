@@ -26,7 +26,7 @@ namespace Domain.Client.Clients.Events
 
         public override string ToString()
         {
-            return String.Format("Update date of birth for client {0} to {1}.", ClientId.Id, DateOfBirth.Date.ToShortDateString());
+            return String.Format("Corrected date of birth for client {0} to {1}.", ClientId.Id, DateOfBirth.Date.ToShortDateString());
         }
     }
 }
