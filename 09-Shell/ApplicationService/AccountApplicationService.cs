@@ -88,7 +88,7 @@ namespace ApplicationService
             {
                 AccountNumber accountNumber = accountNumberService.GetAccountNumberForClient(@event.ClientId);
 
-                if (accountNumber.IsEmpty)
+                if (accountNumber.IsEmpty())
                 {
                     return;
                 }

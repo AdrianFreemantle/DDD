@@ -1,24 +1,48 @@
-﻿using Domain.Client.Clients;
+﻿using System.Linq;
+using Domain.Client.Clients;
 using Domain.Client.ValueObjects;
 using Domain.Core;
 using Domain.Core.Infrastructure;
-using PersistenceModel;
 
-namespace Infrastructure.Repositories
+namespace PersistenceModel.Repositories
 {
-    public sealed class ClientRepository : AggregateRepository<Client>
+    public sealed class ClientRepository : IClientRepository
     {       
         private readonly IRepository repository;
+        private readonly IDataQuery dataQuery;
 
-        public ClientRepository(IRepository repository)
+        public ClientRepository(IRepository repository, IDataQuery dataQuery)
         {
             this.repository = repository;
+            this.dataQuery = dataQuery;
         }
 
-        protected override IMemento LoadSnapshot(object id)
+        public Client Get<TKey>(IdentityBase<TKey> id)
         {
             var clientModel = repository.Get<ClientModel>(id);
+            return BuildClient(clientModel);
+        }
 
+        public Client Get(IdentityNumber identityNumber)
+        {
+            var clientModel = dataQuery
+                .GetQueryable<ClientModel>()
+                .First(model => model.IdentityNumber == identityNumber.Number);
+
+            return BuildClient(clientModel);
+        }
+
+        private Client BuildClient(ClientModel clientModel)
+        {
+            Mandate.ParameterNotNull(clientModel, "clientModel");
+
+            var client = ActivatorHelper.CreateInstance<Client>();
+            (client as IAggregate).RestoreSnapshot(LoadSnapshot(clientModel));
+            return client;
+        }
+
+        private static IMemento LoadSnapshot(ClientModel clientModel)
+        {           
             var snapshot = new ClientSnapshot
             {
                 IdentityNumber = new IdentityNumber(clientModel.IdentityNumber),
@@ -40,6 +64,6 @@ namespace Infrastructure.Repositories
             public DateOfBirth DateOfBirth { get; set; }
             public IdentityNumber IdentityNumber { get; set; }
             public bool IsDeceased { get; set; }
-        }
+        }        
     }
 }

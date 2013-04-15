@@ -5,7 +5,7 @@ using Domain.Client.Clients;
 using Domain.Core.Infrastructure;
 using PersistenceModel;
 
-namespace Infrastructure.DomainServices
+namespace Services
 {
     public sealed class AccountNumberService : IAccountNumberService
     {
@@ -34,5 +34,6 @@ namespace Infrastructure.DomainServices
                 ? new AccountNumber(String.Empty)
                 : new AccountNumber(accountNumber);
         }
+
     }
 }

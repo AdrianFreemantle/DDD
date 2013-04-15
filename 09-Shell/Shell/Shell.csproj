@@ -42,13 +42,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commands\CancelAccountConsoleCommand.cs" />
-    <Compile Include="Commands\RegisterSuccessfullPaymentConsoleCommand.cs" />
-    <Compile Include="Commands\RegisterMissedPaymentConsoleCommand.cs" />
-    <Compile Include="Commands\CorrectDateOfBirthConsoleCommand.cs" />
-    <Compile Include="Commands\SetClientAsDeceasedConsoleCommand.cs" />
-    <Compile Include="Commands\OpenAccountConsoleCommand.cs" />
-    <Compile Include="Commands\RegisterClientConsoleCommand.cs" />
+    <Compile Include="ConsoleCommands\CancelAccountConsoleCommand.cs" />
+    <Compile Include="ConsoleCommands\RegisterSuccessfullPaymentConsoleCommand.cs" />
+    <Compile Include="ConsoleCommands\RegisterMissedPaymentConsoleCommand.cs" />
+    <Compile Include="ConsoleCommands\CorrectDateOfBirthConsoleCommand.cs" />
+    <Compile Include="ConsoleCommands\SetClientAsDeceasedConsoleCommand.cs" />
+    <Compile Include="ConsoleCommands\OpenAccountConsoleCommand.cs" />
+    <Compile Include="ConsoleCommands\RegisterClientConsoleCommand.cs" />
     <Compile Include="IConsoleCommand.cs" />
     <Compile Include="ConsoleEvironment.cs" />
     <Compile Include="Program.cs" />
@@ -77,6 +77,10 @@
     <ProjectReference Include="..\PersistenceModel\PersistenceModel.csproj">
       <Project>{BDECC367-C056-4C39-BFA0-8B9E50239070}</Project>
       <Name>PersistenceModel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Services\Services.csproj">
+      <Project>{ADEDCE06-2708-4E9A-99F2-504E5CCA7688}</Project>
+      <Name>Services</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

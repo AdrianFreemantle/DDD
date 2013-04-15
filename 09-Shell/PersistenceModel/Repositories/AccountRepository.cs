@@ -1,13 +1,13 @@
-﻿using Domain.Client.Accounts;
+﻿using System;
+using Domain.Client.Accounts;
 using Domain.Client.Clients;
 using Domain.Client.ValueObjects;
 using Domain.Core;
 using Domain.Core.Infrastructure;
-using PersistenceModel;
 
-namespace Infrastructure.Repositories
-{
-    public sealed class AccountRepository : AggregateRepository<Account>
+namespace PersistenceModel.Repositories
+{   
+    public sealed class AccountRepository : IAccountRepository 
     {
         private readonly IRepository repository;
 
@@ -16,10 +16,21 @@ namespace Infrastructure.Repositories
             this.repository = repository;
         }
 
-        protected override IMemento LoadSnapshot(object id)
+        public Account Get<TKey>(IdentityBase<TKey> id)
         {
             var accountModel = repository.Get<AccountModel>(id);
+            return BuildAccount(accountModel);
+        }
+        
+        private Account BuildAccount(AccountModel accountModel)
+        {
+            var account = ActivatorHelper.CreateInstance<Account>();
+            (account as IAggregate).RestoreSnapshot(LoadSnapshot(accountModel));
+            return account;
+        }
 
+        private IMemento LoadSnapshot(AccountModel accountModel)
+        {
             return new AccountSnapshot
             {
                 Identity = new AccountNumber(accountModel.AccountNumber),

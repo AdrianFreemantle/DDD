@@ -2,12 +2,8 @@
 using Domain.Client.Accounts.Commands;
 using Domain.Client.ValueObjects;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Shell.Commands
+namespace Shell.ConsoleCommands
 {
     class RegisterSuccessfullPaymentConsoleCommand : RegisterSuccessfullPayment, IConsoleCommand
     {

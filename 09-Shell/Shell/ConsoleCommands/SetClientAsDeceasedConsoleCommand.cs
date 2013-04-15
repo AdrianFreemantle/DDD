@@ -2,7 +2,7 @@
 using System;
 using Domain.Client.Clients.Commands;
 
-namespace Shell.Commands
+namespace Shell.ConsoleCommands
 {
     class SetClientAsDeceasedConsoleCommand : SetClientAsDeceased, IConsoleCommand
     {

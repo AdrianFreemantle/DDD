@@ -1,22 +1,21 @@
-﻿using System.Linq;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
+using Domain.Client.Clients;
 using Domain.Client.Clients.Commands;
-using Domain.Core.Infrastructure;
-using PersistenceModel;
 using Domain.Core.Commands;
 using Domain.Client.ValueObjects;
 
-namespace Infrastructure.CommandValidators
+namespace Domain.Client.Validators
 {
     public sealed class RegisterClientValidator : IValidateCommand<RegisterClient>
     {
-        private readonly IDataQuery dataQuery;
+        private readonly IClientRepository clientRepository;
 
-        public RegisterClientValidator(IDataQuery dataQuery)
+        public RegisterClientValidator(IClientRepository clientRepository)
         {
-            this.dataQuery = dataQuery;
-        }       
+            this.clientRepository = clientRepository;
+        }
 
         public IEnumerable<ValidationResult> Validate(RegisterClient command)
         {
@@ -30,9 +29,14 @@ namespace Infrastructure.CommandValidators
 
         private bool ClientIsRegistered(IdentityNumber identityNumber)
         {
-            return dataQuery
-                .GetQueryable<ClientModel>()
-                .Any(client => client.IdentityNumber == identityNumber.Number);
+            try
+            {
+                return clientRepository.Get(identityNumber) != null;
+            }
+            catch (InvalidOperationException)
+            {
+                return false;
+            }
         }
     }
 }

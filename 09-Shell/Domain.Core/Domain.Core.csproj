@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Aggregate.cs" />
+    <Compile Include="AggregateNotFoundException.cs" />
     <Compile Include="Commands\CommandValidationException.cs" />
     <Compile Include="Commands\IValidateCommand.cs" />
     <Compile Include="ISpecification.cs" />
@@ -56,7 +57,6 @@
     <Compile Include="IEntity.cs" />
     <Compile Include="Logging\ILog.cs" />
     <Compile Include="Infrastructure\ActivatorHelper.cs" />
-    <Compile Include="Infrastructure\AggregateRepository.cs" />
     <Compile Include="Infrastructure\IAggregateRepository.cs" />
     <Compile Include="Infrastructure\IDataQuery.cs" />
     <Compile Include="Infrastructure\IRepository.cs" />

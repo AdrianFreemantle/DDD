@@ -1,23 +1,19 @@
 ﻿using Domain.Client.Accounts;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Domain.Client.Accounts.Commands;
 
-namespace Shell.Commands
+namespace Shell.ConsoleCommands
 {
-    class RegisterMissedPaymentConsoleCommand : RegisterMissedPayment, IConsoleCommand
+    class CancelAccountConsoleCommand : CancelAccount, IConsoleCommand
     {
         public string[] Keys
         {
-            get { return new[] { "RegisterMissedPayment" }; }
+            get { return new[] { "CancelAccount" }; }
         }
 
         public string Usage
         {
-            get { return "RegisterMissedPayment <AccountNumber>"; }
+            get { return "CancelAccount <AccountNumber>"; }
         }
 
         public void Build(string[] args)

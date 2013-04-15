@@ -44,9 +44,10 @@
   <ItemGroup>
     <Compile Include="Accounts\Account.cs" />
     <Compile Include="Accounts\AccountNumber.cs" />
-    <Compile Include="Accounts\AccountState.cs" />
+    <Compile Include="Accounts\Account.State.cs" />
     <Compile Include="Accounts\IAccountApplicationService.cs" />
     <Compile Include="Accounts\IAccountProjections.cs" />
+    <Compile Include="Accounts\IAccountRepository.cs" />
     <Compile Include="Clients\IClientApplicationService.cs" />
     <Compile Include="Clients\IClientProjections.cs" />
     <Compile Include="Clients\ClientState.cs" />
@@ -64,6 +65,9 @@
     <Compile Include="Clients\Events\ClientPassedAway.cs" />
     <Compile Include="Clients\Events\ClientRegistered.cs" />
     <Compile Include="Accounts\IAccountNumberService.cs" />
+    <Compile Include="Clients\IClientRepository.cs" />
+    <Compile Include="Validators\OpenAccountValidator.cs" />
+    <Compile Include="Validators\RegisterClientValidator.cs" />
     <Compile Include="ValueObjects\BillingResult.cs" />
     <Compile Include="Accounts\IAccountSnapshot.cs" />
     <Compile Include="Clients\Client.cs" />
