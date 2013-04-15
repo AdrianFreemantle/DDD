@@ -1,3 +1,4 @@
+using System;
 using Domain.Core;
 
 namespace Domain.Client.Accounts
@@ -6,6 +7,10 @@ namespace Domain.Client.Accounts
     {
         public override string Id { get; protected set; }
 
+        private AccountNumber()
+        {
+        }
+
         public AccountNumber(string accountNumber)
         {
             Mandate.ParameterNotNullOrEmpty(accountNumber, "accountNumber");
@@ -13,9 +18,22 @@ namespace Domain.Client.Accounts
             Id = accountNumber;
         }
 
+        public static AccountNumber Empty()
+        {
+            return new AccountNumber
+            {
+                Id = String.Empty
+            };
+        }
+
         public override string GetTag()
         {
             return "account-number";
+        }
+
+        public override bool IsEmpty()
+        {
+            return String.IsNullOrWhiteSpace(Id);
         }
     }
 }

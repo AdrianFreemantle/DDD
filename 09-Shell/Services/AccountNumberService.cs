@@ -31,7 +31,7 @@ namespace Services
                                          .FirstOrDefault();
 
             return String.IsNullOrWhiteSpace(accountNumber)
-                ? new AccountNumber(String.Empty)
+                ? AccountNumber.Empty()
                 : new AccountNumber(accountNumber);
         }
 

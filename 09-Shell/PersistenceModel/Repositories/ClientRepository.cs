@@ -19,7 +19,7 @@ namespace PersistenceModel.Repositories
 
         public Client Get<TKey>(IdentityBase<TKey> id)
         {
-            var clientModel = repository.Get<ClientModel>(id);
+            var clientModel = repository.Get<ClientModel>(id.Id);
             return BuildClient(clientModel);
         }
 

@@ -18,7 +18,7 @@ namespace PersistenceModel.Repositories
 
         public Account Get<TKey>(IdentityBase<TKey> id)
         {
-            var accountModel = repository.Get<AccountModel>(id);
+            var accountModel = repository.Get<AccountModel>(id.Id);
             return BuildAccount(accountModel);
         }
         
