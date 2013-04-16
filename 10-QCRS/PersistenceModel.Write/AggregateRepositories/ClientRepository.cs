@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Domain.Client.Clients;
+﻿using Domain.Client.Clients;
 using Domain.Client.ValueObjects;
 using Domain.Core;
 using Domain.Core.Infrastructure;
@@ -7,63 +6,31 @@ using Domain.Core.Infrastructure;
 namespace PersistenceModel.Write.AggregateRepositories
 {
     public sealed class ClientRepository : IClientRepository
-    {       
-        private readonly IRepository repository;
-        private readonly IDataQuery dataQuery;
+    {
+        private readonly IDocumentStore documentStore;
 
-        public ClientRepository(IRepository repository, IDataQuery dataQuery)
+        public ClientRepository(IDocumentStore documentStore)
         {
-            this.repository = repository;
-            this.dataQuery = dataQuery;
-        }
-
-        public Client Get<TKey>(IdentityBase<TKey> id)
-        {
-            var clientModel = repository.Get<ClientModel>(id.Id);
-            return BuildClient(clientModel);
+            this.documentStore = documentStore;
         }
 
         public Client Get(IdentityNumber identityNumber)
         {
-            var clientModel = dataQuery
-                .GetQueryable<ClientModel>()
-                .First(model => model.IdentityNumber == identityNumber.Number);
-
-            return BuildClient(clientModel);
+            return Get(new ClientId(identityNumber));
         }
 
-        private Client BuildClient(ClientModel clientModel)
+        public Client Get(IHaveIdentity id)
         {
-            Mandate.ParameterNotNull(clientModel, "clientModel");
-
+            var snapshot = documentStore.Get<ClientSnapshot>(id.ToString());
             var client = ActivatorHelper.CreateInstance<Client>();
-            (client as IAggregate).RestoreSnapshot(LoadSnapshot(clientModel));
+            ((IAggregate)client).RestoreSnapshot(snapshot);
             return client;
         }
 
-        private static IMemento LoadSnapshot(ClientModel clientModel)
-        {           
-            var snapshot = new ClientSnapshot
-            {
-                IdentityNumber = new IdentityNumber(clientModel.IdentityNumber),
-                Identity = new ClientId(new IdentityNumber(clientModel.IdentityNumber)),
-                ClientName = new PersonName(clientModel.FirstName, clientModel.Surname),
-                DateOfBirth = new DateOfBirth(clientModel.DateOfBirth),
-                IsDeceased = clientModel.IsDeceased,
-                PrimaryContactNumber = new TelephoneNumber(clientModel.PrimaryContactNumber),
-            };
-
-            return snapshot;
-        }
-
-        class ClientSnapshot : IClientSnapshot
+        public void Save(Client client)
         {
-            public IHaveIdentity Identity { get; set; }
-            public PersonName ClientName { get; set; }
-            public TelephoneNumber PrimaryContactNumber { get; set; }
-            public DateOfBirth DateOfBirth { get; set; }
-            public IdentityNumber IdentityNumber { get; set; }
-            public bool IsDeceased { get; set; }
-        }        
+            IMemento memento = ((IAggregate)client).GetSnapshot();
+            documentStore.Save(memento.Identity.ToString(), memento);
+        }
     }
 }

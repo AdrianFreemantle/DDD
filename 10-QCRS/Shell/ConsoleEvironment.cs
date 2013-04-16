@@ -13,7 +13,6 @@ using PersistenceModel.Reporting;
 using PersistenceModel.Reporting.Projections;
 using PersistenceModel.Write;
 using PersistenceModel.Write.AggregateRepositories;
-using PersistenceModel.Write.Projections;
 using Queries;
 using Services;
 using Infrastructure;
@@ -25,6 +24,7 @@ namespace Shell
 {
     public class ConsoleEnvironment
     {
+        public static IDocumentStore DocumentStore { get; private set; }
         public static IRepository Repository { get; private set; }
         public static IDataQuery DataQuery { get; private set; }
         public static IUnitOfWork UnitOfWork { get; private set; }
@@ -37,8 +37,6 @@ namespace Shell
         public static Dictionary<string, IConsoleView> Views { get; private set; }
         public static IPublishCommands LocalCommandPublisher { get; private set; }
 
-        public static IAccountProjections AccountProjections { get; private set; }
-        public static IClientProjections ClientProjections { get; private set; }
         public static AccountStatusHistoryProjection AccountStatusHistoryProjection { get; private set; }
         public static ClientViewProjections ClientViewProjections { get; private set; }
 
@@ -47,17 +45,16 @@ namespace Shell
             LogFactory.BuildLogger = type => new ConsoleWindowLogger(type);
 
             Repository = new InMemoryRepository();
+            DocumentStore = new InMemeoryDocumentStore();
             DataQuery = Repository as IDataQuery;
             UnitOfWork = new InMemoryUnitOfWork(Repository);
           
-            ClientProjections = new ClientProjections(Repository);
-            AccountProjections = new AccountProjections(Repository);
             AccountStatusHistoryProjection = new AccountStatusHistoryProjection(Repository);
             ClientViewProjections = new ClientViewProjections(Repository);
 
-            ClientRepository = new ClientRepository(Repository, DataQuery);
+            ClientRepository = new ClientRepository(DocumentStore);
             ClientApplicationService = new ClientApplicationService(ClientRepository, UnitOfWork);
-            AccountRepository = new AccountRepository(Repository);
+            AccountRepository = new AccountRepository(DocumentStore);
             AccountNumberService = new AccountNumberService(DataQuery);
             AccountApplicationService = new AccountApplicationService(AccountRepository, AccountNumberService, UnitOfWork);
 
@@ -119,14 +116,7 @@ namespace Shell
 
         static void SubsribeToEvents()
         {
-            DomainEvent.Current.Subscribe<AccountOpened>(AccountProjections.When);
-            DomainEvent.Current.Subscribe<AccountStatusChanged>(AccountProjections.When);
-            DomainEvent.Current.Subscribe<AccountBilled>(AccountProjections.When);
             DomainEvent.Current.Subscribe<ClientPassedAway>(AccountApplicationService.When);
-
-            DomainEvent.Current.Subscribe<ClientRegistered>(ClientProjections.When);
-            DomainEvent.Current.Subscribe<ClientDateOfBirthCorrected>(ClientProjections.When);
-            DomainEvent.Current.Subscribe<ClientPassedAway>(ClientProjections.When);
 
             DomainEvent.Current.Subscribe<AccountOpened>(ClientViewProjections.When);
             DomainEvent.Current.Subscribe<AccountStatusChanged>(ClientViewProjections.When);

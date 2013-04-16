@@ -33,7 +33,7 @@ namespace Domain.Client.Validators
             {
                 return clientRepository.Get(identityNumber) != null;
             }
-            catch (InvalidOperationException)
+            catch (KeyNotFoundException)
             {
                 return false;
             }

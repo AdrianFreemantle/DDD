@@ -2,6 +2,7 @@
 using System.Linq;
 using Domain.Core.Infrastructure;
 using PersistenceModel.Reporting;
+using Queries.Dtos;
 
 namespace Queries
 {

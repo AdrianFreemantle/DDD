@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Queries;
+using Queries.Dtos;
 
 namespace Shell.ConsoleViews
 {

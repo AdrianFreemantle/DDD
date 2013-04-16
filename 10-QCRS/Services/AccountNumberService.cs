@@ -3,7 +3,7 @@ using Domain.Client.Accounts;
 using System;
 using Domain.Client.Clients;
 using Domain.Core.Infrastructure;
-using PersistenceModel.Write;
+using PersistenceModel.Reporting;
 
 namespace Services
 {
@@ -25,8 +25,8 @@ namespace Services
 
         public AccountNumber GetAccountNumberForClient(ClientId clientId)
         {
-            var accountNumber = dataQuery.GetQueryable<AccountModel>()
-                                         .Where(a => a.ClientId == clientId.Id)
+            var accountNumber = dataQuery.GetQueryable<ClientView>()
+                                         .Where(a => a.IdentityNumber == clientId.Id)
                                          .Select(a => a.AccountNumber)
                                          .FirstOrDefault();
 

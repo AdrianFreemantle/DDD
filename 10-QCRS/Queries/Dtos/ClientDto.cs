@@ -1,9 +1,9 @@
 ﻿using System;
 using PersistenceModel.Reporting;
 
-namespace Queries
+namespace Queries.Dtos
 {
-    public class ClientViewDto
+    public class ClientDto
     {
         public string IdentityNumber { get; set; }
         public string FirstName { get; set; }
@@ -15,9 +15,9 @@ namespace Queries
         public string AccountStatus { get; set; }
         public int AccountRecency { get; set; }
 
-        public static ClientViewDto BuildFromModel(ClientView view)
+        public static ClientDto BuildFromModel(ClientView view)
         {
-            return new ClientViewDto
+            return new ClientDto
             {
                 IdentityNumber = view.IdentityNumber,
                 AccountNumber = view.AccountNumber,

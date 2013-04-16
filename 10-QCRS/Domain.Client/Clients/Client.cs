@@ -46,13 +46,26 @@ namespace Domain.Client.Clients
 
         protected override void RestoreSnapshot(IMemento memento)
         {
-            var snapshot = (IClientSnapshot)memento;
+            var snapshot = (ClientSnapshot)memento;
 
             dateOfBirth = snapshot.DateOfBirth;
             clientName = snapshot.ClientName;
             primaryContactNumber = snapshot.PrimaryContactNumber;
             identityNumber = snapshot.IdentityNumber;
             isDeceased = snapshot.IsDeceased;
+        }
+
+        protected override IMemento GetSnapshot()
+        {
+            return new ClientSnapshot
+            {
+                ClientName = clientName,
+                DateOfBirth = dateOfBirth,
+                PrimaryContactNumber = primaryContactNumber,
+                Identity = Identity,
+                IdentityNumber = identityNumber,
+                IsDeceased = isDeceased
+            };
         }
     }
 }

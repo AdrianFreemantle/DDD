@@ -51,9 +51,9 @@
       <Project>{DCE3F633-1ACD-4069-9D9B-722ED23A93AB}</Project>
       <Name>Domain.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\PersistenceModel.Write\PersistenceModel.Write.csproj">
-      <Project>{8588F2A0-8E2D-4A5C-BF9E-73E89CE3BF19}</Project>
-      <Name>PersistenceModel.Write</Name>
+    <ProjectReference Include="..\PersistenceModel.Reporting\PersistenceModel.Reporting.csproj">
+      <Project>{020B0084-37E6-42AD-8A6A-FEC4390F3CAA}</Project>
+      <Name>PersistenceModel.Reporting</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

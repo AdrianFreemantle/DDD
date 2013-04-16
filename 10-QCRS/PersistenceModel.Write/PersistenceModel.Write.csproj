@@ -40,10 +40,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AccountModel.cs" />
-    <Compile Include="Projections\AccountProjections.cs" />
-    <Compile Include="ClientModel.cs" />
-    <Compile Include="Projections\ClientProjections.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AggregateRepositories\AccountRepository.cs" />
     <Compile Include="AggregateRepositories\ClientRepository.cs" />
@@ -58,6 +54,7 @@
       <Name>Domain.Core</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

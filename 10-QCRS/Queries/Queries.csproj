@@ -40,8 +40,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountQueries.cs" />
-    <Compile Include="AccountStatusHistoryDto.cs" />
-    <Compile Include="ClientViewDto.cs" />
+    <Compile Include="Dtos\AccountStatusHistoryDto.cs" />
+    <Compile Include="Dtos\ClientDto.cs" />
     <Compile Include="ClientQueries.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

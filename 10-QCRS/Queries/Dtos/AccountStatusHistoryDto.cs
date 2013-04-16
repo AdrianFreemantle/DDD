@@ -1,6 +1,6 @@
 ﻿using PersistenceModel.Reporting;
 
-namespace Queries
+namespace Queries.Dtos
 {
     public class AccountStatusHistoryDto
     {

@@ -2,6 +2,7 @@
 using System.Linq;
 using Domain.Core.Infrastructure;
 using PersistenceModel.Reporting;
+using Queries.Dtos;
 
 namespace Queries
 {
@@ -14,20 +15,20 @@ namespace Queries
             this.dataQuery = dataQuery;
         }
 
-        public ICollection<ClientViewDto> FetchAllClients()
+        public ICollection<ClientDto> FetchAllClients()
         {
             return dataQuery.GetQueryable<ClientView>()
                             .ToList()
-                            .ConvertAll(ClientViewDto.BuildFromModel);
+                            .ConvertAll(ClientDto.BuildFromModel);
 
         }
 
-        public ICollection<ClientViewDto> FetchDeceasedClients()
+        public ICollection<ClientDto> FetchDeceasedClients()
         {
             return dataQuery.GetQueryable<ClientView>()
                             .Where(view => view.IsDeceased)
                             .ToList()
-                            .ConvertAll(ClientViewDto.BuildFromModel);
+                            .ConvertAll(ClientDto.BuildFromModel);
         }
     }
 }

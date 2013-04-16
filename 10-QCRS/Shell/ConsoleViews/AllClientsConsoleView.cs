@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Queries;
+using Queries.Dtos;
 
 namespace Shell.ConsoleViews
 {
@@ -17,7 +18,7 @@ namespace Shell.ConsoleViews
 
         public void Print(string[] args)
         {
-            ICollection<ClientViewDto> allClients = clientQueries.FetchAllClients();
+            ICollection<ClientDto> allClients = clientQueries.FetchAllClients();
 
             PrintBorder();
             Console.WriteLine("{0,-14} {1, -15} {2, -15} {3, -11} {4, -8} {5, -11} {6, -8}", "Id Number", "Surname", "Name", "Telephone", "Acc #", "Acc Status", "Recency");

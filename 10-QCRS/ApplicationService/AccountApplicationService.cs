@@ -24,7 +24,8 @@ namespace ApplicationService
         {
             try
             {
-                Account.Open(command.ClientId, accountNumberService.GetNextAccountNumber());
+                var account = Account.Open(command.ClientId, accountNumberService.GetNextAccountNumber());
+                accountRepository.Save(account);
                 unitOfWork.Commit();
             }
             catch (Exception ex)
@@ -39,6 +40,7 @@ namespace ApplicationService
             {
                 Account account = accountRepository.Get(command.AccountNumber);
                 account.Cancel();
+                accountRepository.Save(account);
                 unitOfWork.Commit();
             }
             catch (Exception ex)
@@ -53,6 +55,7 @@ namespace ApplicationService
             {
                 Account account = accountRepository.Get(command.AccountNumber);
                 account.RegisterPayment(BillingResult.NotPaid(DateTime.Today));
+                accountRepository.Save(account);
                 unitOfWork.Commit();
             }
             catch (Exception ex)
@@ -67,6 +70,7 @@ namespace ApplicationService
             {
                 Account account = accountRepository.Get(command.AccountNumber);
                 account.RegisterPayment(command.BillingResult);
+                accountRepository.Save(account);
                 unitOfWork.Commit();
             }
             catch (Exception ex)
@@ -88,6 +92,7 @@ namespace ApplicationService
                 
                 Account account = accountRepository.Get(accountNumber);
                 account.Cancel();
+                accountRepository.Save(account);
                 unitOfWork.Commit();
             }
             catch (Exception ex)

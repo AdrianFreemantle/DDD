@@ -45,6 +45,7 @@
     <Compile Include="AggregateNotFoundException.cs" />
     <Compile Include="Commands\CommandValidationException.cs" />
     <Compile Include="Commands\IValidateCommand.cs" />
+    <Compile Include="Infrastructure\IDocumentStore.cs" />
     <Compile Include="ISpecification.cs" />
     <Compile Include="Commands\ICommand.cs" />
     <Compile Include="Commands\IPublishCommands.cs" />

@@ -1,6 +1,4 @@
 ﻿using Domain.Client.Accounts;
-using Domain.Client.Clients;
-using Domain.Client.ValueObjects;
 using Domain.Core;
 using Domain.Core.Infrastructure;
 
@@ -8,43 +6,25 @@ namespace PersistenceModel.Write.AggregateRepositories
 {   
     public sealed class AccountRepository : IAccountRepository 
     {
-        private readonly IRepository repository;
+        private readonly IDocumentStore documentStore;
 
-        public AccountRepository(IRepository repository)
+        public AccountRepository(IDocumentStore documentStore)
         {
-            this.repository = repository;
+            this.documentStore = documentStore;
         }
 
-        public Account Get<TKey>(IdentityBase<TKey> id)
+        public Account Get(IHaveIdentity id)
         {
-            var accountModel = repository.Get<AccountModel>(id.Id);
-            return BuildAccount(accountModel);
-        }
-        
-        private Account BuildAccount(AccountModel accountModel)
-        {
+            var snapshot = documentStore.Get<AccountSnapshot>(id.ToString());
             var account = ActivatorHelper.CreateInstance<Account>();
-            (account as IAggregate).RestoreSnapshot(LoadSnapshot(accountModel));
+            ((IAggregate)account).RestoreSnapshot(snapshot);
             return account;
         }
 
-        private IMemento LoadSnapshot(AccountModel accountModel)
+        public void Save(Account account)
         {
-            return new AccountSnapshot
-            {
-                Identity = new AccountNumber(accountModel.AccountNumber),
-                AccountStatus = new AccountStatus((AccountStatusType)accountModel.AccountStatusId),
-                Recency = new Recency(accountModel.Recency),
-                ClientId = new ClientId(accountModel.ClientId)                
-            };
-        }
-
-        class AccountSnapshot : IAccountSnapshot
-        {
-            public IHaveIdentity Identity { get; set; }
-            public AccountStatus AccountStatus { get; set; }
-            public Recency Recency { get; set; }
-            public ClientId ClientId { get; set; }
+            IMemento memento = ((IAggregate)account).GetSnapshot();
+            documentStore.Save(memento.Identity.ToString(), memento);
         }
     }
 }

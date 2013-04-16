@@ -20,7 +20,8 @@ namespace ApplicationService
         {
             try
             {
-                Client.RegisterClient(command.IdentityNumber, command.ClientName, command.PrimaryContactNumber);
+                var client = Client.RegisterClient(command.IdentityNumber, command.ClientName, command.PrimaryContactNumber);
+                clientRepository.Save(client);
                 unitOfWork.Commit();
             }
             catch (Exception ex)
@@ -35,6 +36,7 @@ namespace ApplicationService
             {
                 Client client = clientRepository.Get(command.ClientId);
                 client.CorrectDateOfBirth(command.DateOfBirth);
+                clientRepository.Save(client);
                 unitOfWork.Commit();
             }
             catch (Exception ex)
@@ -49,6 +51,7 @@ namespace ApplicationService
             {
                 Client client = clientRepository.Get(command.ClientId);
                 client.ClientIsDeceased();
+                clientRepository.Save(client);
                 unitOfWork.Commit();
             }
             catch (Exception ex)

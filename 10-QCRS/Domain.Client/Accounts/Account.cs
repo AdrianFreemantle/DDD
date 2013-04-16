@@ -65,11 +65,22 @@ namespace Domain.Client.Accounts
 
         protected override void RestoreSnapshot(IMemento memento)
         {
-            var snapshot = (IAccountSnapshot)memento;
+            var snapshot = (AccountSnapshot)memento;
 
             accountStatus = snapshot.AccountStatus;
             recency = snapshot.Recency;
             clientId = snapshot.ClientId;
+        }
+
+        protected override IMemento GetSnapshot()
+        {
+            return new AccountSnapshot
+            {
+                Identity = Identity,
+                AccountStatus = accountStatus,
+                ClientId = clientId,
+                Recency = recency
+            };
         }
     }
 }

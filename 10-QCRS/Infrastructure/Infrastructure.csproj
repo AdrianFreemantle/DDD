@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="InMemeoryDocumentStore.cs" />
     <Compile Include="LocalCommandPublisher.cs" />
     <Compile Include="ConsoleWindowLogger.cs" />
     <Compile Include="InMemoryRepository.cs" />
