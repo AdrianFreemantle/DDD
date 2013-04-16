@@ -15,8 +15,8 @@ namespace Infrastructure
             foreach (var enumValue in enumValues)
             {
                 var wrapper = ActivatorHelper.CreateInstance<TLookup>();
-                wrapper.Description = ((Enum)(dynamic)enumValue).GetDescription();
-                wrapper.Id = ((int)(dynamic)enumValue);
+                wrapper.Description = ((Enum)(object)enumValue).GetDescription();
+                wrapper.Id = ((int)(object)enumValue);
                 AddOrUpdate(wrapper, repository);
             }
         }
