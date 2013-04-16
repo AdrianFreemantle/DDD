@@ -2,7 +2,7 @@ using System;
 using Domain.Core;
 using System.Runtime.Serialization;
 namespace Domain.Client.ValueObjects
-{
+{   
     [DataContract]
     public struct PersonAge : IEquatable<PersonAge>
     {

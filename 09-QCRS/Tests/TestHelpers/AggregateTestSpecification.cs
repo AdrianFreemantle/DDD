@@ -36,21 +36,16 @@ namespace Tests.TestHelpers
 
         IGiven IGiven.And(IDomainEvent @event)
         {
-            Console.WriteLine("And  : {0}", GetFormattedEventName(@event));
+            Console.WriteLine("And  : {0}", @event);
             Aggregate.ApplyEvent(@event);
             return this;
         }
 
         protected IGiven Given(IDomainEvent @event)
         {
-            Console.WriteLine("Given: {0}", GetFormattedEventName(@event));
+            Console.WriteLine("Given: {0}", @event);
             Aggregate.ApplyEvent(@event);
             return this;
-        }
-
-        private string GetFormattedEventName(IDomainEvent @event)
-        {
-            return InsertSpaces(@event.GetType().ToString().Split('.').Last());
         }
 
         protected void When(Expression<Func<TAggregate>> expression)
@@ -142,12 +137,12 @@ namespace Tests.TestHelpers
             {
                 if (insertComma)
                 {
-                    Console.Write(", {0}", GetFormattedEventName(domainEvent));
+                    Console.Write("; {0}", domainEvent);
                 }
                 else
                 {
                     insertComma = true;
-                    Console.Write("Then : {0}", GetFormattedEventName(domainEvent));
+                    Console.Write("Then : {0}", domainEvent);
                 }
             }
         }

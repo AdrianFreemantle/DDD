@@ -1,6 +1,7 @@
 ﻿using Domain.Client.Accounts;
 using Domain.Core;
 using Domain.Core.Infrastructure;
+using Domain.Core.Logging;
 
 namespace PersistenceModel.Write
 {   

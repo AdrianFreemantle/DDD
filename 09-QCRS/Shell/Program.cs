@@ -12,6 +12,9 @@ namespace Shell
 
         static void Main()
         {
+            Console.WindowHeight = 40;
+            Console.WindowWidth = 120;
+
             ConsoleEnvironment.Build();
             logger = LogFactory.BuildLogger(typeof(Program));
 
@@ -45,8 +48,6 @@ namespace Shell
             }
             catch (CommandValidationException ex)
             {
-                Console.WriteLine(ex.Message);
-
                 foreach (var validationResult in ex.ValidationResults)
                 {
                     logger.Fatal(validationResult.ErrorMessage);

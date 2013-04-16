@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Domain.Core.Logging;
 
 namespace Domain.Core.Events
 {
@@ -9,6 +10,7 @@ namespace Domain.Core.Events
         [ThreadStatic] //so that each thread has its own callbacks
         private static volatile DomainEvent instance;
         private static readonly object SyncRoot = new Object();
+        private static readonly ILog Logger = LogFactory.BuildLogger(typeof(DomainEvent));
 
         private HashSet<Delegate> actions;
         private IPublishEvents eventPublisher;
@@ -46,6 +48,8 @@ namespace Domain.Core.Events
             {
                 eventPublisher.Publish(@event);
             }
+
+            Logger.Verbose(@event.ToString());
         }
 
         public void Subscribe<T>(Action<T> callback) where T : IDomainEvent
