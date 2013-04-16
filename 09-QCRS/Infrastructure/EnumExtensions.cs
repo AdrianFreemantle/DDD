@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Reflection;
 
-namespace PersistenceModel.Reporting
+namespace Infrastructure
 {
     public static class EnumExtensions
     {

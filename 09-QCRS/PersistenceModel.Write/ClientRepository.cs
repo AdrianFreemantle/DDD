@@ -3,7 +3,7 @@ using Domain.Client.ValueObjects;
 using Domain.Core;
 using Domain.Core.Infrastructure;
 
-namespace PersistenceModel.Write.AggregateRepositories
+namespace PersistenceModel.Write
 {
     public sealed class ClientRepository : IClientRepository
     {

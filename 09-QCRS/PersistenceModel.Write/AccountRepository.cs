@@ -2,7 +2,7 @@
 using Domain.Core;
 using Domain.Core.Infrastructure;
 
-namespace PersistenceModel.Write.AggregateRepositories
+namespace PersistenceModel.Write
 {   
     public sealed class AccountRepository : IAccountRepository 
     {

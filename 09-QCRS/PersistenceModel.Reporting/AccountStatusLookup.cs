@@ -1,8 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Domain.Core.Infrastructure;
 
 namespace PersistenceModel.Reporting
 {
-    public class AccountStatusLookup
+    public class AccountStatusLookup : ILookupTable 
     {
         [Key]
         public int Id { get; set; }

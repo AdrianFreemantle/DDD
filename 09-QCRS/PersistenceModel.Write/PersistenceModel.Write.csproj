@@ -41,8 +41,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="AggregateRepositories\AccountRepository.cs" />
-    <Compile Include="AggregateRepositories\ClientRepository.cs" />
+    <Compile Include="AccountRepository.cs" />
+    <Compile Include="ClientRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Domain.Client\Domain.Client.csproj">

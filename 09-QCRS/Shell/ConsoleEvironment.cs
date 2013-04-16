@@ -12,7 +12,6 @@ using Domain.Core.Logging;
 using PersistenceModel.Reporting;
 using PersistenceModel.Reporting.Projections;
 using PersistenceModel.Write;
-using PersistenceModel.Write.AggregateRepositories;
 using Queries;
 using Services;
 using Infrastructure;
@@ -64,7 +63,7 @@ namespace Shell
             RegisterCommandValidators();
             SubsribeToEvents();
 
-            LookupTables.Initialize<AccountStatusType>(Repository);
+            LookupTables.Register<AccountStatusLookup, AccountStatusType>(Repository);
         }
 
         static void RegisterViews()
