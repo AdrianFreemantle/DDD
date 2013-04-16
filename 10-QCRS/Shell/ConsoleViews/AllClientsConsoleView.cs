@@ -10,6 +10,7 @@ namespace Shell.ConsoleViews
         private readonly ClientQueries clientQueries;
 
         public string Key { get { return "AllClients"; } }
+        public string Usage { get { return "AllClients"; } }
        
         public AllClientsConsoleView(ClientQueries clientQueries)
         {

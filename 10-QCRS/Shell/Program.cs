@@ -95,7 +95,7 @@ namespace Shell
 
             foreach (var consoleView in ConsoleEnvironment.Views.Values)
             {
-                Console.Write("{0} ", consoleView.Key);
+                Console.WriteLine(consoleView.Usage);
             }
 
             Console.ForegroundColor = originalColor;

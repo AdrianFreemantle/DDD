@@ -10,6 +10,7 @@ namespace Shell.ConsoleViews
         private readonly AccountQueries accountQueries;
 
         public string Key { get { return "AccHistory"; } }
+        public string Usage { get { return "AccHistory <AccountNumber>"; } }
 
         public AccountStatusHistoryConsoleView(AccountQueries accountQueries)
         {
