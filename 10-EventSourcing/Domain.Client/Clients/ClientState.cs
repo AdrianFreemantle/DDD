@@ -55,7 +55,7 @@ namespace Domain.Client.Clients
 
         void IHandleClientStateTransitions.When(IssuedLoyaltyCard @event)
         {
-            var card = new LoyaltyCard(Identity, @event.CardNumber, @event.AccountNumber);
+            var card = new LoyaltyCard(Identity, @event.CardNumber);
             ((IEntity)card).RegisterChangesHandler(SaveChange);
             loyaltyCards.Add(card);
         }

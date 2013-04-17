@@ -49,7 +49,7 @@ namespace Domain.Client.Clients
             }
 
             var loyaltyCardNumber = new LoyaltyCardNumber(Guid.NewGuid());
-            RaiseEvent(new IssuedLoyaltyCard(Identity, loyaltyCardNumber, AccountNumber));
+            RaiseEvent(new IssuedLoyaltyCard(Identity, loyaltyCardNumber));
         }
 
         public void ReportLoyaltyCardAsStolen()

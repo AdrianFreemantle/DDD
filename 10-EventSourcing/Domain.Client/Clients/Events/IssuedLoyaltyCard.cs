@@ -14,14 +14,10 @@ namespace Domain.Client.Clients.Events
         [DataMember(Order = 2, IsRequired = true, Name = "CardNumber")]
         public LoyaltyCardNumber CardNumber { get; protected set; }
 
-        [DataMember(Order = 3, IsRequired = true, Name = "AccountNumber")]
-        public AccountNumber AccountNumber { get; protected set; }
-
-        public IssuedLoyaltyCard(ClientId clientId, LoyaltyCardNumber loyaltyCardNumber, AccountNumber accountNumber)
+        public IssuedLoyaltyCard(ClientId clientId, LoyaltyCardNumber loyaltyCardNumber)
         {
             ClientId = clientId;
             CardNumber = loyaltyCardNumber;
-            AccountNumber = accountNumber;
         }
 
         public override string ToString()

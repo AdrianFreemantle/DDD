@@ -7,15 +7,13 @@ namespace Domain.Client.Clients
     public class LoyaltyCard : Entity<LoyaltyCardNumber>
     {
         private readonly ClientId clientId;
-        private AccountNumber accountNumber;
         private bool isActive;
 
-        internal LoyaltyCard(ClientId clientId, LoyaltyCardNumber cardNumber, AccountNumber accountNumber)
+        internal LoyaltyCard(ClientId clientId, LoyaltyCardNumber cardNumber)
         {
             isActive = true;
             Identity = cardNumber;
             this.clientId = clientId;
-            this.accountNumber = accountNumber;
         }
 
         public bool IsActive()
