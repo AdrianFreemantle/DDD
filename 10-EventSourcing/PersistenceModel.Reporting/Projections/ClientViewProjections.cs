@@ -1,13 +1,19 @@
-﻿using Domain.Client.Accounts;
-using Domain.Client.Accounts.Events;
+﻿using Domain.Client.Accounts.Events;
 using Domain.Client.Clients;
 using Domain.Client.Clients.Events;
 using Domain.Client.ValueObjects;
+using Domain.Core.Events;
 using Domain.Core.Infrastructure;
 
 namespace PersistenceModel.Reporting.Projections
 {
-    public class ClientViewProjections : IAccountProjections, IClientProjections
+    public class ClientViewProjections : 
+        IHandleEvent<AccountOpened>,
+        IHandleEvent<AccountStatusChanged>,
+        IHandleEvent<AccountBilled>,
+        IHandleEvent<ClientRegistered>,
+        IHandleEvent<ClientDateOfBirthCorrected>,
+        IHandleEvent<ClientPassedAway>
     {
         private readonly IRepository repository;
 

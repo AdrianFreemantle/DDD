@@ -3,6 +3,7 @@ using Domain.Core.Commands;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using Domain.Core.Logging;
 
 namespace Infrastructure
@@ -18,12 +19,12 @@ namespace Infrastructure
         private static readonly ILog Logger = LogFactory.BuildLogger(typeof(LocalCommandPublisher));
 
         private readonly HashSet<object> handlers;
-        private readonly HashSet<object> commandSpecifications;
+        private readonly HashSet<object> commandValidators;
 
         public LocalCommandPublisher()
         {
             handlers = new HashSet<object>();
-            commandSpecifications = new HashSet<object>();
+            commandValidators = new HashSet<object>();
         }
 
         public void Subscribe(object handler)
@@ -33,7 +34,7 @@ namespace Infrastructure
 
         public void RegisterSpecification<TCommand>(IValidateCommand<TCommand> specification) where TCommand : ICommand
         {
-            commandSpecifications.Add(specification);
+            commandValidators.Add(specification);
         }
 
         public void Publish<TCommand>(TCommand command) where TCommand : ICommand
@@ -52,7 +53,7 @@ namespace Infrastructure
         {
             Type validatorGenericType = typeof(IValidateCommand<>);
             Type specificationType = validatorGenericType.MakeGenericType(new[] { command.GetType() });
-            object validator = commandSpecifications.SingleOrDefault(specificationType.IsInstanceOfType);
+            object validator = commandValidators.SingleOrDefault(specificationType.IsInstanceOfType);
 
             if (validator != null)
             {

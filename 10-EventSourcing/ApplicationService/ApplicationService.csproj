@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="AccountApplicationService.cs" />
     <Compile Include="ClientApplicationService.cs" />
+    <Compile Include="OpenAccountHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

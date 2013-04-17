@@ -73,6 +73,10 @@
       <Project>{DCE3F633-1ACD-4069-9D9B-722ED23A93AB}</Project>
       <Name>Domain.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\EventStore\EventStore.csproj">
+      <Project>{D1A661B0-0EF4-4312-A194-67B5CE86E47D}</Project>
+      <Name>EventStore</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj">
       <Project>{956BBE1A-8D51-4DCF-9CAD-27C43305F8B4}</Project>
       <Name>Infrastructure</Name>

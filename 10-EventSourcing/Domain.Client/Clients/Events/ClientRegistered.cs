@@ -7,7 +7,7 @@ using Domain.Core.Events;
 namespace Domain.Client.Clients.Events
 {
     [DataContract]
-    public class ClientRegistered : IDomainEvent
+    public class ClientRegistered : DomainEvent, IClientEvent
     {
         [DataMember(Order = 0, IsRequired = true, Name = "ClientId")]
         public ClientId ClientId { get; protected set; }

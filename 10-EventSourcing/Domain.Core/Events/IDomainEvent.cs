@@ -1,14 +1,16 @@
+using System;
+
 namespace Domain.Core.Events
 {
     public interface IDomainEvent
     {
-        IHaveIdentity AggregateId { get; set; }
+        Guid Source { get; set; }
         int Version { get; set; }
     }
 
     public abstract class DomainEvent : IDomainEvent
     {
-        public IHaveIdentity AggregateId { get; set; }
-        public int Version { get; set; }
+        Guid IDomainEvent.Source { get; set; }
+        int IDomainEvent.Version { get; set; }
     }
 }

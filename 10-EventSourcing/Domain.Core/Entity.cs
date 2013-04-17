@@ -8,7 +8,12 @@ namespace Domain.Core
     {
         public TIdentity Identity { get; protected set; }
 
-        Action<IDomainEvent> IEntity.SaveChangesHandler { get; set; }
+        private Action<IDomainEvent> saveChangesHandler;
+
+        void IEntity.RegisterChangesHandler(Action<IDomainEvent> handler)
+        {
+            saveChangesHandler = handler;
+        }
 
         void IEntity.ApplyEvent(object @event)
         {
@@ -22,7 +27,12 @@ namespace Domain.Core
 
         protected virtual void RaiseEvent(IDomainEvent @event)
         {
-            (this as IEntity).SaveChangesHandler(@event);
+            if (saveChangesHandler == null)
+            {
+                throw new InvalidOperationException("You must first register the SaveChangesHandler before raising an event on an entity.");
+            }
+
+            saveChangesHandler(@event);
         }
 
         public override int GetHashCode()

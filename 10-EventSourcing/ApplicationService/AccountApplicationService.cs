@@ -9,29 +9,15 @@ namespace ApplicationService
 {
     public class AccountApplicationService : IAccountApplicationService
     {
-        private readonly IAggregateRepository<Account> accountRepository;
+        private readonly IAccountRepository accountRepository;
         private readonly IAccountNumberService accountNumberService;
         private readonly IUnitOfWork unitOfWork;
 
-        public AccountApplicationService(IAggregateRepository<Account> accountRepository, IAccountNumberService accountNumberService, IUnitOfWork unitOfWork)
+        public AccountApplicationService(IAccountRepository accountRepository, IAccountNumberService accountNumberService, IUnitOfWork unitOfWork)
         {
             this.accountRepository = accountRepository;
             this.accountNumberService = accountNumberService;
             this.unitOfWork = unitOfWork;
-        }
-
-        public void Execute(OpenAccount command)
-        {
-            try
-            {
-                var account = Account.Open(command.ClientId, accountNumberService.GetNextAccountNumber());
-                accountRepository.Save(account);
-                unitOfWork.Commit();
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex);
-            }
         }
 
         public void Execute(CancelAccount command)

@@ -8,7 +8,7 @@ using Domain.Core.Events;
 namespace Domain.Client.Accounts.Events
 {
     [DataContract]
-    public class AccountBilled : IDomainEvent
+    public class AccountBilled : DomainEvent, IAccountEvent
     {
         [DataMember(Order = 1, IsRequired = true, Name = "AccountNumber")]
         public AccountNumber AccountNumber { get; protected set; }

@@ -5,67 +5,9 @@ using Domain.Client.Accounts;
 using Domain.Client.Clients.Events;
 using Domain.Client.ValueObjects;
 using Domain.Core;
-using Domain.Core.Events;
 
 namespace Domain.Client.Clients
 {
-    public sealed class LoyaltyCardNumber : IdentityBase<Guid>
-    {
-        public LoyaltyCardNumber(Guid cardNumber)
-        {
-            Mandate.ParameterNotDefaut(cardNumber, "cardNumber");
-
-            Id = cardNumber;
-        }
-
-        public override string GetTag()
-        {
-            return "loyaltyCard";
-        }
-
-        public override bool IsEmpty()
-        {
-            return Id == Guid.Empty;
-        }
-    }
-
-    public class LoyaltyCard : Entity<LoyaltyCardNumber>
-    {
-        private AccountNumber accountNumber;
-        private bool isDisabled;
-
-        internal LoyaltyCard(LoyaltyCardNumber cardNumber, AccountNumber accountNumber)
-        {
-            Identity = cardNumber;
-            this.accountNumber = accountNumber;
-        }
-
-        public bool IsDisabled()
-        {
-            return isDisabled;
-        }
-
-        public void BankCardIsReportedStolen()
-        {
-            RaiseEvent(new LoyaltyCardWasReportedStolen(Identity));
-        }   
-    }
-
-    public interface ILoyaltyCardEvent : IDomainEvent
-    {
-        LoyaltyCardNumber CardNumber { get; }
-    }
-
-    public class LoyaltyCardWasReportedStolen : DomainEvent, ILoyaltyCardEvent
-    {
-        public LoyaltyCardNumber CardNumber { get; protected set; }
-
-        public LoyaltyCardWasReportedStolen(LoyaltyCardNumber identity)
-        {
-            CardNumber = identity;
-        }
-    }
-
     public partial class Client : Aggregate<ClientId>
     {       
         protected Client()
@@ -107,7 +49,7 @@ namespace Domain.Client.Clients
                 throw DomainError.Named("active-loyalty-card", "The client may not be issued a loyalty card as they already have an active one.");
             }
 
-            RaiseEvent(new ClientIssuedLoyaltyCard(new LoyaltyCardNumber(Guid.NewGuid()), accountNumber));
+            RaiseEvent(new IssuedLoyaltyCard(new LoyaltyCardNumber(Guid.NewGuid()), accountNumber));
         }
 
         public Account OpenAccount(IAccountNumberService accountNumberService)
@@ -118,7 +60,7 @@ namespace Domain.Client.Clients
             }
 
             Account account = Account.Open(Identity, accountNumberService.GetNextAccountNumber());
-            RaiseEvent(new AccountAssingedToClient(account.Identity));
+            RaiseEvent(new AccountAssingedToClient(Identity, account.Identity));
             return account;
         }
 

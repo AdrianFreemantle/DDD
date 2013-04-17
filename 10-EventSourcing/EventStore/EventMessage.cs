@@ -11,14 +11,6 @@ namespace EventStore
     public class EventMessage
     {
         /// <summary>
-        /// Initializes a new instance of the EventMessage class.
-        /// </summary>
-        public EventMessage()
-        {
-            this.Headers = new Dictionary<string, object>();
-        }
-
-        /// <summary>
         /// Gets the metadata which provides additional, unstructured information about this message.
         /// </summary>
         [DataMember]
@@ -29,5 +21,19 @@ namespace EventStore
         /// </summary>
         [DataMember]
         public object Body { get; set; }
+
+        /// <summary>
+        /// Initializes a new instance of the EventMessage class.
+        /// </summary>
+        public EventMessage()
+        {
+            Headers = new Dictionary<string, object>();
+        }
+
+        public EventMessage(object body)
+            : this()
+        {
+            Body = body;
+        }
     }
 }

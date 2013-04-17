@@ -14,7 +14,7 @@ namespace EventStore
         public InMemoryEventStream(Guid streamId)
         {
             StreamId = streamId;
-            StreamRevision = -1;
+            StreamRevision = 0;
             committedEvents = new List<EventMessage>();
         }
         

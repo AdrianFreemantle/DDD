@@ -46,12 +46,11 @@
     <Compile Include="Accounts\AccountNumber.cs" />
     <Compile Include="Accounts\Account.State.cs" />
     <Compile Include="Accounts\IAccountApplicationService.cs" />
-    <Compile Include="Accounts\IAccountProjections.cs" />
     <Compile Include="Accounts\IAccountRepository.cs" />
-    <Compile Include="Clients\Events\ClientIssuedLoyaltyCard.cs" />
+    <Compile Include="Clients\Events\IssuedLoyaltyCard.cs" />
     <Compile Include="Clients\Events\AccountAssingedToClient.cs" />
     <Compile Include="Clients\IClientApplicationService.cs" />
-    <Compile Include="Clients\IClientProjections.cs" />
+    <Compile Include="Clients\Events\IClientEvent.cs" />
     <Compile Include="Clients\ClientState.cs" />
     <Compile Include="Clients\Commands\CorrectDateOfBirth.cs" />
     <Compile Include="Accounts\Commands\OpenAccount.cs" />
@@ -68,6 +67,10 @@
     <Compile Include="Clients\Events\ClientRegistered.cs" />
     <Compile Include="Accounts\IAccountNumberService.cs" />
     <Compile Include="Clients\IClientRepository.cs" />
+    <Compile Include="Clients\Events\ILoyaltyCardEvent.cs" />
+    <Compile Include="Clients\LoyaltyCard.cs" />
+    <Compile Include="Clients\LoyaltyCardNumber.cs" />
+    <Compile Include="Clients\Events\LoyaltyCardWasReportedStolen.cs" />
     <Compile Include="Validators\OpenAccountValidator.cs" />
     <Compile Include="Validators\RegisterClientValidator.cs" />
     <Compile Include="ValueObjects\BillingResult.cs" />

@@ -18,6 +18,15 @@ namespace Domain.Core
             return version;
         }
 
+        void IAggregate.LoadFromHistory(IEnumerable<IDomainEvent> domainEvents)
+        {
+            foreach (var @event in domainEvents)
+            {
+                ApplyEvent(@event);
+                version = @event.Version;
+            }
+        }
+
         protected virtual void RaiseEvent(IEnumerable<IDomainEvent> events)
         {
             foreach (var @event in events)
@@ -29,14 +38,13 @@ namespace Domain.Core
         protected override void RaiseEvent(IDomainEvent @event) 
         {
             ApplyEvent(@event);
-            base.RaiseEvent(@event);
             SaveChange(@event);
         }
 
         protected virtual void SaveChange(IDomainEvent @event)
         {
             version++;
-            @event.AggregateId = Identity;
+            @event.Source = Identity.GetSurrogateId();
             @event.Version = version;
             changes.Add(@event);
         }               

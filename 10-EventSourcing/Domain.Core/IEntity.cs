@@ -5,9 +5,9 @@ namespace Domain.Core
 {
     public interface IEntity 
     {
-        Action<IDomainEvent> SaveChangesHandler { get; set; }
         IMemento GetSnapshot();
         void RestoreSnapshot(IMemento memento);
-        void ApplyEvent(object @event);    
+        void ApplyEvent(object @event);
+        void RegisterChangesHandler(Action<IDomainEvent> handler);
     }
 }

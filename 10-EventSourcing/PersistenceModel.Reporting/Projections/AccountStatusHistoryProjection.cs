@@ -1,10 +1,11 @@
 ﻿using System;
 using Domain.Client.Accounts.Events;
+using Domain.Core.Events;
 using Domain.Core.Infrastructure;
 
 namespace PersistenceModel.Reporting.Projections
 {
-    public class AccountStatusHistoryProjection
+    public class AccountStatusHistoryProjection : IHandleEvent<AccountStatusChanged>
     {
         private readonly IRepository repository;
 

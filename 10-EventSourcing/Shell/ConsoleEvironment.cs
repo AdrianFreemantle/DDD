@@ -1,5 +1,6 @@
 ﻿using ApplicationService;
 using Domain.Client.Accounts;
+using Domain.Client.Accounts.Commands;
 using Domain.Client.Accounts.Events;
 using Domain.Client.Clients;
 using Domain.Client.Clients.Events;
@@ -9,6 +10,9 @@ using Domain.Core.Commands;
 using Domain.Core.Events;
 using Domain.Core.Infrastructure;
 using Domain.Core.Logging;
+
+using EventStore;
+
 using PersistenceModel.Reporting;
 using PersistenceModel.Reporting.Projections;
 using PersistenceModel.Write;
@@ -23,7 +27,7 @@ namespace Shell
 {
     public class ConsoleEnvironment
     {
-        public static IDocumentStore DocumentStore { get; private set; }
+        public static IStoreEvents EventStore { get; private set; }
         public static IRepository Repository { get; private set; }
         public static IDataQuery DataQuery { get; private set; }
         public static IUnitOfWork UnitOfWork { get; private set; }
@@ -31,10 +35,12 @@ namespace Shell
         public static IClientApplicationService ClientApplicationService { get; private set; }
         public static IAccountNumberService AccountNumberService { get; private set; }
         public static IAccountRepository AccountRepository { get; private set; }
+        public static IHandleCommand<OpenAccount> OpenAccountHandler { get; private set; }
         public static IAccountApplicationService AccountApplicationService { get; private set; }
         public static Dictionary<string, IConsoleCommand> Commands { get; private set; }
         public static Dictionary<string, IConsoleView> Views { get; private set; }
-        public static IPublishCommands LocalCommandPublisher { get; private set; }
+        public static LocalCommandPublisher LocalCommandPublisher { get; private set; }
+        public static LocalEventPublisher LocalEventPublisher { get; private set; }
 
         public static AccountStatusHistoryProjection AccountStatusHistoryProjection { get; private set; }
         public static ClientViewProjections ClientViewProjections { get; private set; }
@@ -42,20 +48,23 @@ namespace Shell
         public static void Build()
         {
             LogFactory.BuildLogger = type => new ConsoleWindowLogger(type);
-
+            
             Repository = new InMemoryRepository();
-            DocumentStore = new InMemeoryDocumentStore();
+            EventStore = new InMemoryEventStore();
             DataQuery = Repository as IDataQuery;
             UnitOfWork = new InMemoryUnitOfWork(Repository);
+            LocalEventPublisher = new LocalEventPublisher();
+            LocalCommandPublisher = new LocalCommandPublisher();
           
             AccountStatusHistoryProjection = new AccountStatusHistoryProjection(Repository);
             ClientViewProjections = new ClientViewProjections(Repository);
 
-            ClientRepository = new ClientRepository(DocumentStore);
+            ClientRepository = new ClientRepository(EventStore, LocalEventPublisher);
             ClientApplicationService = new ClientApplicationService(ClientRepository, UnitOfWork);
-            AccountRepository = new AccountRepository(DocumentStore);
+            AccountRepository = new AccountRepository(EventStore, LocalEventPublisher);
             AccountNumberService = new AccountNumberService(DataQuery);
             AccountApplicationService = new AccountApplicationService(AccountRepository, AccountNumberService, UnitOfWork);
+            OpenAccountHandler = new OpenAccountHandler(ClientRepository, AccountRepository, AccountNumberService, UnitOfWork);
 
             RegisterCommands();
             RegisterViews();
@@ -99,33 +108,24 @@ namespace Shell
             }
         }
 
+        private static void SubsribeToEvents()
+        {
+            LocalEventPublisher.Subscribe(ClientViewProjections);
+            LocalEventPublisher.Subscribe(AccountStatusHistoryProjection);
+            LocalEventPublisher.Subscribe(AccountApplicationService);
+        }
+
         private static void SubscribeToCommands()
         {
-            LocalCommandPublisher = new LocalCommandPublisher();
-
-            ((LocalCommandPublisher)LocalCommandPublisher).Subscribe(ClientApplicationService);
-            ((LocalCommandPublisher)LocalCommandPublisher).Subscribe(AccountApplicationService);
+            LocalCommandPublisher.Subscribe(OpenAccountHandler);
+            LocalCommandPublisher.Subscribe(ClientApplicationService);
+            LocalCommandPublisher.Subscribe(AccountApplicationService);
         }
 
         static void RegisterCommandValidators()
         {
-            ((LocalCommandPublisher)LocalCommandPublisher).RegisterSpecification(new RegisterClientValidator(ClientRepository));
-            ((LocalCommandPublisher)LocalCommandPublisher).RegisterSpecification(new OpenAccountValidator(ClientRepository, AccountNumberService));
-        }
-
-        static void SubsribeToEvents()
-        {
-            EventPublisher.Current.Subscribe<ClientPassedAway>(AccountApplicationService.When);
-
-            EventPublisher.Current.Subscribe<AccountOpened>(ClientViewProjections.When);
-            EventPublisher.Current.Subscribe<AccountStatusChanged>(ClientViewProjections.When);
-            EventPublisher.Current.Subscribe<AccountBilled>(ClientViewProjections.When);
-            EventPublisher.Current.Subscribe<ClientPassedAway>(ClientViewProjections.When);
-            EventPublisher.Current.Subscribe<ClientRegistered>(ClientViewProjections.When);
-            EventPublisher.Current.Subscribe<ClientDateOfBirthCorrected>(ClientViewProjections.When);
-            EventPublisher.Current.Subscribe<ClientPassedAway>(ClientViewProjections.When);
-
-            EventPublisher.Current.Subscribe<AccountStatusChanged>(AccountStatusHistoryProjection.When);
+            LocalCommandPublisher.RegisterSpecification(new RegisterClientValidator(ClientRepository));
+            LocalCommandPublisher.RegisterSpecification(new OpenAccountValidator(ClientRepository, AccountNumberService));
         }
     }
 }

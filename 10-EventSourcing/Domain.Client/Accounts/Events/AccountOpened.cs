@@ -6,7 +6,7 @@ using Domain.Core.Events;
 namespace Domain.Client.Accounts.Events
 {
     [DataContract]
-    public class AccountOpened : IDomainEvent
+    public class AccountOpened : DomainEvent, IAccountEvent
     {       
         [DataMember(Order = 2, IsRequired = true, Name = "AccountNumber")]
         public AccountNumber AccountNumber { get; protected set; }

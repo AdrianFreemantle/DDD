@@ -6,7 +6,7 @@ using Domain.Core.Events;
 namespace Domain.Client.Clients.Events
 {
     [DataContract]
-    public class ClientPassedAway : IDomainEvent
+    public class ClientPassedAway : DomainEvent, IClientEvent
     {
         [DataMember(Order = 1, IsRequired = true, Name = "ClientId")]
         public ClientId ClientId { get; private set; }

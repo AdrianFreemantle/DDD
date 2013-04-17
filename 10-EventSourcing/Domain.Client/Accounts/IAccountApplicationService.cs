@@ -6,8 +6,7 @@ using Domain.Core.Events;
 namespace Domain.Client.Accounts
 {
     public interface IAccountApplicationService :
-        IHandleCommand<CancelAccount>,
-        IHandleCommand<OpenAccount>,
+        IHandleCommand<CancelAccount>,        
         IHandleCommand<RegisterMissedPayment>,
         IHandleCommand<RegisterSuccessfullPayment>,
         IHandleEvent<ClientPassedAway>

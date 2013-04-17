@@ -14,7 +14,7 @@ namespace Domain.Client.Clients
         void When(ClientDateOfBirthCorrected @event);
         void When(ClientPassedAway @event);
         void When(AccountAssingedToClient @event);
-        void When(ClientIssuedLoyaltyCard @event);
+        void When(IssuedLoyaltyCard @event);
     }
 
     public partial class Client : IHandleClientStateTransitions
@@ -52,10 +52,10 @@ namespace Domain.Client.Clients
             accountNumber = @event.AccountNumber;
         }
 
-        void IHandleClientStateTransitions.When(ClientIssuedLoyaltyCard @event)
+        void IHandleClientStateTransitions.When(IssuedLoyaltyCard @event)
         {
-            var card = new LoyaltyCard(@event.LoyaltyCardNumber, @event.AccountNumber);
-            ((IEntity)card).SaveChangesHandler = SaveChange;
+            var card = new LoyaltyCard(@event.CardNumber, @event.AccountNumber);
+            ((IEntity)card).RegisterChangesHandler(SaveChange);
             loyaltyCards.Add(card);
         }
 
