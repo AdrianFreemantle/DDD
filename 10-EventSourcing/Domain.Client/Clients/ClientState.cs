@@ -19,8 +19,9 @@ namespace Domain.Client.Clients
 
     public partial class Client : IHandleClientStateTransitions
     {
+        public AccountNumber AccountNumber { get; private set; }
+
         private IdentityNumber identityNumber;
-        private AccountNumber accountNumber;
         private PersonName clientName;
         private TelephoneNumber primaryContactNumber;
         private DateOfBirth dateOfBirth;
@@ -29,7 +30,7 @@ namespace Domain.Client.Clients
 
         void IHandleClientStateTransitions.When(ClientRegistered @event)
         {
-            accountNumber = AccountNumber.Empty;
+            AccountNumber = AccountNumber.Empty;
             Identity = @event.ClientId;
             identityNumber = @event.IdentityNumber;
             clientName = @event.ClientName;
@@ -49,12 +50,12 @@ namespace Domain.Client.Clients
 
         void IHandleClientStateTransitions.When(AccountAssingedToClient @event)
         {
-            accountNumber = @event.AccountNumber;
+            AccountNumber = @event.AccountNumber;
         }
 
         void IHandleClientStateTransitions.When(IssuedLoyaltyCard @event)
         {
-            var card = new LoyaltyCard(@event.CardNumber, @event.AccountNumber);
+            var card = new LoyaltyCard(Identity, @event.CardNumber, @event.AccountNumber);
             ((IEntity)card).RegisterChangesHandler(SaveChange);
             loyaltyCards.Add(card);
         }
@@ -71,5 +72,29 @@ namespace Domain.Client.Clients
                 ((IHandleClientStateTransitions)this).When((dynamic)@event);
             }
         }
+
+        protected override void RestoreSnapshot(IMemento memento)
+        {
+            var snapshot = (ClientSnapshot)memento;
+
+            dateOfBirth = snapshot.DateOfBirth;
+            clientName = snapshot.ClientName;
+            primaryContactNumber = snapshot.PrimaryContactNumber;
+            identityNumber = snapshot.IdentityNumber;
+            isDeceased = snapshot.IsDeceased;
+        }
+
+        protected override IMemento GetSnapshot()
+        {
+            return new ClientSnapshot
+            {
+                ClientName = clientName,
+                DateOfBirth = dateOfBirth,
+                PrimaryContactNumber = primaryContactNumber,
+                Identity = Identity,
+                IdentityNumber = identityNumber,
+                IsDeceased = isDeceased
+            };
+        } 
     }
 }

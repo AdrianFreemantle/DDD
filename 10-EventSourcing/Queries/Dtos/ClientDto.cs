@@ -15,7 +15,7 @@ namespace Queries.Dtos
         public string AccountStatus { get; set; }
         public int AccountRecency { get; set; }
 
-        public static ClientDto BuildFromModel(ClientView view)
+        public static ClientDto BuildFromView(ClientView view)
         {
             return new ClientDto
             {

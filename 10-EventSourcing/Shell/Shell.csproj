@@ -43,13 +43,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConsoleCommands\CancelAccountConsoleCommand.cs" />
+    <Compile Include="ConsoleCommands\CancelLoyaltyCardConsoleCommand.cs" />
+    <Compile Include="ConsoleCommands\IssueLoyaltyCardConsoleCommand.cs" />
     <Compile Include="ConsoleCommands\RegisterSuccessfullPaymentConsoleCommand.cs" />
     <Compile Include="ConsoleCommands\RegisterMissedPaymentConsoleCommand.cs" />
     <Compile Include="ConsoleCommands\CorrectDateOfBirthConsoleCommand.cs" />
+    <Compile Include="ConsoleCommands\ReportLoyaltyCardAsStolenConsoleCommand.cs" />
     <Compile Include="ConsoleCommands\SetClientAsDeceasedConsoleCommand.cs" />
     <Compile Include="ConsoleCommands\OpenAccountConsoleCommand.cs" />
     <Compile Include="ConsoleCommands\RegisterClientConsoleCommand.cs" />
     <Compile Include="ConsoleViews\AccountStatusHistoryConsoleView.cs" />
+    <Compile Include="ConsoleViews\CancelledCardsConsoleView.cs" />
+    <Compile Include="ConsoleViews\ClientCardsConsoleView.cs" />
+    <Compile Include="ConsoleViews\StolenCardsConsoleView.cs" />
     <Compile Include="IConsoleView.cs" />
     <Compile Include="ConsoleViews\AllClientsConsoleView.cs" />
     <Compile Include="IConsoleCommand.cs" />

@@ -7,6 +7,51 @@ using Domain.Core.Infrastructure;
 
 namespace PersistenceModel.Reporting.Projections
 {
+    public class ClientLoyaltyCardProjections : 
+        IHandleEvent<LoyaltyCardWasCancelled>,
+        IHandleEvent<LoyaltyCardWasReportedStolen>,
+        IHandleEvent<IssuedLoyaltyCard>
+    {
+        private readonly IRepository repository;
+
+        public ClientLoyaltyCardProjections(IRepository repository)
+        {
+            this.repository = repository;
+        }
+
+        public void When(IssuedLoyaltyCard @event)
+        {
+            var view = new ClientLoyaltyCardView()
+            {
+                CardNumber = @event.CardNumber.Id,
+                ClientId = @event.ClientId.Id,
+                Cancelled = false,
+                Stolen = false
+            };
+
+            repository.Add(view);
+        }
+
+        public void When(LoyaltyCardWasCancelled @event)
+        {
+            var view = FetchClientView(@event.CardNumber);
+
+            view.Cancelled = true;
+        }
+
+        public void When(LoyaltyCardWasReportedStolen @event)
+        {
+            var view = FetchClientView(@event.CardNumber);
+
+            view.Stolen = true;
+        }
+
+        private ClientLoyaltyCardView FetchClientView(LoyaltyCardNumber cardNumber)
+        {
+            return repository.Get<ClientLoyaltyCardView>(cardNumber.Id);
+        }
+    }
+
     public class ClientViewProjections : 
         IHandleEvent<AccountOpened>,
         IHandleEvent<AccountStatusChanged>,

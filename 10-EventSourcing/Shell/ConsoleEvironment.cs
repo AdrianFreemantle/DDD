@@ -1,13 +1,10 @@
 ﻿using ApplicationService;
 using Domain.Client.Accounts;
 using Domain.Client.Accounts.Commands;
-using Domain.Client.Accounts.Events;
 using Domain.Client.Clients;
-using Domain.Client.Clients.Events;
 using Domain.Client.Validators;
 using Domain.Client.ValueObjects;
 using Domain.Core.Commands;
-using Domain.Core.Events;
 using Domain.Core.Infrastructure;
 using Domain.Core.Logging;
 
@@ -42,6 +39,7 @@ namespace Shell
         public static LocalCommandPublisher LocalCommandPublisher { get; private set; }
         public static LocalEventPublisher LocalEventPublisher { get; private set; }
 
+        public static ClientLoyaltyCardProjections ClientLoyaltyCardProjections { get; private set; }
         public static AccountStatusHistoryProjection AccountStatusHistoryProjection { get; private set; }
         public static ClientViewProjections ClientViewProjections { get; private set; }
 
@@ -55,7 +53,8 @@ namespace Shell
             UnitOfWork = new InMemoryUnitOfWork(Repository);
             LocalEventPublisher = new LocalEventPublisher();
             LocalCommandPublisher = new LocalCommandPublisher();
-          
+
+            ClientLoyaltyCardProjections = new ClientLoyaltyCardProjections(Repository);
             AccountStatusHistoryProjection = new AccountStatusHistoryProjection(Repository);
             ClientViewProjections = new ClientViewProjections(Repository);
 
@@ -80,6 +79,9 @@ namespace Shell
             Views = new Dictionary<string, IConsoleView>();
             RegisterView(new AllClientsConsoleView(new ClientQueries(DataQuery)));
             RegisterView(new AccountStatusHistoryConsoleView(new AccountQueries(DataQuery)));
+            RegisterView(new StolenCardsConsoleView(new LoyaltyCardQueries(DataQuery)));
+            RegisterView(new ClientCardsConsoleView(new LoyaltyCardQueries(DataQuery)));
+            RegisterView(new CancelledCardsConsoleView(new LoyaltyCardQueries(DataQuery)));
         }
 
         static void RegisterView(IConsoleView view)
@@ -98,6 +100,9 @@ namespace Shell
             RegisterCommand(new CancelAccountConsoleCommand());
             RegisterCommand(new RegisterMissedPaymentConsoleCommand());
             RegisterCommand(new RegisterSuccessfullPaymentConsoleCommand());
+            RegisterCommand(new CancelLoyaltyCardConsoleCommand());
+            RegisterCommand(new ReportLoyaltyCardAsStolenConsoleCommand());
+            RegisterCommand(new IssueLoyaltyCardConsoleCommand());
         }
 
         static void RegisterCommand(IConsoleCommand command)
@@ -113,6 +118,7 @@ namespace Shell
             LocalEventPublisher.Subscribe(ClientViewProjections);
             LocalEventPublisher.Subscribe(AccountStatusHistoryProjection);
             LocalEventPublisher.Subscribe(AccountApplicationService);
+            LocalEventPublisher.Subscribe(ClientLoyaltyCardProjections);
         }
 
         private static void SubscribeToCommands()
@@ -124,8 +130,9 @@ namespace Shell
 
         static void RegisterCommandValidators()
         {
-            LocalCommandPublisher.RegisterSpecification(new RegisterClientValidator(ClientRepository));
-            LocalCommandPublisher.RegisterSpecification(new OpenAccountValidator(ClientRepository, AccountNumberService));
+            LocalCommandPublisher.RegisterValidator(new IssueLoyaltyCardValidator(AccountRepository, ClientRepository));
+            LocalCommandPublisher.RegisterValidator(new RegisterClientValidator(ClientRepository));
+            LocalCommandPublisher.RegisterValidator(new OpenAccountValidator(ClientRepository, AccountNumberService));
         }
     }
 }

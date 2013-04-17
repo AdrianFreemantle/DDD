@@ -6,28 +6,41 @@ namespace Domain.Client.Clients
 {
     public class LoyaltyCard : Entity<LoyaltyCardNumber>
     {
+        private readonly ClientId clientId;
         private AccountNumber accountNumber;
-        private bool isDisabled;
+        private bool isActive;
 
-        internal LoyaltyCard(LoyaltyCardNumber cardNumber, AccountNumber accountNumber)
+        internal LoyaltyCard(ClientId clientId, LoyaltyCardNumber cardNumber, AccountNumber accountNumber)
         {
+            isActive = true;
             Identity = cardNumber;
+            this.clientId = clientId;
             this.accountNumber = accountNumber;
         }
 
-        public bool IsDisabled()
+        public bool IsActive()
         {
-            return isDisabled;
+            return isActive;
         }
 
-        public void BankCardIsReportedStolen()
+        public void ReportLoyaltyCardAsStolen()
         {
-            RaiseEvent(new LoyaltyCardWasReportedStolen(Identity));
-        }   
+            RaiseEvent(new LoyaltyCardWasReportedStolen(clientId, Identity));
+        }  
+ 
+        public void CancelLoyaltyCard()
+        {
+            RaiseEvent(new LoyaltyCardWasCancelled(clientId, Identity));
+        }
 
         public void When(LoyaltyCardWasReportedStolen @event)
         {
-            isDisabled = true;
+            isActive = false;
+        }
+
+        public void When(LoyaltyCardWasCancelled @event)
+        {
+            isActive = false;
         }
     }
 }

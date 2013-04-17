@@ -47,6 +47,9 @@
     <Compile Include="Accounts\Account.State.cs" />
     <Compile Include="Accounts\IAccountApplicationService.cs" />
     <Compile Include="Accounts\IAccountRepository.cs" />
+    <Compile Include="Clients\Commands\CancelLoyaltyCard.cs" />
+    <Compile Include="Clients\Commands\IssueLoyaltyCard.cs" />
+    <Compile Include="Clients\Commands\ReportLoyaltyCardAsStolen.cs" />
     <Compile Include="Clients\Events\IssuedLoyaltyCard.cs" />
     <Compile Include="Clients\Events\AccountAssingedToClient.cs" />
     <Compile Include="Clients\IClientApplicationService.cs" />
@@ -71,6 +74,8 @@
     <Compile Include="Clients\LoyaltyCard.cs" />
     <Compile Include="Clients\LoyaltyCardNumber.cs" />
     <Compile Include="Clients\Events\LoyaltyCardWasReportedStolen.cs" />
+    <Compile Include="Clients\Events\LoyaltyCardWasCancelled.cs" />
+    <Compile Include="Validators\IssueLoyaltyCardValidator.cs" />
     <Compile Include="Validators\OpenAccountValidator.cs" />
     <Compile Include="Validators\RegisterClientValidator.cs" />
     <Compile Include="ValueObjects\BillingResult.cs" />

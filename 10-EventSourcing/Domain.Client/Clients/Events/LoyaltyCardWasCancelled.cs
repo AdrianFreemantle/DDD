@@ -6,7 +6,7 @@ using Domain.Core.Events;
 namespace Domain.Client.Clients.Events
 {
     [DataContract]
-    public class LoyaltyCardWasReportedStolen : DomainEvent, ILoyaltyCardEvent
+    public class LoyaltyCardWasCancelled : DomainEvent, ILoyaltyCardEvent
     {
         [DataMember(Order = 1, IsRequired = true, Name = "ClientId")]
         public ClientId ClientId { get; protected set; }
@@ -14,15 +14,15 @@ namespace Domain.Client.Clients.Events
         [DataMember(Order = 2, IsRequired = true, Name = "CardNumber")]
         public LoyaltyCardNumber CardNumber { get; protected set; }
 
-        public LoyaltyCardWasReportedStolen(ClientId clientId, LoyaltyCardNumber identity)
+        public LoyaltyCardWasCancelled(ClientId clientId, LoyaltyCardNumber cardNumber)
         {
             ClientId = clientId;
-            CardNumber = identity;
+            CardNumber = cardNumber;
         }
 
         public override string ToString()
         {
-            return String.Format("Client {0} loyalty card {1} was reported stolen.", ClientId.Id, CardNumber.Id);
+            return String.Format("Client {0} loyalty card {1} was cancelled.", ClientId.Id, CardNumber.Id);
         }
     }
 }

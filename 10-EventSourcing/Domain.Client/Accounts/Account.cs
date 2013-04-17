@@ -29,6 +29,11 @@ namespace Domain.Client.Accounts
             SetAccountStatus(AccountStatusType.Cancelled);
         }
 
+        public bool QaulifiesForLoyaltyCard()
+        {
+            return accountStatus.Status == AccountStatusType.Active;
+        }
+
         private void SetAccountStatus(AccountStatusType status)
         {
             if (!accountStatus.StatusMayBeChanged())

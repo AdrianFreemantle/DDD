@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Domain.Client.Accounts;
 using Domain.Client.Clients.Events;
@@ -39,17 +38,43 @@ namespace Domain.Client.Clients
 
         public void IssueLoyaltyCard()
         {
-            if (accountNumber == AccountNumber.Empty)
+            if (AccountNumber == AccountNumber.Empty)
             {
                 throw DomainError.Named("no-account", "The client may not be issued a loyalty card as they do not have an account.");
             }
 
-            if (loyaltyCards.Any(card => !card.IsDisabled()))
+            if (HasActiveLoyaltyCard())
             {
                 throw DomainError.Named("active-loyalty-card", "The client may not be issued a loyalty card as they already have an active one.");
             }
 
-            RaiseEvent(new IssuedLoyaltyCard(new LoyaltyCardNumber(Guid.NewGuid()), accountNumber));
+            var loyaltyCardNumber = new LoyaltyCardNumber(Guid.NewGuid());
+            RaiseEvent(new IssuedLoyaltyCard(Identity, loyaltyCardNumber, AccountNumber));
+        }
+
+        public void ReportLoyaltyCardAsStolen()
+        {
+            if (!HasActiveLoyaltyCard())
+            {
+                throw DomainError.Named("no-active-loyalty-card", "The client does not have an active loyalty card.");
+            }
+
+            loyaltyCards.Last().ReportLoyaltyCardAsStolen();
+        }
+
+        public void CancelLoyaltyCard()
+        {
+            if (!HasActiveLoyaltyCard())
+            {
+                throw DomainError.Named("no-active-loyalty-card", "The client does not have an active loyalty card.");
+            }
+
+            loyaltyCards.Last().CancelLoyaltyCard();
+        }
+
+        public bool HasActiveLoyaltyCard()
+        {
+            return loyaltyCards.Any() && loyaltyCards.Last().IsActive();
         }
 
         public Account OpenAccount(IAccountNumberService accountNumberService)
@@ -68,36 +93,12 @@ namespace Domain.Client.Clients
         {
             var clientAge = dateOfBirth.GetCurrentAge();
 
-            return (!isDeceased) && (clientAge >= 18) && accountNumber.IsEmpty();
+            return (!isDeceased) && (clientAge >= 18) && AccountNumber.IsEmpty();
         }
 
         public void ClientIsDeceased()
         {
             RaiseEvent(new ClientPassedAway(Identity));
-        }
-
-        protected override void RestoreSnapshot(IMemento memento)
-        {
-            var snapshot = (ClientSnapshot)memento;
-
-            dateOfBirth = snapshot.DateOfBirth;
-            clientName = snapshot.ClientName;
-            primaryContactNumber = snapshot.PrimaryContactNumber;
-            identityNumber = snapshot.IdentityNumber;
-            isDeceased = snapshot.IsDeceased;
-        }
-
-        protected override IMemento GetSnapshot()
-        {
-            return new ClientSnapshot
-            {
-                ClientName = clientName,
-                DateOfBirth = dateOfBirth,
-                PrimaryContactNumber = primaryContactNumber,
-                Identity = Identity,
-                IdentityNumber = identityNumber,
-                IsDeceased = isDeceased
-            };
-        }
+        }       
     }
 }

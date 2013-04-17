@@ -28,7 +28,52 @@ namespace ApplicationService
             {
                 HandleException(ex);
             }
-        }        
+        }       
+ 
+        public void Execute(IssueLoyaltyCard command)
+        {
+            try
+            {
+                Client client = clientRepository.Get(command.ClientId);
+                client.IssueLoyaltyCard();
+                clientRepository.Save(client);
+                unitOfWork.Commit();
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex);
+            }
+        }
+
+        public void Execute(ReportLoyaltyCardAsStolen command)
+        {
+            try
+            {
+                Client client = clientRepository.Get(command.ClientId);
+                client.ReportLoyaltyCardAsStolen();
+                clientRepository.Save(client);
+                unitOfWork.Commit();
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex);
+            }
+        }
+
+        public void Execute(CancelLoyaltyCard command)
+        {
+            try
+            {
+                Client client = clientRepository.Get(command.ClientId);
+                client.CancelLoyaltyCard();
+                clientRepository.Save(client);
+                unitOfWork.Commit();
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex);
+            }
+        }
 
         public void Execute(CorrectDateOfBirth command)
         {

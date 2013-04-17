@@ -32,7 +32,7 @@ namespace Infrastructure
             handlers.Add(handler);
         }
 
-        public void RegisterSpecification<TCommand>(IValidateCommand<TCommand> specification) where TCommand : ICommand
+        public void RegisterValidator<TCommand>(IValidateCommand<TCommand> specification) where TCommand : ICommand
         {
             commandValidators.Add(specification);
         }

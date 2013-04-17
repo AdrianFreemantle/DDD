@@ -6,7 +6,10 @@ namespace Domain.Client.Clients
     public interface IClientApplicationService: 
         IHandleCommand<RegisterClient>,
         IHandleCommand<CorrectDateOfBirth>,
-        IHandleCommand<SetClientAsDeceased>
+        IHandleCommand<SetClientAsDeceased>,
+        IHandleCommand<CancelLoyaltyCard>,
+        IHandleCommand<ReportLoyaltyCardAsStolen>,
+        IHandleCommand<IssueLoyaltyCard>
     {
     }
 }

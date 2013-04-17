@@ -19,6 +19,11 @@ namespace Shell.ConsoleViews
 
         public void Print(string[] args)
         {
+            if (args.Length != 1)
+            {
+                throw new Exception(String.Format("Error. Usage is: {0}", Usage));
+            }
+
             ICollection<AccountStatusHistoryDto> history = accountQueries.FetchStatusHistory(args[0]);
 
             PrintBorder();

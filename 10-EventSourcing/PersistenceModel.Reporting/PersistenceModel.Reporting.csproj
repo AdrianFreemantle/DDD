@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClientLoyaltyCardView.cs" />
     <Compile Include="Projections\AccountStatusHistoryProjection.cs" />
     <Compile Include="AccountStatusHistoryView.cs" />
     <Compile Include="AccountStatusLookup.cs" />

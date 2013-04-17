@@ -19,7 +19,7 @@ namespace Queries
         {
             return dataQuery.GetQueryable<ClientView>()
                             .ToList()
-                            .ConvertAll(ClientDto.BuildFromModel);
+                            .ConvertAll(ClientDto.BuildFromView);
 
         }
 
@@ -28,7 +28,7 @@ namespace Queries
             return dataQuery.GetQueryable<ClientView>()
                             .Where(view => view.IsDeceased)
                             .ToList()
-                            .ConvertAll(ClientDto.BuildFromModel);
+                            .ConvertAll(ClientDto.BuildFromView);
         }
     }
 }
