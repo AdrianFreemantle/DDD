@@ -5,7 +5,16 @@ namespace Domain.Client.Accounts
 {
     public sealed class AccountNumber : IdentityBase<string>
     {
-        public override string Id { get; protected set; }
+        public static AccountNumber Empty
+        {
+            get
+            {
+                return new AccountNumber
+                {
+                    Id = String.Empty
+                };
+            }
+        }
 
         private AccountNumber()
         {
@@ -16,14 +25,6 @@ namespace Domain.Client.Accounts
             Mandate.ParameterNotNullOrEmpty(accountNumber, "accountNumber");
 
             Id = accountNumber;
-        }
-
-        public static AccountNumber Empty()
-        {
-            return new AccountNumber
-            {
-                Id = default(string)
-            };
         }
 
         public override string GetTag()

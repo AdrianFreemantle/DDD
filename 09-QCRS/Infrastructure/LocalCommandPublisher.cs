@@ -56,7 +56,7 @@ namespace Infrastructure
 
             if (validator != null)
             {
-                ValidationResult[] validationResults = ((dynamic)validator).Validate((dynamic)command);
+                IEnumerable<ValidationResult> validationResults = ((dynamic)validator).Validate((dynamic)command);
 
                 if (validationResults.Any())
                 {

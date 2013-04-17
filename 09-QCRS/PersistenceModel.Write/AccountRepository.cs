@@ -1,7 +1,6 @@
 ﻿using Domain.Client.Accounts;
 using Domain.Core;
 using Domain.Core.Infrastructure;
-using Domain.Core.Logging;
 
 namespace PersistenceModel.Write
 {   
@@ -16,7 +15,7 @@ namespace PersistenceModel.Write
 
         public Account Get(IHaveIdentity id)
         {
-            var snapshot = documentStore.Get<AccountSnapshot>(id.ToString());
+            var snapshot = documentStore.Get<AccountSnapshot>(id.GetSurrogateId());
             var account = ActivatorHelper.CreateInstance<Account>();
             ((IAggregate)account).RestoreSnapshot(snapshot);
             return account;
@@ -25,7 +24,7 @@ namespace PersistenceModel.Write
         public void Save(Account account)
         {
             IMemento memento = ((IAggregate)account).GetSnapshot();
-            documentStore.Save(memento.Identity.ToString(), memento);
+            documentStore.Save(memento.Identity.GetSurrogateId(), memento);
         }
     }
 }

@@ -35,7 +35,7 @@ namespace Domain.Client.Validators
                 results.Add(new ValidationResult("The client does not qualify for an account."));
             }
 
-            return new ValidationResult[0];
+            return results;
         }
     }
 }

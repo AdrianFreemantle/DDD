@@ -20,12 +20,8 @@ namespace Domain.Core
         /// </summary>
         string GetTag();
 
-        /// <summary>
-        /// Provides consistent hashing, which will not be affected by platforms or different
-        /// versions of .NET Framework
-        /// </summary>
-        int GetStableHashCode();
-
         bool IsEmpty();
+
+        Guid GetSurrogateId();
     }
 }

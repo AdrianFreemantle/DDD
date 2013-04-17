@@ -6,9 +6,9 @@ namespace Infrastructure
 {
     public class InMemeoryDocumentStore : IDocumentStore 
     {
-        public readonly Dictionary<string, object> Store = new Dictionary<string, object>();
+        public readonly Dictionary<Guid, object> Store = new Dictionary<Guid, object>();
 
-        public TDocument Get<TDocument>(string key) where TDocument : class
+        public TDocument Get<TDocument>(Guid key) where TDocument : class
         {
             if (!Store.ContainsKey(key))
             {
@@ -18,7 +18,7 @@ namespace Infrastructure
             return Store[key] as TDocument;
         }
 
-        public void Save<TDocument>(string key, TDocument document) where TDocument : class
+        public void Save<TDocument>(Guid key, TDocument document) where TDocument : class
         {
             if (Store.ContainsKey(key))
             {
@@ -30,7 +30,7 @@ namespace Infrastructure
             }
         }
 
-        public void Delete(string key)
+        public void Delete(Guid key)
         {
             if (!Store.ContainsKey(key))
             {

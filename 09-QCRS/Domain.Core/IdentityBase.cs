@@ -1,4 +1,5 @@
 using System;
+using Domain.Core.Infrastructure;
 
 namespace Domain.Core
 {
@@ -9,15 +10,40 @@ namespace Domain.Core
     /// <typeparam name="TKey">The type of the key.</typeparam>
     public abstract class IdentityBase<TKey> : IHaveIdentity
     {
-        public abstract TKey Id { get; protected set; }
+        // ReSharper disable StaticFieldInGenericType
+        private static readonly Guid IdentityNamespace = Guid.Parse("24142086-67e1-5c77-aadf-6bd8d09c06b9");
+        // ReSharper restore StaticFieldInGenericType
+        private Guid surrogateId;
+        public virtual TKey Id { get; protected set; }
         public abstract string GetTag();
+        public abstract bool IsEmpty();
 
         public string GetId()
         {
             return Id.ToString();
         }
 
-        public abstract bool IsEmpty();
+        //The surrogate identity is used in event sourcing to identify the event stream.
+        Guid IHaveIdentity.GetSurrogateId()
+        {
+            return GetSurrogateId();
+        }
+
+        protected virtual Guid GetSurrogateId()
+        {
+            if (Id is Guid)
+            {
+                return (Guid)(object)Id;
+            }
+
+            if (surrogateId != Guid.Empty)
+            {
+                return surrogateId;
+            }
+
+            surrogateId = StringToGuid.Convert(ToString(), IdentityNamespace);
+            return surrogateId;
+        }
 
         public override bool Equals(object obj)
         {
@@ -41,17 +67,7 @@ namespace Domain.Core
 
         public override int GetHashCode()
         {
-            return (Id.GetHashCode());
-        }
-
-        public int GetStableHashCode()
-        {
-            // same as hash code, but works across multiple architectures 
-            var type = typeof(TKey);
-
-            return type == typeof(string) 
-                ? CalculateStringHash(Id.ToString()) 
-                : Id.GetHashCode();
+            return (GetSurrogateId().GetHashCode());
         }
 
         static IdentityBase()
@@ -69,23 +85,6 @@ namespace Domain.Core
             }
 
             throw new InvalidOperationException("Abstract identity inheritors must provide stable hash. It is not supported for:  " + type);
-        }
-
-        static int CalculateStringHash(string value)
-        {
-            if (value == null) return 42;
-            
-            unchecked
-            {
-                var hash = 23;
-
-                foreach (var c in value)
-                {
-                    hash = hash * 31 + c;
-                }
-
-                return hash;
-            }
         }
 
         public bool Equals(IdentityBase<TKey> other)

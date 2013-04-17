@@ -21,7 +21,7 @@ namespace PersistenceModel.Write
 
         public Client Get(IHaveIdentity id)
         {
-            var snapshot = documentStore.Get<ClientSnapshot>(id.ToString());
+            var snapshot = documentStore.Get<ClientSnapshot>(id.GetSurrogateId());
             var client = ActivatorHelper.CreateInstance<Client>();
             ((IAggregate)client).RestoreSnapshot(snapshot);
             return client;
@@ -30,7 +30,7 @@ namespace PersistenceModel.Write
         public void Save(Client client)
         {
             IMemento memento = ((IAggregate)client).GetSnapshot();
-            documentStore.Save(memento.Identity.ToString(), memento);
+            documentStore.Save(memento.Identity.GetSurrogateId(), memento);
         }
     }
 }
